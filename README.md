@@ -16,7 +16,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=[your postgreSQL password here]
-DB_NAME=productlist
+DB_NAME=rural_eats_db
 
 ```
 4. In terminal, type ```psql -U postgres -f src/app/data/database.sql```. This creates the database for you.
