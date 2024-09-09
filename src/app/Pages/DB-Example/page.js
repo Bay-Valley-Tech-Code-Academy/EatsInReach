@@ -1,10 +1,13 @@
+// Use this file as an example for how to display database contents onto your webpage.
+// This file shows how to add and remove items from the database.
+
 "use client"
-import Navbar from './Components/Navbar'
+import Navbar from '@/Components/Navbar'
 
 import { useState, useEffect } from 'react';
 
 
-export default function Home() {
+export default function DB_Example() {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [data, setData] = useState([]);
@@ -13,7 +16,7 @@ export default function Home() {
   // Fetch the data when the component mounts
   const fetchData = async () => {
     try {
-      const res = await fetch('/api/rural_table');
+      const res = await fetch('/api/eats_in_reach_table');
       const result = await res.json();
       setData(result);
     } catch (err) {
@@ -33,7 +36,7 @@ export default function Home() {
 
 
     try {
-      const res = await fetch('/api/rural_table', {
+      const res = await fetch('/api/eats_in_reach_table', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ description, category }),
@@ -57,7 +60,7 @@ export default function Home() {
   const handleDelete = async (id) => {
     try {
       // Send DELETE request to API with item ID
-      const res = await fetch('/api/rural_table', {
+      const res = await fetch('/api/eats_in_reach_table', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id }),
