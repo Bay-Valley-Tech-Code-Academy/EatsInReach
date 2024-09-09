@@ -9,7 +9,7 @@
 After cloning the repo:
 1. Navigate to EatsInReach in terminal by typing ```cd EatsInReach```.
 2. Install packages by typing ```npm install``` in terminal. You can also type ```npm i```.
-3. Create a .env file in the base folder. Put this inside:
+3. Create a .env file in the base folder. Add the following contents inside:
 
 ```
 DB_HOST=localhost
