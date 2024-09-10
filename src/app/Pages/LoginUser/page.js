@@ -33,7 +33,7 @@ export default function LoginUser() {
   };
 
   return (
-    <div>
+    <div >
       <div>User Login</div>
       <Link href="/">Back</Link>
     </div>
