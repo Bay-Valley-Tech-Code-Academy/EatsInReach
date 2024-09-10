@@ -1,3 +1,4 @@
+// src/app/api/restaurants/[restaurantId]/route.js
 import { Pool } from 'pg';
 import { NextResponse } from 'next/server';
 
@@ -5,8 +6,8 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
 });
 
-export async function GET(req) {
-    const { restaurantId } = req.nextUrl.pathname.split('/').pop();
+export async function GET(req, { params }) {
+    const { restaurantId } = params;
 
     try {
         const client = await pool.connect();
@@ -26,17 +27,7 @@ export async function GET(req) {
 
         const restaurant = result.rows[0];
 
-        // Fetch menu images if needed
-        const menuImages = await client.query(`
-            SELECT image_url
-            FROM Restaurant_Pictures
-            WHERE restaurant_id = $1 AND photo_type_id = 1
-        `, [restaurantId]);
-
-        return NextResponse.json({
-            ...restaurant,
-            menu_images: menuImages.rows.map(row => row.image_url)
-        });
+        return NextResponse.json(restaurant);
     } catch (error) {
         console.error('Error fetching restaurant details:', error);
         return NextResponse.json({ error: 'Failed to fetch restaurant details' }, { status: 500 });

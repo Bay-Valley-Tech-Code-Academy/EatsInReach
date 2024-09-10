@@ -17,8 +17,12 @@ DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=[your postgreSQL password here]
 DB_NAME=eats_in_reach_db
+DATABASE_URL=postgres://postgres:[your postgreSQL password here]@localhost:5432/eats_in_reach_db
+
 
 ```
+Do not include the brackets when adding in the password.
+
 4. In terminal, type ```psql -U postgres -f src/app/data/database.sql```. This creates the database for you.
 5. Install the PostgreSQL Explorer by Chris Kolkman on VS Code.
 * Once you install this, follow the instructions here to create a connection to the database: https://youtu.be/ezjoDYs72GA?si=0U7jKxL2xwNuQ5YR&t=680 . The instruction ends at 13:20.

@@ -24,7 +24,7 @@ export default function RestaurantPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {restaurants.map(restaurant => (
                         <div key={restaurant.restaurant_id} className="bg-white shadow-md rounded-lg overflow-hidden">
-                            <Link href={`/restaurants/${restaurant.restaurant_id}`}>
+                            <Link href={`/Pages/Restaurants/${restaurant.restaurant_id}`}>
                                 <img
                                     src={restaurant.image_url}
                                     alt={`Image of ${restaurant.name}`}
