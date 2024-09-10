@@ -12,7 +12,7 @@ export default function Landing() {
                 <Link href="/Pages/LoginUser">User Login</Link>
             </div>
             <div>
-                <Link href="/Pages/LoginUser">Vendor Login</Link>
+                <Link href="/Pages/LoginVendor">Vendor Login</Link>
             </div>
         </div>
     )
