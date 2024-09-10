@@ -34,7 +34,12 @@ export default function LoginVendor() {
   return (
     <div>
       <div>Vendor Login</div>
-      <Link href="/">Home</Link>
+      <div>
+        <Link href="/">Back</Link>
+      </div>
+      <div>
+          <Link href="/Pages/VendorSubmission">Make a submission</Link>
+      </div>
     </div>
   );
 }

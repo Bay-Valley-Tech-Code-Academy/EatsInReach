@@ -9,7 +9,7 @@
 After cloning the repo:
 1. Navigate to EatsInReach in terminal by typing ```cd EatsInReach```.
 2. Install packages by typing ```npm install``` in terminal. You can also type ```npm i```.
-3. Create a .env file in the base folder. Add the following contents inside:
+3. Create a file named ```.env``` in the base folder. Add the following contents inside:
 
 ```
 DB_HOST=localhost
@@ -18,7 +18,6 @@ DB_USER=postgres
 DB_PASSWORD=[your postgreSQL password here]
 DB_NAME=eats_in_reach_db
 DATABASE_URL=postgres://postgres:[your postgreSQL password here]@localhost:5432/eats_in_reach_db
-
 
 ```
 Do not include the brackets when adding in the password.

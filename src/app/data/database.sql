@@ -56,6 +56,20 @@ CREATE TABLE Price_Ranges (
     range VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE Vendor_Submissions (
+    submission_id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    location TEXT NOT NULL,
+    price_range TEXT NOT NULL,
+    food_type TEXT NOT NULL,
+    hours_of_operation TEXT NOT NULL,
+    description TEXT,
+    image_url TEXT,
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'pending'
+);
+
+
 -- Optional: Insert predefined price ranges
 INSERT INTO Price_Ranges (range)
 VALUES

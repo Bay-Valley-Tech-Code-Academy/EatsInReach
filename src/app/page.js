@@ -14,6 +14,9 @@ export default function Landing() {
             <div>
                 <Link href="/Pages/LoginVendor">Vendor Login</Link>
             </div>
+            <div>
+                <Link href="/Pages/Admin">Admin</Link>
+            </div>
         </div>
     )
 }
