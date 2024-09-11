@@ -30,7 +30,6 @@ export default function RestaurantPage({ params }) {
         }
     }, [restaurantId]);
     
-
     if (!restaurant) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-white text-lg text-black">
@@ -77,7 +76,7 @@ export default function RestaurantPage({ params }) {
                             <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
                                 <h2 className="text-2xl font-bold mb-2 text-black">Contact Information</h2>
                                 <p className="text-lg mb-6 text-black">
-                                    <span className="font-semibold">Phone:</span> {restaurant.phone}
+                                    <span className="font-semibold">Phone:</span> {restaurant.phone_number}
                                 </p>
                                 <p className="text-lg mb-6 text-black">
                                     <span className="font-semibold">Email:</span> {restaurant.email}

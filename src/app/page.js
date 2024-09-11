@@ -1,22 +1,27 @@
-"use client"
+"use client";
 
-import Navbar from './Components/Navbar'
-import Link from 'next/link';
+import Navbar from "./Components/Navbar";
+import Link from "next/link";
+import { Italiana } from "next/font/google";
+
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 
 export default function Landing() {
-    return(
-        <div>
-            <Navbar />
-            <div>Get Started</div>
-            <div>
-                <Link href="/Pages/LoginUser">User Login</Link>
-            </div>
-            <div>
-                <Link href="/Pages/LoginVendor">Vendor Login</Link>
-            </div>
-            <div>
-                <Link href="/Pages/Favorites">Favorites</Link>
-            </div>
+  return (
+    <div>
+      <Navbar />
+      <div className="w-full flex flex-col items-center landing-page">
+        <h1 className={`mt-20 text-6xl sm:text-8xl md:text-9xl landing-header ${italiana.className}`}>Eats in Reach</h1>
+        <h2 className="text-2xl sm:text-4xl md:text-5xl mt-4">Reach for Flavor, Anytime</h2>
+        <div className="mt-20">
+          <Link href="/Pages/Login">
+            <button className="text-1xl sm:text-2xl md:text-3xl bg-gray-300 p-3 sm:p-4 md:p-5 rounded-full border border-black">Login</button>
+          </Link>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
