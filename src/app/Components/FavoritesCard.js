@@ -25,7 +25,7 @@ export default function FavoritesCard({ restaurantImg, restaurantTitle }) {
                 <p className="text-left">{restaurantTitle}</p>
                 <div onClick={handleIconClick} className="cursor-pointer ml-auto text-2xl text-right">
                   {isFavorited ? (
-                    <PiHeartStraightFill />
+                    <PiHeartStraightFill className="text-red-500" />
                   ) : (
                     <PiHeartStraightThin />
                   )}
