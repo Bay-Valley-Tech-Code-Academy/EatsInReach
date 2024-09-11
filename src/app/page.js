@@ -15,7 +15,7 @@ export default function Landing() {
                 <Link href="/Pages/LoginVendor">Vendor Login</Link>
             </div>
             <div>
-                <Link href="/Pages/Bookmarks">Bookmarks</Link>
+                <Link href="/Pages/Favorites">Favorites</Link>
             </div>
         </div>
     )
