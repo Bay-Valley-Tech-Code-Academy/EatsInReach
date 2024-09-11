@@ -2,3 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+.landing-page{
+  height: calc(100vh - 72px);
+}
+
+.login-page{
+  height: 100vh;
+}
+
+.landing-page, .login-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.landing-page::before{
+  background-image: url(/images/landing-page.jpg);
+}
+
+.login-page::before{
+  background-image: url(/images/login-page.jpg);
+}
+
+.landing-page::before, .login-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(7px);
+  z-index: -1;
+}
