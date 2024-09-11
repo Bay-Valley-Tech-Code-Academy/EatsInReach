@@ -15,7 +15,7 @@ export default function RestaurantCard({ restaurantImg, restaurantTitle }) {
             />
             <div className="flex gap-2 w-full p-1">
                 <p className="text-left">{restaurantTitle}</p>
-                <PiHeartStraightThin className="text-xl text-right ml-auto" />
+                <PiHeartStraightThin className="text-2xl text-right ml-auto" />
             </div>
         </div>
     </div>
