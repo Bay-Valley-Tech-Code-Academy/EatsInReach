@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Navbar from '@/Components/Navbar'
 import FavoritesCard from '@/Components/FavoritesCard';
 
-export default function Bookmarks() {
+export default function Favorites() {
     const restaurantData = [
         {
             restaurantTitle: "Restaurant 1",
@@ -50,10 +50,9 @@ export default function Bookmarks() {
     return(
         <div>
             <Navbar />
-            <div className="flex flex-col items-center">
-                <div className="text-2xl font-bold justify-start mt-8">Favorites</div>
-                <Link href="/">Home</Link>
-                <div className="flex flex-wrap gap-6 justify-center max-w-screen mx-auto px-4">
+            <div className="flex flex-col justify-center items-center">
+                <div className="text-4xl font-semibold text-center w-full px-16 mt-12">Favorites</div>
+                <div className="flex flex-wrap gap-6 justify-center max-w-screen mx-auto px-4 mt-8">
                     {restaurantData.map((restaurant, index) => (
                         <FavoritesCard
                             key={index}
