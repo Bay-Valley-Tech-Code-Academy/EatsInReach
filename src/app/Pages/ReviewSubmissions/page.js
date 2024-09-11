@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 
-
 export default function ReviewSubmissions() {
     const [submissions, setSubmissions] = useState([]);
     const [error, setError] = useState(null);
@@ -37,13 +36,15 @@ export default function ReviewSubmissions() {
             {submissions.length > 0 ? (
                 <ul>
                     {submissions.map((submission) => (
-                        <li key={submission.id} className="mb-4 p-4 border border-gray-300 rounded">
+                        <li key={submission.submission_id} className="mb-4 p-4 border border-gray-300 rounded">
                             <h2 className="text-xl font-bold">{submission.name}</h2>
                             <p><strong>Location:</strong> {submission.location}</p>
                             <p><strong>Price Range:</strong> {submission.price_range}</p>
                             <p><strong>Food Type:</strong> {submission.food_type}</p>
                             <p><strong>Hours of Operation:</strong> {submission.hours_of_operation}</p>
                             <p><strong>Description:</strong> {submission.description}</p>
+                            <p><strong>Phone Number:</strong> {submission.phone_number}</p>
+                            <p><strong>Email:</strong> {submission.email}</p>
                             <p><strong>Image URL:</strong> <a href={submission.image_url} target="_blank" rel="noopener noreferrer">{submission.image_url}</a></p>
                             {/* Add buttons for approving or rejecting the submission */}
                         </li>
