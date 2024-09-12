@@ -5,7 +5,7 @@ function IconStars(props) {
   return (
     <svg
       className="w-1/2 h-1/2 object-cover"
-      fill="#FF670E"
+      fill="#FDE4CE"
       viewBox="0 0 16 16"
       height="1em"
       width="1em"
