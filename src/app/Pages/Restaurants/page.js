@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Navbar from '@/Components/Navbar';
 import Slider from "react-slick";
 
+
 // Import css files for react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -35,15 +36,15 @@ export default function RestaurantPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-Almond">
             <Navbar />
-            <div className="container p-10 mt-4 mx-auto rounded-3xl bg-gray-600">
-                <h1 className="text-3xl font-bold mb-4 text-white">Featured Restaurants</h1>
+            <div className="container p-10 mt-4 mx-auto rounded-3xl bg-Yellow-Green">
+                <h1 className="text-3xl font-bold mb-4 text-black">Featured Restaurants</h1>
                 <Slider {...settings}>
                     {restaurants.slice(0, 5).map(restaurant => (
                         <div key={restaurant.restaurant_id}>
                             <img
-                                src={restaurant.image_url}
+                                src={`/images/${restaurant.image_url}`}
                                 alt={`Image of ${restaurant.name}`}
                                 className="w-full h-64 object-cover"
                             />
@@ -55,13 +56,13 @@ export default function RestaurantPage() {
                     ))}
                 </Slider>
 
-                <h2 className="text-2xl font-bold my-4 text-white">All Restaurants</h2>
+                <h2 className="text-2xl font-bold my-4 text-black">All Restaurants</h2>
                 <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4">
                     {restaurants.map(restaurant => (
                         <div key={restaurant.restaurant_id} className="bg-white shadow-md rounded-3xl overflow-hidden flex">
                             <Link href={`/Pages/Restaurants/${restaurant.restaurant_id}`} className="flex">
                                 <img
-                                    src={restaurant.image_url}
+                                    src={`/images/${restaurant.image_url}`}
                                     alt={`Image of ${restaurant.name}`}
                                     className="w-1/2 h-auto object-cover cursor-pointer"
                                 />
@@ -75,7 +76,7 @@ export default function RestaurantPage() {
                         </div>
                     ))}
                 </div>
-                <Link href="/" className="bg-white text-blue-500 rounded-lg hover:bg-gray-300 mt-4 inline-block px-6 py-3 text-sm font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-transform transform hover:-translate-y-1 scale-105">
+                <Link href="/" className="bg-Kobicha text-rosey-brown rounded-lg hover:bg-Chocolate-cosmos hover:text-white mt-4 inline-block px-6 py-3 text-sm font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-transform transform hover:-translate-y-1 scale-105">
                     Home
                 </Link>
             </div>
