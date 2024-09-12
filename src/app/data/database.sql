@@ -128,7 +128,7 @@ VALUES
 -- Insert dummy data into the Vendor_Submissions table
 INSERT INTO Vendor_Submissions (name, location, price_range, food_type, hours_of_operation, description, phone_number, email, image_url)
 VALUES
-    ('Tasty Thai', 'Meow St, Merced, CA', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg'),
+    ('Tasty Thai', 'Meow St, Merced, CA', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg')
 
 
 -- DROP DATABASE eats_in_reach_db;
