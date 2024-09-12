@@ -53,6 +53,7 @@ export async function POST(request) {
     // Retrieve role from Firestore by querying both collections
     let userRole = "unknown";
     const userDoc = await getDoc(doc(firestore, "users", user.uid));
+
     if (userDoc.exists()) {
       userRole = userDoc.data().role;
     } else {
@@ -60,6 +61,12 @@ export async function POST(request) {
       if (vendorDoc.exists()) {
         userRole = vendorDoc.data().role;
       }
+    }
+
+    // Check if the user is an admin (You can have a flag like `isAdmin`)
+    const adminDoc = await getDoc(doc(firestore, "admins", user.uid));
+    if (adminDoc.exists()) {
+      userRole = "admin"; // If user is admin, override role
     }
 
     console.log("User Role:", userRole);
