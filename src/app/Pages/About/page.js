@@ -39,7 +39,7 @@ export default function About() {
                 </h1>
                 <p className="text-center pb-20 min-w-80 max-w-[500px]">
                     Welcome to YumYonder! We’re thrilled to connect you with the hidden culinary gems in rural areas. 
-                    Our platform bridges the gap between small, local food vendors and a wider audience eager tao discover
+                    Our platform bridges the gap between small, local food vendors and a wider audience eager to discover
                     and support unique offerings.
                 </p>
                 <div>
