@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from 'next/link';
+import About from '../Pages/About/page';
 
 export default function Navbar() {
   return (
@@ -13,6 +14,9 @@ export default function Navbar() {
             </div>
             <div>
                 <Link href="/Pages/UserProfile">User Profile</Link>
+            </div>
+            <div>
+                <Link href="/Pages/About">About Us</Link>
             </div>
         </div>
     </header>
