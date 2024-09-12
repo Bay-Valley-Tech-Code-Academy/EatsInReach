@@ -40,7 +40,7 @@ CREATE TABLE Restaurant_Food_Items (
     restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
     item_name VARCHAR(255) NOT NULL,
     item_desc VARCHAR(255) NOT NULL,
-    image_path image BLOB NOT NULL,
+    image_path BLOB NOT NULL,
     alt_text VARCHAR(255)
 );
 
