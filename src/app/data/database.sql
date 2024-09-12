@@ -40,6 +40,7 @@ CREATE TABLE Restaurant_Food_Items (
     restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
     item_name VARCHAR(255) NOT NULL,
     item_desc VARCHAR(255) NOT NULL,
+    item_price DECIMAL(10, 2) NOT NULL,
     image_path BLOB NOT NULL,
     alt_text VARCHAR(255)
 );
@@ -138,5 +139,9 @@ INSERT INTO Vendor_Submissions (name, location, price_range, food_type, hours_of
 VALUES
     ('Tasty Thai', 'Meow St, Merced, CA', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg'),
 
+-- Insert 
+INSERT INTO Vendor_Items (item_name, item_desc, item_price, image_path, alt_text )
+VALUES
+    ('Apples', 'Delicious and sweet!', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg'),
 
 -- DROP DATABASE eats_in_reach_db;
