@@ -4,6 +4,13 @@ CREATE DATABASE eats_in_reach_db;
 -- Connect to the newly created database
 \c eats_in_reach_db;
 
+-- Create the Cuisines table
+CREATE TABLE Cuisines (
+    cuisine_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT
+);
+
 -- Create the Restaurants table with phone number and email (modified)
 CREATE TABLE Restaurants (
     restaurant_id SERIAL PRIMARY KEY,
@@ -19,13 +26,6 @@ CREATE TABLE Restaurants (
     website VARCHAR(255),
     phone_number VARCHAR(20),
     email VARCHAR(255)
-);
-
--- Create the Cuisines table
-CREATE TABLE Cuisines (
-    cuisine_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    description TEXT
 );
 
 -- Create the Food_Types table
@@ -85,6 +85,56 @@ VALUES
     ('$$'),
     ('$$$'),
     ('$$$$');
+
+-- Create the Menus table
+CREATE TABLE Menus (
+    menu_id SERIAL PRIMARY KEY,
+    restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    description TEXT
+);
+
+-- Create the Menu_Items table
+CREATE TABLE Menu_Items (
+    item_id SERIAL PRIMARY KEY,
+    menu_id INTEGER REFERENCES Menus(menu_id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    is_vegetarian BOOLEAN DEFAULT FALSE,
+    is_vegan BOOLEAN DEFAULT FALSE,
+    is_gluten_free BOOLEAN DEFAULT FALSE
+);
+
+-- Create the Users table
+CREATE TABLE Users (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the Favorites table
+CREATE TABLE Favorites (
+    user_id INTEGER REFERENCES Users(user_id) ON DELETE CASCADE,
+    restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, restaurant_id)
+);
+
+-- Create the Dietary_Restrictions table
+CREATE TABLE Dietary_Restrictions (
+    restriction_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT
+);
+
+-- Create the Restaurant_Dietary_Options table
+CREATE TABLE Restaurant_Dietary_Options (
+    restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
+    restriction_id INTEGER REFERENCES Dietary_Restrictions(restriction_id) ON DELETE CASCADE,
+    PRIMARY KEY (restaurant_id, restriction_id)
+);
 
 -- Insert dummy data
 INSERT INTO Cuisines (name, description) VALUES
