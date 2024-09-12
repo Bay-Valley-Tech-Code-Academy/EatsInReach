@@ -43,7 +43,7 @@ export default function About() {
                     and support unique offerings.
                 </p>
                 <div>
-                    <button className="bg-[#FF670E] w-36 h-12 rounded-lg">
+                    <button className="bg-[#FDE4CE] hover:bg-orange-300 w-36 h-12 rounded-lg shadow-md">
                         <Link href="/Pages/Restaurants"> Get Started </Link>
                     </button>
                 </div>
