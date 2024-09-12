@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function FooterTwo() {
+export default function Footer() {
   const sections = [
     {
       title: "Bay Valley Tech", href: 'https://www.bayvalleytech.com/'
