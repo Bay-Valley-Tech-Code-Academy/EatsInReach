@@ -33,7 +33,7 @@ export default function RestaurantPage() {
             <Navbar />
             <div className="container mx-auto p-4">
                 <h1 className="text-3xl font-bold mb-4">Restaurants</h1>
-                <form class="flex items-center max-w-sm mx-auto">   
+                <div class="flex items-center max-w-sm mx-auto">   
                     <label for="simple-search" class="sr-only">Search</label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -52,7 +52,7 @@ export default function RestaurantPage() {
                         </svg>
                         <span class="sr-only">Search</span>
                     </button>
-                </form>
+                </div>
 
                 {/* List of filtered restaurants */}
                 <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
