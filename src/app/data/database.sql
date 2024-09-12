@@ -130,5 +130,14 @@ INSERT INTO Vendor_Submissions (name, location, price_range, food_type, hours_of
 VALUES
     ('Tasty Thai', 'Meow St, Merced, CA', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg')
 
+CREATE TABLE Favorite_Restaurants (
+    restaurant_id SERIAL PRIMARY KEY,
+    restaurant_name VARCHAR(255) NOT NULL,
+    favorited BOOLEAN DEFAULT 
+);
+
+CREATE TABLE User_Info (
+
+)
 
 -- DROP DATABASE eats_in_reach_db;
