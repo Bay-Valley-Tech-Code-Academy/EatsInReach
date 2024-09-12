@@ -2,6 +2,11 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/Components/Navbar';
+import Slider from "react-slick";
+
+// Import css files for react-slick
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function RestaurantPage() {
     const [restaurants, setRestaurants] = useState([]);
@@ -16,11 +21,41 @@ export default function RestaurantPage() {
         fetchRestaurants();
     }, []);
 
+    
+    const settings = {
+            
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+
+    };
+
     return (
         <div className="min-h-screen bg-gray-100">
             <Navbar />
-            <div className="container mt-4 mx-auto p-4 rounded-3xl bg-gray-600">
-                <h1 className="text-3xl font-bold mb-4">Restaurants</h1>
+            <div className="container p-10 mt-4 mx-auto rounded-3xl bg-gray-600">
+                <h1 className="text-3xl font-bold mb-4 text-white">Featured Restaurants</h1>
+                <Slider {...settings}>
+                    {restaurants.slice(0, 5).map(restaurant => (
+                        <div key={restaurant.restaurant_id}>
+                            <img
+                                src={restaurant.image_url}
+                                alt={`Image of ${restaurant.name}`}
+                                className="w-full h-64 object-cover"
+                            />
+                            <div className="bg-white p-4">
+                                <h2 className="text-xl font-semibold">{restaurant.name}</h2>
+                                <p>{restaurant.food_type}</p>
+                            </div>
+                        </div>
+                    ))}
+                </Slider>
+
+                <h2 className="text-2xl font-bold my-4 text-white">All Restaurants</h2>
                 <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4">
                     {restaurants.map(restaurant => (
                         <div key={restaurant.restaurant_id} className="bg-white shadow-md rounded-3xl overflow-hidden flex">
