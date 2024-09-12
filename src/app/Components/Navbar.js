@@ -14,6 +14,9 @@ export default function Navbar() {
             <div>
                 <Link href="/Pages/UserProfile">User Profile</Link>
             </div>
+            <div>
+              <Link href="/Pages/Favorites">Favorites</Link>
+            </div>
         </div>
     </header>
   );
