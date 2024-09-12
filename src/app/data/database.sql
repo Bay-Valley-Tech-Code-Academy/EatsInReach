@@ -114,21 +114,21 @@ VALUES
 -- Insert dummy data into the Restaurant_Pictures table
 INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text)
 VALUES
-    (1, 1, 'https://st3.depositphotos.com/1807998/37163/v/1600/depositphotos_371630846-stock-illustration-art-pizza-menu-design-big.jpg', 'Menu at Pasta Palace'),
-    (1, 2, 'https://media.licdn.com/dms/image/C4E12AQHQPPSfVtjeJQ/article-cover_image-shrink_720_1280/0/1557238718742?e=2147483647&v=beta&t=IQLUyEnZBq_0DSHf0KxBi-b4uwubHAGzpfRES0AGY10', 'Signature pasta dish at Pasta Palace'),
-    (2, 1, 'https://cdn.shopify.com/s/files/1/1568/8443/products/mv6_es_dad_layout_core_vertical_sushi-menu-chart-wall-art.webp?v=1716388788&width=900', 'Menu at Sushi Central'),
-    (2, 2, 'https://i.pinimg.com/736x/cc/f3/a7/ccf3a7ccd98bb3413b32269b42381aeb.jpg', 'Fresh sashimi platter at Sushi Central'),
-    (3, 1, 'https://example.com/burger-bonanza-menu.jpg', 'Menu at Burger Bonanza'),
-    (3, 2, 'https://example.com/burger-bonanza-burger.jpg', 'Signature burger at Burger Bonanza'),
-    (4, 1, 'https://example.com/taco-town-menu.jpg', 'Menu at Taco Town'),
-    (4, 2, 'https://example.com/taco-town-tacos.jpg', 'Fresh tacos at Taco Town'),
-    (5, 1, 'https://example.com/steak-house-menu.jpg', 'Menu at Steak House'),
-    (5, 2, 'https://example.com/steak-house-steak.jpg', 'Premium steak dish at Steak House');
+    (1, 1, 'pizza-menu.jpg', 'Menu at Pasta Palace'),
+    (1, 2, 'pizza-2.jpg', 'Signature pasta dish at Pasta Palace'),
+    (2, 1, 'sushi-menu.jpg', 'Menu at Sushi Central'),
+    (2, 2, 'sushi-1.jpg', 'Fresh sashimi platter at Sushi Central'),
+    (3, 1, 'burger-menu.jpg', 'Menu at Burger Bonanza'),
+    (3, 2, 'burger-1.jpg', 'Signature burger at Burger Bonanza'),
+    (4, 1, 'taco-menu.jpg', 'Menu at Taco Town'),
+    (4, 2, 'taco-1.jpg', 'Fresh tacos at Taco Town'),
+    (5, 1, 'steak-menu.jpg', 'Menu at Steak House'),
+    (5, 2, 'steak-1.jpg', 'Premium steak dish at Steak House');
 
 -- Insert dummy data into the Vendor_Submissions table
 INSERT INTO Vendor_Submissions (name, location, price_range, food_type, hours_of_operation, description, phone_number, email, image_url)
 VALUES
-    ('Tasty Thai', 'Meow St, Merced, CA', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg'),
+    ('Tasty Thai', 'Meow St, Merced, CA', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg')
 
 
--- DROP DATABASE eats_in_reach_db;
+ --DROP DATABASE eats_in_reach_db;
