@@ -33,9 +33,10 @@ export default function ReviewSubmissions() {
     }
 
     return (
-    <body className="bg-[#FDE4CE]">
+    
+    <div className="bg-[#FDE4CE] min-h-screen flex flex-col">
         <Navbar/>
-        <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+        <div className="m-5 min-h-min items-center max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
             <h1 className="text-2xl font-bold mb-6">Review Submissions</h1>
             {submissions.length > 0 ? (
                 <ul>
@@ -51,8 +52,10 @@ export default function ReviewSubmissions() {
                             <p><strong>Email:</strong> {submission.email}</p>
                             <p><strong>Image URL:</strong> <a href={submission.image_url} target="_blank" rel="noopener noreferrer">{submission.image_url}</a></p>
                             {/* Add buttons for approving or rejecting the submission */}
-                            <button className='rounded-full text-white bg-[#AAD15F] px-4 py-1 m-2 border border-gray-300'>Accept</button>
-                            <button className='rounded-full text-white bg-[#D22701] px-4 py-1 m-2 border border-gray-300'>Reject</button>
+                            <div className="flex justify-center">
+                                <button className='rounded-full font-thin bg-[#AAD15F] px-4 py-1 mx-1 my-2 hover:bg-[#627937]'>Accept</button>
+                                <button className='rounded-full font-thin bg-[#D22701] px-4 py-1 mx-1 my-2 hover:bg-[#963a25]'>Reject</button>
+                            </div>
                         </li>
                     ))}
                 </ul>
@@ -60,10 +63,10 @@ export default function ReviewSubmissions() {
                 <p>No submissions to review at this time.</p>
             )}
             <Link href="/">
-            <button className='rounded-full text-white bg-[#FF670E] px-4 py-1 border border-gray-300'>Home</button>
+            <button className='rounded-full font-thin bg-[#D9D9D9] px-4 py-1 border border-gray-300'>Home</button>
             </Link>
         </div>
         <Footer/>
-    </body>
+    </div>
     );
 }

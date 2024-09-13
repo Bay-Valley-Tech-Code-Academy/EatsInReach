@@ -20,7 +20,7 @@ export default function Footer() {
   ];
 
   return (
-    <div className="bg-[#D9D9D9]">
+    <div className="bg-[#D9D9D9] mt-auto">
       <div className="flex pt-4 pb-6">
         {sections.map((section, index) => (
           <div key={index} className="flex justify-center items-center">
