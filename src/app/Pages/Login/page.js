@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function LoginUser() {
+export default function Login() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -70,7 +70,7 @@ export default function LoginUser() {
           className="w-28 absolute top-0 left-0"
         />
       </Link>
-      <div className="w-3/4 sm:w-1/2 lg:w-1/4 bg-gray-300 rounded-xl flex flex-col items-center">
+      <div className="w-3/4 sm:w-1/2 lg:w-1/4 bg-[#AAD15F] rounded-xl flex flex-col items-center">
         <h1 className="text-6xl p-3 text-center">Let's Eat!</h1>
         <form onSubmit={handleLogin} className="flex flex-col w-3/4 pt-6">
           <input
@@ -132,7 +132,7 @@ export default function LoginUser() {
           <div className="text-center p-2">
             <button
               type="submit"
-              className="bg-gray-400 hover:bg-gray-500 p-2 rounded-xl"
+              className="bg-[#FDE4CE] hover:bg-[#FBCDAC]  p-2 rounded-xl"
             >
               {signUp ? "Sign Up" : "Sign In"}
             </button>
@@ -143,7 +143,7 @@ export default function LoginUser() {
               <p>
                 Have an account:
                 <span
-                  className="text-blue-500 hover:cursor-pointer hover:text-blue-700 pl-1"
+                  className="text-[#D22701] hover:cursor-pointer hover:text-[#4E070C] pl-1"
                   onClick={() => {
                     setSignUp(!signUp);
                     setError("");
@@ -156,7 +156,7 @@ export default function LoginUser() {
               <p>
                 Don't have an account:
                 <span
-                  className="text-blue-500 hover:cursor-pointer hover:text-blue-700 pl-1"
+                  className="text-[#D22701] hover:cursor-pointer hover:text-[#4E070C] pl-1"
                   onClick={() => setSignUp(!signUp)}
                 >
                   Sign Up

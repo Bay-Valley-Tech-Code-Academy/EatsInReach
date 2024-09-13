@@ -1,6 +1,8 @@
 [Prerequisites](doc:EatsInReach#prerequisites) |
 [Setup](doc:EatsInReach#setup)
 
+_Please make sure to follow the instructions in order. You may run into errors if you follow them out of order._
+
 ## PREREQUISITES
 
 ### Windows
@@ -8,7 +10,7 @@
 1. Install [PostgreSQL 15.8](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). (Uncheck 'Stack builder' and 'pgAdmin' when installing, we don't need those.)
 2. After installation, open your Command Prompt and type `psql`.
 
-- If `psql` is not recognized, then open your environment variables, and add `C:\Program Files\PostgreSQL\15\lib` and `C:\Program Files\PostgreSQL\15\bin` to your system variables PATH.
+- If `psql` is not recognized, then open your environment variables, and add `C:\Program Files\PostgreSQL\15\lib` and `C:\Program Files\PostgreSQL\15\bin` to your system variables PATH. (If you don't know how to access the environment variables, see the link below.)
 - [Follow this tutorial to access and edit the environment variables.](https://www.c-sharpcorner.com/article/how-to-addedit-path-environment-variable-in-windows-11/#:~:text=We%20require%20permission%20from%20the,if%20you%20are%20not%20one.&text=Press%20Windows%2BR%2C%20type%20%22,%22%20and%20press%20%22Ok%22.)
 - Open and close Command Prompt, try `psql` again. (If issues persist, message Soraya if you need help.)
 
