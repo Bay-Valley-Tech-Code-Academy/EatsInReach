@@ -6,7 +6,6 @@ export default function LearnMoreCard({image, title, description, link}) {
                     {image}
                 </div>
             </div>
-            <div className="w-32 h-32 m-6 bg-slate-900 rounded-full"></div>
             <div className="text-center">
                 <h3 className="font-bold mb-2"> {title} </h3>
                 <p> {description} </p>
