@@ -20,8 +20,8 @@ export default function Footer() {
   ];
 
   return (
-    <div className="bg-[#D9D9D9] mt-auto">
-      <div className="flex pt-4 pb-6">
+    <div className="bg-[#D9D9D9] mt-auto w-full h-full">
+      <div className="flex pt-4 pb-6 sm:flex">
         {sections.map((section, index) => (
           <div key={index} className="flex justify-center items-center">
             {section.title && (
@@ -30,8 +30,8 @@ export default function Footer() {
           </div>
         ))}
         <div className="ml-auto flex items-center">
-        {sections[2].items.map((item, idx) => (
-          <a key={idx} href={item.href} className="inline-flex justify-end px-3 py-3 hover:underline">
+          {sections[2].items.map((item, idx) => (
+            <a key={idx} href={item.href} className="inline-flex justify-end px-3 py-3 hover:underline">
             <img src={item.imgSrc} width={24} height={24} className="w-6 mr-2 opacity-60" />
           </a>
         ))}
