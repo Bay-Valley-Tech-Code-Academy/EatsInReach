@@ -11,6 +11,7 @@ export async function POST(request) {
       await request.json();
     // Handle role (user or vendor)
     const userType = role === "vendor" ? "vendors" : "users";
+    
     // Sign Up logic
     if (signUp) {
       if (password !== verifyPassword) {
@@ -50,16 +51,19 @@ export async function POST(request) {
     );
     const user = userCredential.user;
 
-    // Retrieve role from Firestore by querying both collections
+    // Retrieve role and 2FA status from Firestore
     let userRole = "unknown";
+    let requires2FA = false;
     const userDoc = await getDoc(doc(firestore, "users", user.uid));
 
     if (userDoc.exists()) {
       userRole = userDoc.data().role;
+      requires2FA = userDoc.data().requires2FA || false;
     } else {
       const vendorDoc = await getDoc(doc(firestore, "vendors", user.uid));
       if (vendorDoc.exists()) {
         userRole = vendorDoc.data().role;
+        requires2FA = vendorDoc.data().requires2FA || false;
       }
     }
 
@@ -75,6 +79,7 @@ export async function POST(request) {
       JSON.stringify({
         message: `${role} signed in successfully`,
         role: userRole,
+        requires2FA: requires2FA, // Add this field to indicate 2FA requirement
       }),
       { status: 200 }
     );
