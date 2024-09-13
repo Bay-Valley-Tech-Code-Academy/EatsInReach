@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Navbar() {
 
   return (
-    <header className="bg-[#dfaf90] flex w-screen items-center h-screen max-h-14 justify-between">
+    <header className="bg-[#dfaf90] flex w-full items-center h-screen max-h-14 justify-between">
        
       {/*/Pages/Home?LandingPage*/}
         <Link href="{}">
