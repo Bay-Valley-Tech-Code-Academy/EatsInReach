@@ -45,9 +45,9 @@ export default function Login() {
         setError("");
         // Redirect based on role
         if (data.role === "vendor") {
-          router.push("/"); //change to the correct page
+          router.push("/Pages/VendorSubmission"); //change to the correct page
         } else if (data.role === "user") {
-          router.push("/"); //change to the correct page
+          router.push("/Pages/Restaurants"); //change to the correct page
         } else {
           console.error("Unknown role:", data.role);
           setError("Unable to determine user role.");
