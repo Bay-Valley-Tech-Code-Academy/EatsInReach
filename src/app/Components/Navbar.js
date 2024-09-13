@@ -24,7 +24,7 @@ export default function Navbar() {
 
         <div className="flex w-1/4">      
 
-                <Link href="">
+                <Link href="/Pages/Landing">
               
                 <div className="hover:bg-[#bb9277] hover:p-4 hover p-4 ">
               
