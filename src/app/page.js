@@ -18,7 +18,7 @@ export default function Landing() {
         <h2 className="text-2xl sm:text-4xl md:text-5xl mt-4">Reach for Flavor, Anytime</h2>
         <div className="mt-20">
           <Link href="/Pages/Login">
-            <button className="text-1xl sm:text-2xl md:text-3xl bg-gray-300 p-3 sm:p-4 md:p-5 rounded-full border border-black">Login</button>
+            <button className="text-1xl sm:text-2xl md:text-3xl bg-[#AAD15F] hover:bg-[#8A9C4C] p-3 sm:p-4 md:p-5 rounded-full border border-black">Login</button>
           </Link>
         </div>
       </div>
