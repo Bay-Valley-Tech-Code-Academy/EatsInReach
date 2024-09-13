@@ -131,4 +131,4 @@ VALUES
     ('Tasty Thai', 'Meow St, Merced, CA', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg')
 
 
- --DROP DATABASE eats_in_reach_db;
+--  DROP DATABASE eats_in_reach_db;
