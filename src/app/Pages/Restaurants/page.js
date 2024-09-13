@@ -12,6 +12,8 @@ export default function RestaurantPage() {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [sortBy, setSortBy] = useState("");
 
   useEffect(() => {
     async function fetchRestaurants() {
@@ -43,6 +45,21 @@ export default function RestaurantPage() {
     setFilteredRestaurants(filtered);
   }, [searchQuery, restaurants]);
 
+  useEffect(() => {
+    console.log("sort by changed")
+    console.log(filteredRestaurants)
+    if (sortBy == "Price_asc") {
+      setRestaurants(filteredRestaurants.sort((a, b) => a.price_range.length - b.price_range.length))
+    }
+    if (sortBy == "Price_desc") {
+      setRestaurants(filteredRestaurants.sort((a, b) => b.price_range.length - a.price_range.length))
+    }
+    if (sortBy == "Food_type") {
+      setRestaurants(filteredRestaurants.sort((a, b) => a.food_type - b.food_type))
+    }
+
+  }, [sortBy]);
+
   return (
     <div className="min-h-screen bg-Almond">
       <Navbar />
@@ -69,23 +86,38 @@ export default function RestaurantPage() {
           <label for="simple-search" class="sr-only">
             Search
           </label>
+
+
           <div class="relative w-full">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg
-                class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 20"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2"
-                />
-              </svg>
+            <div class="absolute inset-y-0 -start-0 flex items-center ps-3">
+              <button type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                <svg
+                  class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2"
+                  />
+                </svg>
+                {isDropdownOpen && (
+                  <div className="absolute bg-white shadow-md rounded-md mt-2 w-48">
+                    <ul className="py-2">
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_asc")}>Price asc</li>
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_desc")}> Price desc</li>
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Food_Type")}> Food_type</li>
+
+                      <li>Rating NOT IMPLEMENTED NEED TO DO WHEN RATINGS ARE IMPLEMENTED</li>
+                    </ul>
+                  </div>
+                )}
+              </button>
             </div>
             <input
               type="text"
