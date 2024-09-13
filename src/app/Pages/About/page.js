@@ -13,19 +13,19 @@ const cardData = [
         image: <IconMapMarker/>,
         title: "Discover Local Gems",
         description: "Explore a diverse range of food vendors right from your device. Whether you’re craving a gourmet food truck meal, a home-cooked specialty, or a unique dish from a small, family-owned eatery, we’ve got you covered.",
-        link: "../../index.js"
+        link: "/"
     },
     {
         image: <IconBxDonateHeart/>,
         title: "Support Small Businesses",
         description: "Our platform helps local vendors reach a broader audience, giving them the exposure they deserve and helping them thrive. Your support directly contributes to the growth and sustainability of these cherished community businesses.",
-        link: "https://www.youtube.com"
+        link: "/"
     },
     {
         image: <IconStars/>,
         title: "Access Unique Offerings",
         description: "Find and enjoy distinctive culinary experiences that you won’t find in mainstream restaurants. Our app features real-time updates, allowing you to locate vendors, view their menus, and get notifications about their special promotions.",
-        link: "https://www.youtube.com"
+        link: "../Restaurants"
     }
   ];
 
@@ -73,7 +73,9 @@ export default function About() {
                     <img src="https://www.modbee.com/latest-news/cwnnig/picture253156058/alternates/LANDSCAPE_1140/bayvalleytech2_KK.JPG"
                     className="md:h-96 m-6"/>
                     <div>
-                        <h2 className="text-3xl text-center pb-9 font-bold"> Bay Valley Tech </h2>
+                        <h2 className="text-3xl text-center pb-9 font-bold"> 
+                            <a href="https://www.bayvalleytech.com/"> Bay Valley Tech </a>
+                        </h2>
                         <p className="max-w-[620px]">
                             Bay Valley Tech is a fast-growing tech incubator, tech community and digital workforce training program. 
                             We believe that enabling hardworking individuals to attain lucrative technology-based careers can be 
