@@ -12,6 +12,7 @@ export default function Login() {
     verifyPassword: "",
     role: "",
   });
+
   const [signUp, setSignUp] = useState(false);
   const [error, setError] = useState("");
 
@@ -40,18 +41,16 @@ export default function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        if (data.requires2FA) {
-          router.push("/verify-code");
+        console.log(data.message);
+        setError("");
+        // Redirect based on role
+        if (data.role === "vendor") {
+          router.push("/"); //change to the correct page
+        } else if (data.role === "user") {
+          router.push("/"); //change to the correct page
         } else {
-          // Redirect based on role
-          if (data.role === "vendor") {
-            router.push("/vendor-dashboard"); // Change to correct page
-          } else if (data.role === "user") {
-            router.push("/user-dashboard"); // Change to correct page
-          } else {
-            console.error("Unknown role:", data.role);
-            setError("Unable to determine user role.");
-          }
+          console.error("Unknown role:", data.role);
+          setError("Unable to determine user role.");
         }
       } else {
         console.error("Error:", data.error);
@@ -133,7 +132,7 @@ export default function Login() {
           <div className="text-center p-2">
             <button
               type="submit"
-              className="bg-[#FDE4CE] hover:bg-[#FBCDAC] p-2 rounded-xl"
+              className="bg-[#FDE4CE] hover:bg-[#FBCDAC]  p-2 rounded-xl"
             >
               {signUp ? "Sign Up" : "Sign In"}
             </button>
