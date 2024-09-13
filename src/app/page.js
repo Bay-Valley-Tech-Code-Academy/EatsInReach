@@ -1,20 +1,27 @@
-"client side";
+"use client";
+
+import Navbar from "./Components/Navbar";
 import Link from "next/link";
-import Image from "next/image";
+import { Italiana } from "next/font/google";
 
-export default function Verification() {
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+export default function Landing() {
   return (
-    <>
-      <Link href="/">
-        <div className="flex mx-4 items-center ">
-          <Image src="/phLogo.png" height="30" width="40" alt="Yum Yummers" />
-
-          <h2>Yum Yummers</h2>
+    <div>
+      <Navbar />
+      <div className="w-full flex flex-col items-center landing-page">
+        <h1 className={`mt-20 text-6xl sm:text-8xl md:text-9xl landing-header ${italiana.className}`}>Eats in Reach</h1>
+        <h2 className="text-2xl sm:text-4xl md:text-5xl mt-4">Reach for Flavor, Anytime</h2>
+        <div className="mt-20">
+          <Link href="/Pages/Login">
+            <button className="text-1xl sm:text-2xl md:text-3xl bg-[#AAD15F] hover:bg-[#8A9C4C] p-3 sm:p-4 md:p-5 rounded-full border border-black">Login</button>
+          </Link>
         </div>
-      </Link>
-      <div className="flex h-screen justify-center items-center">
-        <div className="bg-gray-500 h-30"> <h2>hello</h2></div>
       </div>
-    </>
+    </div>
   );
 }

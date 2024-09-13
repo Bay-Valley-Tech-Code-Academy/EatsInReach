@@ -4,18 +4,18 @@ import Image from "next/image";
 export default function Navbar() {
   return (
     <header className="bg-[#dfaf90] flex w-full items-center h-screen max-h-14 justify-between">
-     
-      {/*/Pages/Home?LandingPage*/}
-      <div className="flex mx-4 justify-between items-center ">
-        <Link href="/">
+      
+      <Link href="/">
+        <div className="flex mx-4 justify-between items-center ">
           <Image src="/phLogo.png" height="30" width="40" alt="Yum Yummers" />
-        </Link>
-        <h2 className="hidden sm:block pl-2">Yum Yummers</h2>
-      </div>
+
+          <h2>Yum Yummers</h2>
+        </div>
+      </Link>
 
       <div className="flex">
         <Link href="/Pages/Cart">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+          <div className="hover:bg-[#bb9277] hover:p-4 hover p-4 ">
             <Image
               src="/shoppingcart.png"
               height="15"
@@ -27,19 +27,19 @@ export default function Navbar() {
         </Link>
 
         <Link href="/Pages/Restaurants">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+          <div className="hover:bg-[#bb9277] hover:p-4 p-4 ">
             <h2>Restaurants</h2>
           </div>
         </Link>
 
-        <Link href="/Pages/Favorites">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+        <Link href="/Pages/FavoritesPage">
+          <div className="hover:bg-[#bb9277] hover:p-4 p-4 ">
             <h2>Favorites</h2>
           </div>
         </Link>
 
         <Link href="/Pages/UserProfile" className="hidden">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+          <div className="hover:bg-[#bb9277] hover:p-4 p-4">
             <h2>User Profile</h2>
             {/*hidden until signed in*/}
           </div>
@@ -47,7 +47,7 @@ export default function Navbar() {
 
         {/*/pages/Vendor-UserLogin*/}
         <Link href="/Pages/Login">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+          <div className="hover:bg-[#bb9277] hover:p4 p-4 ">
             <h2>Login</h2>
           </div>
         </Link>
