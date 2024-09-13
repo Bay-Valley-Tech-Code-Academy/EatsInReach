@@ -1,6 +1,8 @@
 [Prerequisites](doc:EatsInReach#prerequisites) |
 [Setup](doc:EatsInReach#setup)
 
+*Please make sure to follow the instructions in order. You may run into errors if you follow them out of order.*
+
 ## PREREQUISITES
 ### Windows
 1. Install [PostgreSQL 15.8](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). (Uncheck 'Stack builder' and 'pgAdmin' when installing, we don't need those.)
