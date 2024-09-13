@@ -65,7 +65,8 @@ export default function RestaurantPage() {
             </div>
           ))}
         </Slider>
-        <form className="flex items-center max-w-sm mx-auto mt-8">
+
+        <div className="flex items-center max-w-sm mx-auto mt-8">
           <label htmlFor="simple-search" className="sr-only">
             Search
           </label>
@@ -118,10 +119,12 @@ export default function RestaurantPage() {
             </svg>
             <span className="sr-only">Search</span>
           </button>
-        </form>
+        </div>
+
         <h2 className="text-2xl font-bold my-4 text-black">All Restaurants</h2>
         <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4">
-          {restaurants.map((restaurant) => (
+          {filteredRestaurants.length > 0 ? (
+            filteredRestaurants.map((restaurant) => (
             <div
               key={restaurant.restaurant_id}
               className="bg-white shadow-md rounded-3xl overflow-hidden flex"
@@ -151,8 +154,14 @@ export default function RestaurantPage() {
                 </div>
               </Link>
             </div>
-          ))}
+          ))
+          ) : (
+            <p className="text-center text-lg text-black">No restaurants match your search.</p>
+          )}
+          
         </div>
+
+
         <Link
           href="/"
           className="bg-Kobicha text-rosey-brown rounded-lg hover:bg-Chocolate-cosmos hover:text-white mt-4 inline-block px-6 py-3 text-sm font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-transform transform hover:-translate-y-1 scale-105"

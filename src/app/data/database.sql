@@ -4,12 +4,12 @@ CREATE DATABASE eats_in_reach_db;
 -- Connect to the newly created database
 \c eats_in_reach_db;
 
--- Create the Cuisines table
-CREATE TABLE Cuisines (
-    cuisine_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    description TEXT
+-- Create the Food_Types table (removed description column)
+CREATE TABLE Food_Types (
+    food_type_id SERIAL PRIMARY KEY,
+    type_name VARCHAR(100) NOT NULL
 );
+
 
 -- Create the Restaurants table with phone number and email (modified)
 CREATE TABLE Restaurants (
@@ -20,18 +20,12 @@ CREATE TABLE Restaurants (
     hours_of_operation VARCHAR(255),
     is_open BOOLEAN NOT NULL DEFAULT FALSE,
     description TEXT,
-    cuisine_id INTEGER REFERENCES Cuisines(cuisine_id),
+    food_type_id INTEGER REFERENCES Food_Types(food_type_id),
     average_rating DECIMAL(3,2),
     total_reviews INTEGER DEFAULT 0,
     website VARCHAR(255),
     phone_number VARCHAR(20),
     email VARCHAR(255)
-);
-
--- Create the Food_Types table
-CREATE TABLE Food_Types (
-    food_type_id SERIAL PRIMARY KEY,
-    type_name VARCHAR(100) NOT NULL
 );
 
 -- Create the Restaurant_Food_Types junction table
@@ -67,24 +61,15 @@ CREATE TABLE Vendor_Submissions (
     submission_id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     location TEXT NOT NULL,
-    price_range TEXT NOT NULL,
+    price_range VARCHAR(50) NOT NULL,
     food_type TEXT NOT NULL,
     hours_of_operation TEXT NOT NULL,
     description TEXT,
     phone_number VARCHAR(15),
     email VARCHAR(255),
     image_url TEXT,
-    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status TEXT DEFAULT 'pending'
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- Optional: Insert predefined price ranges
-INSERT INTO Price_Ranges (range)
-VALUES
-    ('$'),
-    ('$$'),
-    ('$$$'),
-    ('$$$$');
 
 -- Create the Menus table
 CREATE TABLE Menus (
@@ -111,7 +96,6 @@ CREATE TABLE Users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -136,10 +120,13 @@ CREATE TABLE Restaurant_Dietary_Options (
     PRIMARY KEY (restaurant_id, restriction_id)
 );
 
--- Insert dummy data
-INSERT INTO Cuisines (name, description) VALUES
-    ('Italian', 'Traditional and modern Italian dishes'),
-    ('Japanese', 'Sushi, ramen, and other Japanese specialties');
+-- Insert predefined price ranges
+INSERT INTO Price_Ranges (range)
+VALUES
+    ('$'),
+    ('$$'),
+    ('$$$'),
+    ('$$$$');
 
 -- Insert predefined photo types
 INSERT INTO Photo_Types (type_name)
@@ -147,16 +134,6 @@ VALUES
     ('Menu'),
     ('Food'),
     ('Restaurant');
-
-    ------ DUMMY DATA -----
--- Insert dummy data into the Restaurants table
-INSERT INTO Restaurants (name, location, price_range, hours_of_operation, is_open, description, cuisine_id, average_rating, total_reviews, website, phone_number, email)
-VALUES
-    ('Pasta Palace', '123 Main St, Merced, CA', '$$', '11:00 AM - 10:00 PM', TRUE, 'A cozy Italian restaurant specializing in homemade pasta.', 1, 4.2, 50, 'www.pastapalace.com','209-555-1111', 'contact@pastapalace.com'),
-    ('Sushi Central', '456 Elm St, Merced, CA', '$$$', '12:00 PM - 11:00 PM', FALSE, 'Fresh sushi and sashimi with a modern twist.', 2, 4.5, 75, 'www.sushicentral.com', '209-555-2222', 'info@sushicentral.com'),
-    ('Burger Bonanza', '789 Oak St, Merced, CA', '$', '10:00 AM - 8:00 PM', TRUE, 'The best burgers in town with secret sauces.',2, 4.5, 75, 'www.sushicentral.com', '209-555-1234', 'info@burgerbonanza.com'),
-    ('Taco Town', '987 Maple Ave, Merced, CA', '$$', '9:00 AM - 9:00 PM', TRUE, 'Authentic Mexican tacos made fresh daily.',2, 4.5, 75, 'www.sushicentral.com', '209-555-9876', 'contact@tacotown.com'),
-    ('Steak House', '321 Pine St, Merced, CA', '$$$$', '5:00 PM - 11:00 PM', FALSE, 'Fine dining steakhouse with premium cuts.',2, 4.5, 75, 'www.sushicentral.com', '209-555-6543', 'reservations@steakhouse.com');
 
 -- Insert dummy data into the Food_Types table
 INSERT INTO Food_Types (type_name)
@@ -166,6 +143,15 @@ VALUES
     ('American'),
     ('Mexican'),
     ('Steakhouse');
+
+-- Insert dummy data into the Restaurants table
+INSERT INTO Restaurants (name, location, price_range, hours_of_operation, is_open, description, food_type_id, average_rating, total_reviews, website, phone_number, email)
+VALUES
+    ('Pasta Palace', '123 Main St, Merced, CA', '$$', '11:00 AM - 10:00 PM', TRUE, 'A cozy Italian restaurant specializing in homemade pasta.', 1, 4.2, 50, 'www.pastapalace.com','209-555-1111', 'contact@pastapalace.com'),
+    ('Sushi Central', '456 Elm St, Merced, CA', '$$$', '12:00 PM - 11:00 PM', FALSE, 'Fresh sushi and sashimi with a modern twist.', 2, 4.5, 75, 'www.sushicentral.com', '209-555-2222', 'info@sushicentral.com'),
+    ('Burger Bonanza', '789 Oak St, Merced, CA', '$', '10:00 AM - 8:00 PM', TRUE, 'The best burgers in town with secret sauces.',2, 4.5, 75, 'www.sushicentral.com', '209-555-1234', 'info@burgerbonanza.com'),
+    ('Taco Town', '987 Maple Ave, Merced, CA', '$$', '9:00 AM - 9:00 PM', TRUE, 'Authentic Mexican tacos made fresh daily.',2, 4.5, 75, 'www.sushicentral.com', '209-555-9876', 'contact@tacotown.com'),
+    ('Steak House', '321 Pine St, Merced, CA', '$$$$', '5:00 PM - 11:00 PM', FALSE, 'Fine dining steakhouse with premium cuts.',2, 4.5, 75, 'www.sushicentral.com', '209-555-6543', 'reservations@steakhouse.com');
 
 -- Insert dummy data into the Restaurant_Food_Types table
 INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id)
@@ -208,10 +194,10 @@ VALUES
     (2, 'Filet Mignon', '8oz, garlic mashed potatoes, asparagus', 29.99, false, false, true),
     (3, 'Vegan Buddha Bowl', 'Quinoa, roasted vegetables, tahini dressing', 14.99, true, true, true);
 
-INSERT INTO Users (username, email, password_hash)
+INSERT INTO Users (username, email)
 VALUES
-    ('foodie123', 'foodie123@email.com', '$2a$10$abc123...'),
-    ('tasteexplorer', 'taste@email.com', '$2a$10$def456...');
+    ('foodie123', 'foodie123@email.com'),
+    ('tasteexplorer', 'taste@email.com');
 
 INSERT INTO Favorites (user_id, restaurant_id)
 VALUES (1, 2), (2, 1);
