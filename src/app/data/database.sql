@@ -96,7 +96,6 @@ CREATE TABLE Users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -195,10 +194,10 @@ VALUES
     (2, 'Filet Mignon', '8oz, garlic mashed potatoes, asparagus', 29.99, false, false, true),
     (3, 'Vegan Buddha Bowl', 'Quinoa, roasted vegetables, tahini dressing', 14.99, true, true, true);
 
-INSERT INTO Users (username, email, password_hash)
+INSERT INTO Users (username, email)
 VALUES
-    ('foodie123', 'foodie123@email.com', '$2a$10$abc123...'),
-    ('tasteexplorer', 'taste@email.com', '$2a$10$def456...');
+    ('foodie123', 'foodie123@email.com'),
+    ('tasteexplorer', 'taste@email.com');
 
 INSERT INTO Favorites (user_id, restaurant_id)
 VALUES (1, 2), (2, 1);
