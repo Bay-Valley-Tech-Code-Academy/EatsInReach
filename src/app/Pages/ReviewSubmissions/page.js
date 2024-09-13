@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from 'react';
 import Link from "next/link";
+import Navbar from '@/Components/Navbar';
+import Footer from '@/Components/Footer';
 
 export default function ReviewSubmissions() {
     const [submissions, setSubmissions] = useState([]);
@@ -32,6 +34,7 @@ export default function ReviewSubmissions() {
 
     return (
     <body className="bg-[#FDE4CE]">
+        <Navbar/>
         <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
             <h1 className="text-2xl font-bold mb-6">Review Submissions</h1>
             {submissions.length > 0 ? (
@@ -60,6 +63,7 @@ export default function ReviewSubmissions() {
             <button className='rounded-full text-white bg-[#FF670E] px-4 py-1 border border-gray-300'>Home</button>
             </Link>
         </div>
+        <Footer/>
     </body>
     );
 }

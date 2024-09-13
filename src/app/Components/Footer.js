@@ -12,9 +12,9 @@ export default function Footer() {
     },
     {
       items: [
-        { text: "Instagram", imgSrc: 'images/logo-instagram.svg', href: "https://www.instagram.com/bayvalleytech/" },
-        { text: "Facebook", imgSrc: 'images/logo-facebook.svg', href: "https://www.facebook.com/BayValleyTech" },
-        { text: "LinkedIn", imgSrc: 'images/logo-linkedin.svg', href: "https://www.linkedin.com/company/bay-valley-tech/posts/?feedView=all" },
+        { text: "Instagram", imgSrc: '../../images/logo-instagram.svg', href: "https://www.instagram.com/bayvalleytech/" },
+        { text: "Facebook", imgSrc: '../../images/logo-facebook.svg', href: "https://www.facebook.com/BayValleyTech" },
+        { text: "LinkedIn", imgSrc: '../../images/logo-linkedin.svg', href: "https://www.linkedin.com/company/bay-valley-tech/posts/?feedView=all" },
       ],
     },
   ];
