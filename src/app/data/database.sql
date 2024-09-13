@@ -36,12 +36,14 @@ CREATE TABLE Photo_Types (
     type_name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE Restaurant_Food_Items (
+-- Create the Vendor_Items table
+CREATE TABLE Vendor_Items (
+    item_id SERIAL PRIMARY KEY,
     restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
     item_name VARCHAR(255) NOT NULL,
     item_desc VARCHAR(255) NOT NULL,
     item_price DECIMAL(10, 2) NOT NULL,
-    image_path BLOB NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
     alt_text VARCHAR(255)
 );
 
@@ -67,13 +69,13 @@ CREATE TABLE Price_Ranges (
     range VARCHAR(50) NOT NULL
 );
 
--- Create the Vendor_Submissions table with phone number and email
+-- Create the Vendor_Submissions table
 CREATE TABLE Vendor_Submissions (
     submission_id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     location TEXT NOT NULL,
-    price_range TEXT NOT NULL,
-    food_type TEXT NOT NULL,
+    price_range VARCHAR(50) NOT NULL,  -- Changed to match Price_Ranges table
+    food_type INTEGER REFERENCES Food_Types(food_type_id),  -- Changed to reference Food_Types
     hours_of_operation TEXT NOT NULL,
     description TEXT,
     phone_number VARCHAR(15),
@@ -91,8 +93,6 @@ VALUES
     ('$$$'),
     ('$$$$');
 
-
------- DUMMY DATA -----
 -- Insert dummy data into the Restaurants table
 INSERT INTO Restaurants (name, location, price_range, hours_of_operation, is_open, description, phone_number, email)
 VALUES
@@ -137,11 +137,12 @@ VALUES
 -- Insert dummy data into the Vendor_Submissions table
 INSERT INTO Vendor_Submissions (name, location, price_range, food_type, hours_of_operation, description, phone_number, email, image_url)
 VALUES
-    ('Tasty Thai', 'Meow St, Merced, CA', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg')
+    ('Tasty Thai', 'Meow St, Merced, CA', '$', 1, '10:00 AM - 8:00 PM', 'The Thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg');
 
--- Insert 
-INSERT INTO Vendor_Items (item_name, item_desc, item_price, image_path, alt_text )
+-- Insert dummy data into the Vendor_Items table
+INSERT INTO Vendor_Items (restaurant_id, item_name, item_desc, item_price, image_path, alt_text)
 VALUES
-    ('Apples', 'Delicious and sweet!', '$', 'Thai', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg'),
+    (1, 'Spaghetti Carbonara', 'Classic Italian pasta with creamy sauce.', 12.99, 'spaghetti-carbonara.jpg', 'Spaghetti Carbonara at Pasta Palace'),
+    (2, 'Salmon Sashimi', 'Freshly sliced salmon sashimi.', 15.99, 'salmon-sashimi.jpg', 'Salmon Sashimi at Sushi Central');
 
  --DROP DATABASE eats_in_reach_db;
