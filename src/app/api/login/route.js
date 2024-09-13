@@ -2,6 +2,7 @@ import { auth, firestore } from "../../../../firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendEmailVerification,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -9,10 +10,12 @@ export async function POST(request) {
   try {
     const { email, password, verifyPassword, signUp, role } =
       await request.json();
+
     // Handle role (user or vendor)
     const userType = role === "vendor" ? "vendors" : "users";
-    // Sign Up logic
+
     if (signUp) {
+      // Sign Up logic
       if (password !== verifyPassword) {
         return new Response(
           JSON.stringify({ error: "Passwords do not match" }),
@@ -33,11 +36,17 @@ export async function POST(request) {
       );
       const user = userCredential.user;
 
+      // Send email verification
+      await sendEmailVerification(user);
+
       // Add user/vendor to Firestore
       await setDoc(doc(firestore, userType, user.uid), { email, role });
 
       return new Response(
-        JSON.stringify({ message: `New ${role} signed up successfully`, role }),
+        JSON.stringify({
+          message: `New ${role} signed up successfully. Please check your email for verification.`,
+          role
+        }),
         { status: 200 }
       );
     }
