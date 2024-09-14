@@ -9,7 +9,7 @@ export async function GET() {
     try {
         const client = await pool.connect();
         const result = await client.query(`
-            SELECT r.restaurant_id, r.name, r.location, r.price_range, f.type_name AS food_type, rp.image_url
+            SELECT r.restaurant_id, r.name, r.location, r.price_range_id, f.type_name AS food_type, rp.image_url
             FROM Restaurants r
             JOIN Restaurant_Food_Types rft ON r.restaurant_id = rft.restaurant_id
             JOIN Food_Types f ON rft.food_type_id = f.food_type_id

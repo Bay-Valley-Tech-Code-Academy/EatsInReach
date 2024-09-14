@@ -1,3 +1,5 @@
+// src/app/Pages/Restaurants/page.js
+
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -61,6 +63,7 @@ export default function RestaurantPage() {
               <div className="bg-white p-4">
                 <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                 <p>{restaurant.food_type}</p>
+                <p>{restaurant.price_range_id}</p>
               </div>
             </div>
           ))}
@@ -125,42 +128,40 @@ export default function RestaurantPage() {
         <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-            <div
-              key={restaurant.restaurant_id}
-              className="bg-white shadow-md rounded-3xl overflow-hidden flex"
-            >
-              <Link
-                href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-                className="flex"
+              <div
+                key={restaurant.restaurant_id}
+                className="bg-white shadow-md rounded-3xl overflow-hidden flex"
               >
-                <img
-                  src={`/images/${restaurant.image_url}`}
-                  alt={`Image of ${restaurant.name}`}
-                  className="w-1/2 h-auto object-cover cursor-pointer"
-                />
-                <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
-                  <h2 className="text-gray-700 text-xl font-semibold mb-2">
-                    {restaurant.name}
-                  </h2>
-                  <p className="text-gray-600 mb-2">
-                    Location: {restaurant.location}
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Price Range: {restaurant.price_range}
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Food Type: {restaurant.food_type}
-                  </p>
-                </div>
-              </Link>
-            </div>
-          ))
+                <Link
+                  href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
+                  className="flex"
+                >
+                  <img
+                    src={`/images/${restaurant.image_url}`}
+                    alt={`Image of ${restaurant.name}`}
+                    className="w-1/2 h-auto object-cover cursor-pointer"
+                  />
+                  <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
+                    <h2 className="text-gray-700 text-xl font-semibold mb-2">
+                      {restaurant.name}
+                    </h2>
+                    <p className="text-gray-600 mb-2">
+                      Location: {restaurant.location}
+                    </p>
+                    <p className="text-gray-600 mb-2">
+                      Price Range: {restaurant.price_range_id}
+                    </p>
+                    <p className="text-gray-600 mb-2">
+                      Food Type: {restaurant.food_type}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ))
           ) : (
             <p className="text-center text-lg text-black">No restaurants match your search.</p>
           )}
-          
         </div>
-
 
         <Link
           href="/"

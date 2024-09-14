@@ -14,9 +14,11 @@ export default function RestaurantPage({ params }) {
             try {
                 const response = await fetch(`/api/restaurants/${restaurantId}`);
                 console.log('API Response:', response);
+                
                 if (!response.ok) {
                     throw new Error('Failed to fetch restaurant');
                 }
+
                 const data = await response.json();
                 console.log('Fetched Data:', data);
                 setRestaurant(data);
@@ -24,12 +26,12 @@ export default function RestaurantPage({ params }) {
                 console.error('Error fetching restaurant data:', error);
             }
         }
-    
+
         if (restaurantId) {
             fetchRestaurant();
         }
     }, [restaurantId]);
-    
+
     if (!restaurant) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-white text-lg text-black">
@@ -44,7 +46,6 @@ export default function RestaurantPage({ params }) {
                 <Navbar />
             </header>
 
-            {/* Main Content Section */}
             <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-white">
                 {/* Restaurant Name */}
                 <section className="mb-4 p-2">
@@ -58,7 +59,7 @@ export default function RestaurantPage({ params }) {
                     {/* Image Section with Hover Effect */}
                     <div className="relative w-full md:w-1/3 p-2 flex-shrink-0 group">
                         <img
-                            src={restaurant.image_url}
+                            src={restaurant.image_url || '/default-image.jpg'} // Provide a default image if URL is missing
                             alt={`${restaurant.name} main dish`}
                             className="w-full h-auto max-w-sm object-cover rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-105"
                         />
@@ -95,7 +96,7 @@ export default function RestaurantPage({ params }) {
                                     <span className="font-semibold">Price Range:</span> {restaurant.price_range}
                                 </p>
                                 <p className="text-lg mb-4 text-black">
-                                    <span className="font-semibold">Rating:</span> {restaurant.rating}
+                                    <span className="font-semibold">Rating:</span> {restaurant.rating || 'N/A'}
                                 </p>
                                 <p className="text-lg mb-4 text-black">
                                     <span className="font-semibold">Food Type:</span> {restaurant.food_type}

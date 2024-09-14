@@ -208,9 +208,9 @@ VALUES
     (5, 2, 'steak-1.jpg', 'Premium steak dish at Steak House');
 
 -- Insert dummy data into the Vendor_Submissions table
-INSERT INTO Vendor_Submissions (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email, image_url)
+INSERT INTO Vendor_Submissions (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email)
 VALUES
-    ('Tasty Thai', 'Meow St, Merced, CA', 1, 10, '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 'https://example.com/tasty-thai.jpg');
+    ('Tasty Thai', 'Meow St, Merced, CA', 1, 10, '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com');
 
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES

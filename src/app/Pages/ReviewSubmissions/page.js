@@ -6,50 +6,64 @@ import Footer from '@/Components/Footer';
 
 export default function ReviewSubmissions() {
     const [submissions, setSubmissions] = useState([]);
-    const [foodTypes, setFoodTypes] = useState([]);
-    const [priceRanges, setPriceRanges] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchSubmissions() {
             try {
-                // Fetch vendor submissions
-                const submissionsResponse = await fetch('/api/vendor-submissions');
-                if (!submissionsResponse.ok) {
-                    throw new Error('Failed to fetch submissions');
+                const response = await fetch('/api/vendor-submissions');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-                const submissionsData = await submissionsResponse.json();
 
-                // Fetch food types and price ranges
-                const foodTypesResponse = await fetch('/api/food-types');
-                const priceRangesResponse = await fetch('/api/price-ranges');
-                if (!foodTypesResponse.ok || !priceRangesResponse.ok) {
-                    throw new Error('Failed to fetch food types or price ranges');
-                }
-                const [foodTypesData, priceRangesData] = await Promise.all([
-                    foodTypesResponse.json(),
-                    priceRangesResponse.json()
-                ]);
-
-                setFoodTypes(foodTypesData);
-                setPriceRanges(priceRangesData);
-                setSubmissions(submissionsData);
+                const text = await response.text(); // Get the response as text
+                const data = text ? JSON.parse(text) : []; // Parse it as JSON if not empty
+                setSubmissions(data);
             } catch (err) {
-                console.error('Failed to fetch data:', err);
-                setError('Failed to load data. Please try again later.');
+                console.error('Failed to fetch submissions:', err);
+                setError('Failed to load submissions. Please try again later.');
             }
         }
 
-        fetchData();
+        fetchSubmissions();
     }, []);
 
-    const getPriceRange = (id) => priceRanges.find((range) => range.price_range_id === id)?.range || 'Unknown';
-    const getFoodType = (id) => foodTypes.find((type) => type.food_type_id === id)?.type_name || 'Unknown';
+    const handleAction = async (submissionId, actionType) => {
+        const confirmation = window.confirm(`Are you sure you want to ${actionType} this submission?`);
+    
+        if (!confirmation) return;
+    
+        try {
+            let response;
+            if (actionType === 'accept') {
+                response = await fetch('/api/vendor-submissions/accept', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ submissionId }),
+                });
+            } else if (actionType === 'reject') {
+                response = await fetch('/api/vendor-submissions/reject', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ submissionId }),
+                });
+            }
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok.');
+            }
+    
+            // Update the state to remove the item from the UI
+            setSubmissions(submissions.filter(submission => submission.submission_id !== submissionId));
+        } catch (error) {
+            console.error(`Failed to ${actionType} submission:`, error);
+            alert('Failed to perform the action. Please try again later.');
+        }
+    };
+    
 
     if (error) {
-        return <div className="m-5 max-w-lg mx-auto p-6 bg-red-100 border border-red-300 text-red-700 rounded-lg">
-            <p>{error}</p>
-        </div>;
+        return <div>{error}</div>;
     }
 
     return (
@@ -63,26 +77,17 @@ export default function ReviewSubmissions() {
                             <li key={submission.submission_id} className="mb-4 p-4 border border-gray-300 rounded">
                                 <h2 className="text-xl font-bold">{submission.name}</h2>
                                 <p><strong>Location:</strong> {submission.location}</p>
-                                <p><strong>Price Range:</strong> {getPriceRange(parseInt(submission.price_range_id))}</p>
-                                <p><strong>Food Type:</strong> {getFoodType(parseInt(submission.food_type_id))}</p>
+                                <p><strong>Price Range:</strong> {submission.price_range_id}</p>
+                                <p><strong>Food Type:</strong> {submission.food_type_id}</p>
                                 <p><strong>Hours of Operation:</strong> {submission.hours_of_operation}</p>
                                 <p><strong>Description:</strong> {submission.description}</p>
                                 <p><strong>Phone Number:</strong> {submission.phone_number}</p>
                                 <p><strong>Email:</strong> {submission.email}</p>
                                 <p><strong>Image URL:</strong> <a href={submission.image_url} target="_blank" rel="noopener noreferrer">{submission.image_url}</a></p>
+                                {/* Add buttons for approving or rejecting the submission */}
                                 <div className="flex justify-center">
-                                    <button 
-                                        className='rounded-full font-thin bg-[#AAD15F] px-4 py-1 mx-1 my-2 hover:bg-[#627937]'
-                                        onClick={() => handleAction(submission.submission_id, 'accept')}
-                                    >
-                                        Accept
-                                    </button>
-                                    <button 
-                                        className='rounded-full font-thin bg-[#D22701] px-4 py-1 mx-1 my-2 hover:bg-[#963a25]'
-                                        onClick={() => handleAction(submission.submission_id, 'reject')}
-                                    >
-                                        Reject
-                                    </button>
+                                    <button onClick={() => handleAction(submission.submission_id, 'accept')} className='rounded-full font-thin bg-[#AAD15F] px-4 py-1 mx-1 my-2 hover:bg-[#627937]'>Accept</button>
+                                    <button onClick={() => handleAction(submission.submission_id, 'reject')} className='rounded-full font-thin bg-[#D22701] px-4 py-1 mx-1 my-2 hover:bg-[#963a25]'>Reject</button>
                                 </div>
                             </li>
                         ))}
