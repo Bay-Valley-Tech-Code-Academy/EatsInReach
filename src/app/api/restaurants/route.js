@@ -1,5 +1,3 @@
-// src/app/api/restaurants/route.js
-
 import { Pool } from 'pg';
 import { NextResponse } from 'next/server';
 
