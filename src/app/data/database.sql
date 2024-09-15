@@ -10,6 +10,12 @@ CREATE TABLE Food_Types (
     type_name VARCHAR(100) NOT NULL
 );
 
+-- Create the Price_Ranges table (Optional)
+CREATE TABLE Price_Ranges (
+    price_range_id SERIAL PRIMARY KEY,
+    range VARCHAR(50) NOT NULL
+);
+
 
 -- Create the Restaurants table with phone number and email (modified)
 CREATE TABLE Restaurants (
@@ -48,12 +54,6 @@ CREATE TABLE Restaurant_Pictures (
     photo_type_id INTEGER REFERENCES Photo_Types(photo_type_id),
     image_url VARCHAR(255) NOT NULL,
     alt_text VARCHAR(255)
-);
-
--- Create the Price_Ranges table (Optional)
-CREATE TABLE Price_Ranges (
-    price_range_id SERIAL PRIMARY KEY,
-    range VARCHAR(50) NOT NULL
 );
 
 -- Create the Vendor_Submissions table
@@ -187,11 +187,11 @@ VALUES
 -- Insert dummy data into the Restaurant_Food_Types table
 INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id)
 VALUES
-    (1, 1),  -- Pasta Palace serves Italian food
-    (2, 2),  -- Sushi Central serves Japanese food
-    (3, 3),  -- Burger Bonanza serves American food
-    (4, 4),  -- Taco Town serves Mexican food
-    (5, 5);  -- Steak House serves Steakhouse food
+    (1, 16),  -- Pasta Palace serves Italian food
+    (2, 17),  -- Sushi Central serves Japanese food
+    (3, 1),  -- Burger Bonanza serves American food
+    (4, 21),  -- Taco Town serves Mexican food
+    (5, 30);  -- Steak House serves Steakhouse food
 
 -- Insert dummy data into the Restaurant_Pictures table
 INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text)
@@ -210,7 +210,7 @@ VALUES
 -- Insert dummy data into the Vendor_Submissions table
 INSERT INTO Vendor_Submissions (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email)
 VALUES
-    ('Tasty Thai', 'Meow St, Merced, CA', 1, 10, '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com');
+    ('Tasty Thai', 'Meow St, Merced, CA', 1, 31, '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com');
 
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES
