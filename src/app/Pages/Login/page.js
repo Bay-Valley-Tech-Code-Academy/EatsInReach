@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { auth, firestore } from "../../../../firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 export default function Login() {
   const router = useRouter();
@@ -21,44 +28,88 @@ export default function Login() {
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  const handleLogin = async (e) => {
+  const handleAuth = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          verifyPassword: formData.verifyPassword,
-          signUp: signUp,
-          role: formData.role,
-        }),
-      });
+      if (signUp) {
+        // Sign Up logic
+        if (formData.password !== formData.verifyPassword) {
+          setError("Passwords do not match");
+          return;
+        } else if (formData.password.length < 6) {
+          setError("Password must be at least 6 characters");
+          return;
+        }
 
-      const data = await response.json();
-      if (response.ok) {
-        console.log(data.message);
-        setError("");
+        // Create new user
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+        const user = userCredential.user;
+
+        // Send email verification
+        await sendEmailVerification(user);
+
+        // Add user/vendor to Firestore
+        await setDoc(doc(firestore, userType, user.uid), { email, role });
+
         // Redirect based on role
-        if (data.role === "vendor") {
+        if (role === "vendor") {
           router.push("/Pages/VendorSubmission"); //change to the correct page
-        } else if (data.role === "user") {
+        } else if (role === "user") {
           router.push("/Pages/Restaurants"); //change to the correct page
         } else {
-          console.error("Unknown role:", data.role);
+          console.error("Unknown role:", role);
           setError("Unable to determine user role.");
         }
       } else {
-        console.error("Error:", data.error);
-        setError(data.error);
+        // Sign In logic
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+        const user = userCredential.user;
+
+        // Retrieve role from Firestore
+        const userRole = await getUserRole(user.uid);
+
+        // Redirect based on role
+        if (userRole === "vendor") {
+          router.push("/Pages/VendorSubmission");
+        } else if (userRole === "user") {
+          router.push("/Pages/Restaurants");
+        } else {
+          setError("Unable to determine user role.");
+        }
       }
     } catch (error) {
-      console.error("Fetch error:", error);
+      console.error("Error:", error.message);
+      setError(error.message);
     }
+  };
+
+  const getUserRole = async (uid) => {
+    const userDoc = await getDoc(doc(firestore, "users", uid));
+    if (userDoc.exists()) {
+      return userDoc.data().role;
+    }
+
+    const vendorDoc = await getDoc(doc(firestore, "vendors", uid));
+    if (vendorDoc.exists()) {
+      return vendorDoc.data().role;
+    }
+
+    // Check for admin role if needed
+    const adminDoc = await getDoc(doc(firestore, "admins", uid));
+    if (adminDoc.exists()) {
+      return "admin";
+    }
+
+    return "unknown";
   };
 
   return (
@@ -72,7 +123,7 @@ export default function Login() {
       </Link>
       <div className="w-3/4 sm:w-1/2 lg:w-1/4 bg-[#AAD15F] rounded-xl flex flex-col items-center">
         <h1 className="text-6xl p-3 text-center">Let's Eat!</h1>
-        <form onSubmit={handleLogin} className="flex flex-col w-3/4 pt-6">
+        <form onSubmit={handleAuth} className="flex flex-col w-3/4 pt-6">
           <input
             type="email"
             name="email"
@@ -132,7 +183,7 @@ export default function Login() {
           <div className="text-center p-2">
             <button
               type="submit"
-              className="bg-[#FDE4CE] hover:bg-[#FBCDAC]  p-2 rounded-xl"
+              className="bg-[#FDE4CE] hover:bg-[#FBCDAC] p-2 rounded-xl"
             >
               {signUp ? "Sign Up" : "Sign In"}
             </button>

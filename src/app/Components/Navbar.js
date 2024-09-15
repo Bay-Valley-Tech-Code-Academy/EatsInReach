@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useAuth } from "../../../context/authContext";
 import { signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { auth } from "../../../firebase";
+import { auth, firestore } from "../../../firebase";
 
 export default function Navbar() {
   const { currentUser } = useAuth();
@@ -15,7 +14,7 @@ export default function Navbar() {
     console.log('Current user in Navbar:', currentUser);
     if (currentUser) {
       const fetchUserRole = async () => {
-        const userDoc = await getDoc(doc(firestore, "users", user.uid));
+        const userDoc = await getDoc(doc(firestore, "users", currentUser.uid));
 
         if (userDoc.exists()) {
           const userData = userDoc.data();
@@ -41,7 +40,7 @@ export default function Navbar() {
     <header className="bg-[#dfaf90] flex w-full items-center h-screen max-h-14 justify-between">
       <div className="flex mx-4 justify-between items-center ">
         <Link href="/">
-          <Image src="/phLogo.png" height="30" width="40" alt="Yum Yummers" />
+          <img src="/images/phLogo.png" height="30" width="40" alt="Yum Yummers" />
         </Link>
         <h2 className="hidden sm:block pl-2">Yum Yummers</h2>
       </div>
@@ -49,8 +48,8 @@ export default function Navbar() {
       <div className="flex">
         <Link href="/Pages/Cart">
           <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-            <Image
-              src="/shoppingcart.png"
+            <img
+              src="/images/shoppingcart.png"
               height="15"
               width="25"
               alt="Your Shopping Cart"

@@ -1,6 +1,7 @@
-// src/app/layout.js
+'use client';
+
 import './globals.css';
-import { AuthProvider } from '../../context/authContext'; // Ensure this path is correct
+import { AuthProvider } from '../../context/authContext';
 
 export default function RootLayout({ children }) {
   return (
