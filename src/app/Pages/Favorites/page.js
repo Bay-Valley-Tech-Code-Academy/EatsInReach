@@ -1,9 +1,15 @@
 "use client"
-import Link from 'next/link';
+
 import Navbar from '@/Components/Navbar'
 import FavoritesCard from '@/Components/FavoritesCard';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../../context/authContext";
 
 export default function Favorites() {
+    const router = useRouter();
+    const { currentUser, loading } = useAuth();
+
     const restaurantData = [
         {
             restaurantTitle: "Restaurant 1",
@@ -46,6 +52,23 @@ export default function Favorites() {
             restaurantImg: "/images/restaurantimg1.jpg",
         },
     ];
+
+    useEffect(() => {
+        // Redirect to the landing page if the user is not logged in
+        if (!loading && !currentUser) {
+          router.push("/");
+        }
+      }, [currentUser, loading, router]);
+    
+      // Show a loading indicator or null while checking auth state
+      if (loading) {
+        return <div>Loading...</div>; // Replace with a loading spinner if needed
+      }
+    
+      if (!currentUser) {
+        // While the redirect is taking place, we can also show a loading state
+        return <div>Redirecting...</div>;
+      }
 
     return(
         <div>
