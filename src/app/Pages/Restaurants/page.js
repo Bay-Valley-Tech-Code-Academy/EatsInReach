@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/Components/Navbar";
 import Slider from "react-slick";
+import Footer from "@/Components/Footer"
 
 // Import css files for react-slick
 import "slick-carousel/slick/slick.css";
@@ -222,6 +223,7 @@ export default function RestaurantPage() {
           Home
         </Link>
       </div>
+          <Footer></Footer>
     </div>
   );
 }

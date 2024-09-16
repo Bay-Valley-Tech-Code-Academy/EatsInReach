@@ -5,6 +5,7 @@ import FavoritesCard from '@/Components/FavoritesCard';
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
+import Footer from "@/Components/Footer"
 
 export default function Favorites() {
     const router = useRouter();
@@ -85,6 +86,7 @@ export default function Favorites() {
                     ))}
                 </div>
             </div>
+            <Footer></Footer>
         </div>
         
     )

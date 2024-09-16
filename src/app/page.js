@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Italiana } from "next/font/google";
 import { useAuth } from "../../context/authContext";
 import { useState } from "react";
+import Footer from "@/Components/Footer"
 
 const italiana = Italiana({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default function Landing() {
           </div>
         )}
       </div>
+      <Footer></Footer>
     </div>
   );
 }
