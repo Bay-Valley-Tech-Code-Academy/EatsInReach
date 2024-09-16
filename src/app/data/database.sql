@@ -244,4 +244,4 @@ VALUES (1, 1), (1, 3), (2, 1), (2, 2);
 
 
 -- Uncomment to drop the database (use with caution)
--- DROP DATABASE eats_in_reach_db;
+ --DROP DATABASE eats_in_reach_db;
