@@ -24,11 +24,8 @@ CREATE TABLE Restaurants (
     location VARCHAR(255) NOT NULL,
     price_range_id VARCHAR(50),
     hours_of_operation VARCHAR(255),
-    is_open BOOLEAN NOT NULL DEFAULT FALSE,
     description TEXT,
     food_type_id INTEGER REFERENCES Food_Types(food_type_id),
-    average_rating DECIMAL(3,2),
-    total_reviews INTEGER DEFAULT 0,
     website VARCHAR(255),
     phone_number VARCHAR(20),
     email VARCHAR(255)
@@ -122,6 +119,14 @@ CREATE TABLE Restaurant_Dietary_Options (
     PRIMARY KEY (restaurant_id, restriction_id)
 );
 
+-- Create a new table for vendor submission images
+CREATE TABLE Vendor_Submission_Images (
+    image_id SERIAL PRIMARY KEY,
+    submission_id INTEGER REFERENCES Vendor_Submissions(submission_id) ON DELETE CASCADE,
+    photo_type_id INTEGER REFERENCES Photo_Types(photo_type_id),
+    image_url TEXT NOT NULL
+);
+
 -- Insert predefined price ranges
 INSERT INTO Price_Ranges (range)
 VALUES
@@ -135,6 +140,7 @@ INSERT INTO Photo_Types (type_name)
 VALUES
     ('Menu'),
     ('Food'),
+    ('Display'),
     ('Restaurant');
 
 -- Insert dummy data into the Food_Types table
@@ -176,13 +182,13 @@ INSERT INTO Food_Types (type_name) VALUES
 
 
 -- Insert dummy data into the Restaurants table
-INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, is_open, description, food_type_id, average_rating, total_reviews, website, phone_number, email)
+INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, description, food_type_id, website, phone_number, email)
 VALUES
-    ('Pasta Palace', '123 Main St, Merced, CA', 2, '11:00 AM - 10:00 PM', TRUE, 'A cozy Italian restaurant specializing in homemade pasta.', 1, 4.2, 50, 'www.pastapalace.com','209-555-1111', 'contact@pastapalace.com'),
-    ('Sushi Central', '456 Elm St, Merced, CA', 3, '12:00 PM - 11:00 PM', FALSE, 'Fresh sushi and sashimi with a modern twist.', 2, 4.5, 75, 'www.sushicentral.com', '209-555-2222', 'info@sushicentral.com'),
-    ('Burger Bonanza', '789 Oak St, Merced, CA', 1, '10:00 AM - 8:00 PM', TRUE, 'The best burgers in town with secret sauces.',2, 4.5, 75, 'www.sushicentral.com', '209-555-1234', 'info@burgerbonanza.com'),
-    ('Taco Town', '987 Maple Ave, Merced, CA', 2, '9:00 AM - 9:00 PM', TRUE, 'Authentic Mexican tacos made fresh daily.',2, 4.5, 75, 'www.sushicentral.com', '209-555-9876', 'contact@tacotown.com'),
-    ('Steak House', '321 Pine St, Merced, CA', 4, '5:00 PM - 11:00 PM', FALSE, 'Fine dining steakhouse with premium cuts.',2, 4.5, 75, 'www.sushicentral.com', '209-555-6543', 'reservations@steakhouse.com');
+    ('Pasta Palace', '123 Main St, Merced, CA', 2, '11:00 AM - 10:00 PM', 'A cozy Italian restaurant specializing in homemade pasta.', 1, 'www.pastapalace.com','209-555-1111', 'contact@pastapalace.com'),
+    ('Sushi Central', '456 Elm St, Merced, CA', 3, '12:00 PM - 11:00 PM', 'Fresh sushi and sashimi with a modern twist.', 2, 'www.sushicentral.com', '209-555-2222', 'info@sushicentral.com'),
+    ('Burger Bonanza', '789 Oak St, Merced, CA', 1, '10:00 AM - 8:00 PM', 'The best burgers in town with secret sauces.', 2, 'www.sushicentral.com', '209-555-1234', 'info@burgerbonanza.com'),
+    ('Taco Town', '987 Maple Ave, Merced, CA', 2, '9:00 AM - 9:00 PM', 'Authentic Mexican tacos made fresh daily.', 2, 'www.sushicentral.com', '209-555-9876', 'contact@tacotown.com'),
+    ('Steak House', '321 Pine St, Merced, CA', 4, '5:00 PM - 11:00 PM', 'Fine dining steakhouse with premium cuts.', 2, 'www.sushicentral.com', '209-555-6543', 'reservations@steakhouse.com');
 
 -- Insert dummy data into the Restaurant_Food_Types table
 INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id)
