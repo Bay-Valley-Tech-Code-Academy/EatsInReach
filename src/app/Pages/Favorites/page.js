@@ -16,7 +16,35 @@ export default function Favorites() {
         {
             restaurantTitle: "Restaurant 1",
             restaurantImg: "/images/restaurantimg1.jpg",
-        }
+        },
+        {
+            restaurantTitle: "Restaurant 2",
+            restaurantImg: "/images/restaurantimg1.jpg",
+        },
+        {
+            restaurantTitle: "Restaurant 1",
+            restaurantImg: "/images/restaurantimg1.jpg",
+        },
+        {
+            restaurantTitle: "Restaurant 2",
+            restaurantImg: "/images/restaurantimg1.jpg",
+        },
+        {
+            restaurantTitle: "Restaurant 1",
+            restaurantImg: "/images/restaurantimg1.jpg",
+        },
+        {
+            restaurantTitle: "Restaurant 2",
+            restaurantImg: "/images/restaurantimg1.jpg",
+        },
+        {
+            restaurantTitle: "Restaurant 1",
+            restaurantImg: "/images/restaurantimg1.jpg",
+        },
+        {
+            restaurantTitle: "Restaurant 2",
+            restaurantImg: "/images/restaurantimg1.jpg",
+        },
     ];
 
     return(
