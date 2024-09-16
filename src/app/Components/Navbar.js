@@ -52,8 +52,7 @@ export default function Navbar() {
             alt="Yum Yummers"
           />
         </Link>
-        {userName && <h2 className="hidden sm:block pl-2">{userName}</h2>}
-        <h2 className="hidden sm:block pl-2">Yum Yonders</h2>
+        {userName && <h2 className="sm:block pl-2">{userName}</h2>}
       </div>
 
       {/* Hamburger icon */}
@@ -130,9 +129,9 @@ export default function Navbar() {
 
       {/* Mobile menu (hamburger)  This is where you change color of hamburger menu */}
       {isOpen && (
-        <div className="sm:hidden absolute  top-14 -right-2 bg-[#dfaf90]  p-1 mr-2 flex flex-col items-center z-10">
-          <Link href="/Pages/Cart">
-            <div className="hover:bg-[#bb9277] w-full text-center">
+        <div className="sm:hidden absolute  top-14 -right-2 bg-[#dfaf90] flex flex-col items-center z-10">
+          <Link href="/Pages/Cart" className="w-full">
+            <div className="hover:bg-[#bb9277] w-full flex justify-center p-2">
               <img
                 src="/images/shoppingcart.png"
                 height="15"
@@ -142,35 +141,35 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <Link href="/Pages/Restaurants">
-            <div className="hover:bg-[#bb9277] w-full p-3 text-center">
+          <Link href="/Pages/Restaurants" className="w-full">
+            <div className="hover:bg-[#bb9277] w-full text-center p-2">
               <h2>Restaurants</h2>
             </div>
           </Link>
 
           {currentUser && role === "user" ? (
             <>
-              <Link href="/Pages/Favorites">
-                <div className="hover:bg-[#fdfdfd] p-1 w-full text-center">
+              <Link href="/Pages/Favorites" className="w-full">
+                <div className="hover:bg-[#bb9277] w-full text-center p-2">
                   <h2>Favorites</h2>
                 </div>
               </Link>
 
-              <Link href="/Pages/UserProfile">
-                <div className="hover:bg-[#bb9277] p-1 w-full text-center">
+              <Link href="/Pages/UserProfile" className="w-full">
+                <div className="hover:bg-[#bb9277] p-1 w-full text-center p-2">
                   <h2>User Profile</h2>
                 </div>
               </Link>
 
               <div
-                className="hover:bg-[#bb9277] p-1  w-full text-center cursor-pointer"
+                className="hover:bg-[#bb9277] p-1 w-full text-center cursor-pointer p-2"
                 onClick={handleSignOut}
               >
                 <h2>Sign Out</h2>
               </div>
             </>
           ) : (
-            <Link href="/Pages/Login">
+            <Link href="/Pages/Login" className="w-full">
               <div className="hover:bg-[#bb9277] p-1 w-full text-center">
                 <h2>Login</h2>
               </div>
