@@ -10,24 +10,28 @@ import { auth, firestore } from "../../../firebase";
 export default function Navbar() {
   const { currentUser } = useAuth();
   const [role, setRole] = useState(null);
+  const [userName, setUserName] = useState(null);
+
   const [isOpen, setIsOpen] = useState(false); // State to toggle the hamburger menu
 
   useEffect(() => {
     if (currentUser) {
-      const fetchUserRole = async () => {
+      const fetchUserData = async () => {
         const userDoc = await getDoc(doc(firestore, "users", currentUser.uid));
 
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setRole(userData.role);
+          setUserName(userData.userName);
         } else {
           console.log("User document does not exist in Firestore.");
         }
       };
 
-      fetchUserRole();
+      fetchUserData();
     } else {
       setRole(null);
+      setUserName(null);
     }
   }, [currentUser]);
 
@@ -41,8 +45,14 @@ export default function Navbar() {
     <header className="bg-[#dfaf90] flex w-full items-center h-screen max-h-14 justify-between ">
       <div className="flex mx-4 justify-between items-center">
         <Link href="/">
-          <img src="/images/phLogo.png" height="30" width="40" alt="Yum Yummers" />
+          <img
+            src="/images/phLogo.png"
+            height="30"
+            width="40"
+            alt="Yum Yummers"
+          />
         </Link>
+        {userName && <h2 className="hidden sm:block pl-2">{userName}</h2>}
         <h2 className="hidden sm:block pl-2">Yum Yonders</h2>
       </div>
 
