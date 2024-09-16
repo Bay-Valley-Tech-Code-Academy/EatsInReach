@@ -1,3 +1,5 @@
+// src/app/Pages/Restaurants/page.js
+
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -33,7 +35,9 @@ export default function RestaurantPage() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    pauseOnHover: true,  // This pauses autoplay when hovered
   };
+  
 
   // Handle search query and filter the restaurants based on name, location, etc.
   useEffect(() => {
@@ -46,19 +50,17 @@ export default function RestaurantPage() {
   }, [searchQuery, restaurants]);
 
   useEffect(() => {
-    console.log("sort by changed")
-    console.log(filteredRestaurants)
-    if (sortBy == "Price_asc") {
-      setRestaurants(filteredRestaurants.sort((a, b) => a.price_range.length - b.price_range.length))
+    if (sortBy === "Price_asc") {
+      setFilteredRestaurants([...filteredRestaurants].sort((a, b) => a.price_range.length - b.price_range.length));
     }
-    if (sortBy == "Price_desc") {
-      setRestaurants(filteredRestaurants.sort((a, b) => b.price_range.length - a.price_range.length))
+    if (sortBy === "Price_desc") {
+      setFilteredRestaurants([...filteredRestaurants].sort((a, b) => b.price_range.length - a.price_range.length));
     }
-    if (sortBy == "Food_type") {
-      setRestaurants(filteredRestaurants.sort((a, b) => a.food_type - b.food_type))
+    if (sortBy === "Food_type") {
+      setFilteredRestaurants([...filteredRestaurants].sort((a, b) => a.food_type.localeCompare(b.food_type)));
     }
-
-  }, [sortBy]);
+  }, [sortBy, filteredRestaurants]);
+  
 
   return (
     <div className="min-h-screen bg-Almond">
@@ -78,6 +80,7 @@ export default function RestaurantPage() {
               <div className="bg-white p-4">
                 <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                 <p>{restaurant.food_type}</p>
+                <p>{restaurant.price_range_id}</p>
               </div>
             </div>
           ))}
@@ -89,11 +92,11 @@ export default function RestaurantPage() {
           </label>
 
 
-          <div class="relative w-full">
-            <div class="absolute inset-y-0 -start-0 flex items-center ps-3">
+          <div className="relative w-full">
+            <div className="absolute inset-y-0 -start-0 flex items-center ps-3">
               <button type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                 <svg
-                  class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                  className="w-4 h-4 text-gray-500 dark:text-gray-400"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -101,9 +104,9 @@ export default function RestaurantPage() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2"
                   />
                 </svg>
@@ -157,42 +160,40 @@ export default function RestaurantPage() {
         <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-            <div
-              key={restaurant.restaurant_id}
-              className="bg-white shadow-md rounded-3xl overflow-hidden flex"
-            >
-              <Link
-                href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-                className="flex"
+              <div
+                key={restaurant.restaurant_id}
+                className="bg-white shadow-md rounded-3xl overflow-hidden flex"
               >
-                <img
-                  src={`/images/${restaurant.image_url}`}
-                  alt={`Image of ${restaurant.name}`}
-                  className="w-1/2 h-auto object-cover cursor-pointer"
-                />
-                <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
-                  <h2 className="text-gray-700 text-xl font-semibold mb-2">
-                    {restaurant.name}
-                  </h2>
-                  <p className="text-gray-600 mb-2">
-                    Location: {restaurant.location}
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Price Range: {restaurant.price_range}
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Food Type: {restaurant.food_type}
-                  </p>
-                </div>
-              </Link>
-            </div>
-          ))
+                <Link
+                  href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
+                  className="flex"
+                >
+                  <img
+                    src={`/images/${restaurant.image_url}`}
+                    alt={`Image of ${restaurant.name}`}
+                    className="w-1/2 h-auto object-cover cursor-pointer"
+                  />
+                  <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
+                    <h2 className="text-gray-700 text-xl font-semibold mb-2">
+                      {restaurant.name}
+                    </h2>
+                    <p className="text-gray-600 mb-2">
+                      Location: {restaurant.location}
+                    </p>
+                    <p className="text-gray-600 mb-2">
+                      Price Range: {restaurant.price_range}
+                    </p>
+                    <p className="text-gray-600 mb-2">
+                      Food Type: {restaurant.food_type}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ))
           ) : (
             <p className="text-center text-lg text-black">No restaurants match your search.</p>
           )}
-          
         </div>
-
 
         <Link
           href="/"
