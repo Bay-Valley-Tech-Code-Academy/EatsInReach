@@ -1,3 +1,5 @@
+// src/app/Pages/Restaurants/page.js
+
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -12,6 +14,8 @@ export default function RestaurantPage() {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [sortBy, setSortBy] = useState("");
 
   useEffect(() => {
     async function fetchRestaurants() {
@@ -31,7 +35,9 @@ export default function RestaurantPage() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    pauseOnHover: true,  // This pauses autoplay when hovered
   };
+  
 
   // Handle search query and filter the restaurants based on name, location, etc.
   useEffect(() => {
@@ -42,6 +48,19 @@ export default function RestaurantPage() {
     );
     setFilteredRestaurants(filtered);
   }, [searchQuery, restaurants]);
+
+  useEffect(() => {
+    if (sortBy === "Price_asc") {
+      setFilteredRestaurants([...filteredRestaurants].sort((a, b) => a.price_range.length - b.price_range.length));
+    }
+    if (sortBy === "Price_desc") {
+      setFilteredRestaurants([...filteredRestaurants].sort((a, b) => b.price_range.length - a.price_range.length));
+    }
+    if (sortBy === "Food_type") {
+      setFilteredRestaurants([...filteredRestaurants].sort((a, b) => a.food_type.localeCompare(b.food_type)));
+    }
+  }, [sortBy, filteredRestaurants]);
+  
 
   return (
     <div className="min-h-screen bg-Almond">
@@ -61,6 +80,7 @@ export default function RestaurantPage() {
               <div className="bg-white p-4">
                 <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                 <p>{restaurant.food_type}</p>
+                <p>{restaurant.price_range_id}</p>
               </div>
             </div>
           ))}
@@ -70,37 +90,72 @@ export default function RestaurantPage() {
           <label htmlFor="simple-search" className="sr-only">
             Search
           </label>
+
+
           <div className="relative w-full">
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg
-                className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 20"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2"
-                />
+            <div className="absolute inset-y-0 -start-0 flex items-center ps-3">
+              <button type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="24" height="24" viewBox="0 0 24 24" 
+                fill="none" stroke="#000000" strokeWidth="2" 
+                strokeLinecap="round" strokeLinejoin="round">
+                <line 
+                  x1="4" y1="21" x2="4" y2="14">
+                </line>
+                <line 
+                  x1="4" y1="10" x2="4" y2="3">
+                </line>
+                <line 
+                  x1="12" y1="21" x2="12" y2="12">
+                </line>
+                <line 
+                  x1="12" y1="8" x2="12" y2="3">
+                </line>
+                <line 
+                  x1="20" y1="21" x2="20" y2="16">
+                </line>
+                <line 
+                  x1="20" y1="12" x2="20" y2="3">
+                </line>
+                <line 
+                  x1="1" y1="14" x2="7" y2="14">
+                </line>
+                <line 
+                  x1="9" y1="8" x2="15" y2="8">
+                </line>
+                <line 
+                  x1="17" y1="16" x2="23" y2="16">
+                </line>
               </svg>
+
+                {isDropdownOpen && (
+                  <div className="absolute bg-white shadow-md rounded-md mt-2 w-48">
+                    <ul className="py-2">
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_asc")}>Price asc</li>
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_desc")}> Price desc</li>
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Food_Type")}> Food_type</li>
+
+                      <li>Rating NOT IMPLEMENTED NEED TO DO WHEN RATINGS ARE IMPLEMENTED</li>
+                    </ul>
+                  </div>
+                )}
+              </button>
             </div>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               id="simple-search"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
               placeholder="Search..."
               required
             />
           </div>
           <button
             type="submit"
-            className="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            className="p-2.5 ms-2 text-sm font-medium text-Yellow-Green bg-Almond rounded-lg border hover:bg-Kobicha hover:text-rosey-brown focus:ring-4 focus:outline-none"
           >
             <svg
               className="w-4 h-4"
@@ -125,42 +180,40 @@ export default function RestaurantPage() {
         <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-            <div
-              key={restaurant.restaurant_id}
-              className="bg-white shadow-md rounded-3xl overflow-hidden flex"
-            >
-              <Link
-                href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-                className="flex"
+              <div
+                key={restaurant.restaurant_id}
+                className="bg-white shadow-md rounded-3xl overflow-hidden flex"
               >
-                <img
-                  src={`/images/${restaurant.image_url}`}
-                  alt={`Image of ${restaurant.name}`}
-                  className="w-1/2 h-auto object-cover cursor-pointer"
-                />
-                <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
-                  <h2 className="text-gray-700 text-xl font-semibold mb-2">
-                    {restaurant.name}
-                  </h2>
-                  <p className="text-gray-600 mb-2">
-                    Location: {restaurant.location}
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Price Range: {restaurant.price_range}
-                  </p>
-                  <p className="text-gray-600 mb-2">
-                    Food Type: {restaurant.food_type}
-                  </p>
-                </div>
-              </Link>
-            </div>
-          ))
+                <Link
+                  href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
+                  className="flex"
+                >
+                  <img
+                    src={`/images/${restaurant.image_url}`}
+                    alt={`Image of ${restaurant.name}`}
+                    className="w-1/2 h-auto object-cover cursor-pointer"
+                  />
+                  <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
+                    <h2 className="text-gray-700 text-xl font-semibold mb-2">
+                      {restaurant.name}
+                    </h2>
+                    <p className="text-gray-600 mb-2">
+                      Location: {restaurant.location}
+                    </p>
+                    <p className="text-gray-600 mb-2">
+                      Price Range: {restaurant.price_range}
+                    </p>
+                    <p className="text-gray-600 mb-2">
+                      Food Type: {restaurant.food_type}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ))
           ) : (
             <p className="text-center text-lg text-black">No restaurants match your search.</p>
           )}
-          
         </div>
-
 
         <Link
           href="/"

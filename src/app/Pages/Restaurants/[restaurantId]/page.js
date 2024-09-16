@@ -14,9 +14,12 @@ export default function RestaurantPage({ params }) {
         async function fetchRestaurant() {
             try {
                 const response = await fetch(`/api/restaurants/${restaurantId}`);
+                console.log('API Response:', response);
+                
                 if (!response.ok) {
                     throw new Error("Failed to fetch restaurant");
                 }
+
                 const data = await response.json();
                 setRestaurant(data);
             } catch (error) {
@@ -43,8 +46,8 @@ export default function RestaurantPage({ params }) {
                 <Navbar />
             </header>
 
-            {/* Main Content Section */}
-            <main className="flex-grow w-full max-w-6xl mx-auto p-4">
+            <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-white">
+                {/* Restaurant Name */}
                 <section className="mb-4 p-2">
                     <h1 className="text-3xl font-bold text-center text-black">
                         {restaurant.name}
@@ -56,7 +59,7 @@ export default function RestaurantPage({ params }) {
                     {/* Image Section */}
                     <div className="relative w-full md:w-1/3 p-2 flex-shrink-0">
                         <img
-                            src={restaurant.image_url}
+                            src={restaurant.image_url || '/default-image.jpg'} // Provide a default image if URL is missing
                             alt={`${restaurant.name} main dish`}
                             className="w-full h-auto object-cover rounded-lg"
                         />
@@ -87,17 +90,16 @@ export default function RestaurantPage({ params }) {
 
                         {/* Price Range and Other Details */}
                         <div className="w-full p-2">
-                            <div className="p-3 border border-gray-300 rounded-lg shadow-md" style={{ backgroundColor: '#AAD15F' }}>
-                                <h2 className="text-2xl font-bold mb-2 text-black">
-                                    Restaurant Details
-                                </h2>
-                                <p className="text-lg mb-6 text-black">
-                                    <span className="font-semibold">Price Range:</span>{" "}
-                                    {restaurant.price_range}
+                            <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
+                                <h2 className="text-2xl font-bold mb-2 text-black">Restaurant Details</h2>
+                                <p className="text-lg mb-4 text-black">
+                                    <span className="font-semibold">Price Range:</span> {restaurant.price_range}
                                 </p>
-                                <p className="text-lg text-black">
-                                    <span className="font-semibold">Food Type:</span>{" "}
-                                    {restaurant.food_type}
+                                <p className="text-lg mb-4 text-black">
+                                    <span className="font-semibold">Rating:</span> {restaurant.rating || 'N/A'}
+                                </p>
+                                <p className="text-lg mb-4 text-black">
+                                    <span className="font-semibold">Food Type:</span> {restaurant.food_type}
                                 </p>
                             </div>
                         </div>
