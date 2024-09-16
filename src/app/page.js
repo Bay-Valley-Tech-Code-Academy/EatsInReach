@@ -3,6 +3,7 @@
 import Navbar from "./Components/Navbar";
 import Link from "next/link";
 import { Italiana } from "next/font/google";
+import Footer from "@/Components/Footer"
 
 const italiana = Italiana({
   subsets: ["latin"],
@@ -13,7 +14,7 @@ export default function Landing() {
   return (
     <div>
       <Navbar />
-      <div className="w-full flex flex-col items-center landing-page">
+      <div className="w-full flex flex-col items-center landing-page h-[50vh]">
         <h1 className={`mt-20 text-6xl sm:text-8xl md:text-9xl landing-header ${italiana.className}`}>Eats in Reach</h1>
         <h2 className="text-2xl sm:text-4xl md:text-5xl mt-4">Reach for Flavor, Anytime</h2>
         <div className="mt-20">
@@ -22,6 +23,7 @@ export default function Landing() {
           </Link>
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 }

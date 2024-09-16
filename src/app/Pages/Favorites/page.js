@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Navbar from '@/Components/Navbar'
 import FavoritesCard from '@/Components/FavoritesCard';
+import Footer from "@/Components/Footer"
 
 export default function Favorites() {
     const restaurantData = [
@@ -62,6 +63,7 @@ export default function Favorites() {
                     ))}
                 </div>
             </div>
+            <Footer></Footer>
         </div>
         
     )

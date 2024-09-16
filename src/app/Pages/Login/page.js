@@ -67,7 +67,7 @@ export default function Login() {
         <img
           src="/images/logo-placeholder.jpg"
           alt="logo"
-          className="w-28 absolute top-0 left-0"
+          className=" absolute top-0 left-0  " height="30" width="40"
         />
       </Link>
       <div className="w-3/4 sm:w-1/2 lg:w-1/4 bg-[#AAD15F] rounded-xl flex flex-col items-center">
