@@ -41,12 +41,12 @@ export default function VendorPage() {
                 item_name: newItemName,
                 item_desc: newItemDesc,
                 item_price: parseFloat(newItemPrice.replace('$', '')),
-                image_path: '', // Set to an empty string if no image is provided
+                image_path: {fallbackImage}, // Set to an empty string if no image is provided
                 alt_text: ''
             };
 
             try {
-                const res = await fetch('/api/vendor-items', {
+                const res = await fetch('/api/vendor-items/submit', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
