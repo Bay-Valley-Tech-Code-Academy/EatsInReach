@@ -64,21 +64,22 @@ export default function RestaurantPage() {
   
 
   return (
-    <div className="min-h-screen bg-Almond">
+    <div className="min-h-screen bg-[#FDFBCE]">
       <Navbar />
-      <div className="container p-10 mt-4 mx-auto rounded-3xl bg-Yellow-Green">
-        <h1 className="text-3xl font-bold mb-4 text-black">
+      <div className="rounded-[84px]">
+        <h1 className="text-3xl font-bold mt-8 text-black text-center">
           Featured Restaurants
         </h1>
-        <Slider {...settings}>
+        <div className="m-16 px-24 pt-3 pb-6 rounded-[164px] bg-Yellow-Green">
+        <Slider {...settings} className="container mt-4 mx-auto ">
           {restaurants.slice(0, 5).map((restaurant) => (
-            <div key={restaurant.restaurant_id}>
+            <div key={restaurant.restaurant_id} className="rounded-t-[84px] overflow-hidden">
               <img
                 src={`/images/${restaurant.image_url}`}
                 alt={`Image of ${restaurant.name}`}
                 className="w-full h-64 object-cover"
               />
-              <div className="bg-white p-4">
+              <div className="bg-white p-4 rounded-b-full pl-16">
                 <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                 <p>{restaurant.food_type}</p>
                 <p>{restaurant.price_range_id}</p>
@@ -86,6 +87,7 @@ export default function RestaurantPage() {
             </div>
           ))}
         </Slider>
+        </div>
 
         <div className="flex items-center max-w-sm mx-auto mt-8">
           <label htmlFor="simple-search" className="sr-only">
@@ -177,10 +179,11 @@ export default function RestaurantPage() {
           </button>
         </div>
 
-        <h2 className="text-2xl font-bold my-4 text-black">All Restaurants</h2>
-        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4">
+        <h2 className="text-2xl font-bold my-4 text-black px-16 text-center">All Restaurants</h2>
+        <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 gap-4 p-16">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
+              <div className="bg-Yellow-Green p-3 rounded-3xl">
               <div
                 key={restaurant.restaurant_id}
                 className="bg-white shadow-md rounded-3xl overflow-hidden flex"
@@ -192,7 +195,7 @@ export default function RestaurantPage() {
                   <img
                     src={`/images/${restaurant.image_url}`}
                     alt={`Image of ${restaurant.name}`}
-                    className="w-1/2 h-auto object-cover cursor-pointer"
+                    className="w-1/3 h-52 object-cover cursor-pointer"
                   />
                   <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
                     <h2 className="text-gray-700 text-xl font-semibold mb-2">
@@ -210,18 +213,20 @@ export default function RestaurantPage() {
                   </div>
                 </Link>
               </div>
+              </div>
             ))
           ) : (
             <p className="text-center text-lg text-black">No restaurants match your search.</p>
           )}
         </div>
-
+        <div className="px-16 py-8">
         <Link
           href="/"
           className="bg-Kobicha text-rosey-brown rounded-lg hover:bg-Chocolate-cosmos hover:text-white mt-4 inline-block px-6 py-3 text-sm font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-transform transform hover:-translate-y-1 scale-105"
         >
           Home
         </Link>
+        </div>
       </div>
           <Footer></Footer>
     </div>
