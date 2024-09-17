@@ -1,13 +1,18 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import Navbar from '@/Components/Navbar';
 import Footer from '@/Components/Footer';
 
-export default function RestaurantPage({ params }) {
-    const [restaurant, setRestaurant] = useState(null);
-    const { restaurantId } = params;
+export default function VendorPage() {
+    const [vendorItems, setVendorItems] = useState([]);
+    const [newItemName, setNewItemName] = useState('');
+    const [newItemDesc, setNewItemDesc] = useState('');
+    const [newItemPrice, setNewItemPrice] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    // Fetch vendor items on component mount
     useEffect(() => {
         console.log('Fetching restaurant with ID:', restaurantId);
 
@@ -40,6 +45,14 @@ export default function RestaurantPage({ params }) {
         );
     }
 
+    if (error) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-white text-lg text-black">
+                <p>Error: {error}</p>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen flex flex-col bg-Almond">
             <header className="w-full">
@@ -47,10 +60,9 @@ export default function RestaurantPage({ params }) {
             </header>
 
             <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-white">
-                {/* Restaurant Name */}
                 <section className="mb-4 p-2">
                     <h1 className="text-3xl font-bold text-center text-black">
-                        {restaurant.name}
+                        Vendor Items
                     </h1>
                 </section>
 
