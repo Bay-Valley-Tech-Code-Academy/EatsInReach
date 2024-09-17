@@ -253,4 +253,4 @@ CREATE TABLE User_Info (
 )
 
 -- Uncomment to drop the database (use with caution)
--- DROP DATABASE eats_in_reach_db;
+ --DROP DATABASE eats_in_reach_db;

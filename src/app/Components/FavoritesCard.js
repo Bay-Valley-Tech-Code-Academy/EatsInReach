@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { PiHeartStraightThin  } from "react-icons/pi";
 import { PiHeartStraightFill } from "react-icons/pi";
 import Image from 'next/image'; 
