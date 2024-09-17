@@ -6,7 +6,7 @@ function IconBxDonateHeart(props) {
     <svg
       className="w-1/2 h-1/2 object-cover"
       viewBox="0 0 24 24"
-      fill="#FF670E"
+      fill="#FDE4CE"
       height="1em"
       width="1em"
       {...props}

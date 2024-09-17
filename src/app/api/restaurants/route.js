@@ -1,5 +1,3 @@
-// src/app/api/restaurants/route.js
-
 import { Pool } from 'pg';
 import { NextResponse } from 'next/server';
 
@@ -11,12 +9,13 @@ export async function GET() {
     try {
         const client = await pool.connect();
         const result = await client.query(`
-            SELECT r.restaurant_id, r.name, r.location, r.price_range, f.type_name AS food_type, rp.image_url
+            SELECT r.restaurant_id, r.name, r.location, pr.range AS price_range, f.type_name AS food_type, rp.image_url
             FROM Restaurants r
             JOIN Restaurant_Food_Types rft ON r.restaurant_id = rft.restaurant_id
             JOIN Food_Types f ON rft.food_type_id = f.food_type_id
             JOIN Restaurant_Pictures rp ON r.restaurant_id = rp.restaurant_id
-            WHERE rp.photo_type_id = 2  -- Only fetching food pictures
+            JOIN Price_Ranges pr ON r.price_range_id::integer = pr.price_range_id  -- Cast to integer
+            WHERE rp.photo_type_id = 2
         `);
         client.release();
 
