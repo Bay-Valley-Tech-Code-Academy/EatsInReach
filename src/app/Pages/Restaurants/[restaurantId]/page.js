@@ -6,6 +6,7 @@ import Footer from '@/Components/Footer';
 
 export default function RestaurantPage({ params }) {
     const [restaurant, setRestaurant] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(false);
     const { restaurantId } = params;
 
     useEffect(() => {
@@ -39,6 +40,11 @@ export default function RestaurantPage({ params }) {
             </div>
         );
     }
+
+    // toggles menu accordion
+    const toggleMenuAccordion = () => {
+        setMenuOpen(!menuOpen);
+    };
 
     return (
         <div className="min-h-screen flex flex-col bg-Almond">
@@ -103,6 +109,44 @@ export default function RestaurantPage({ params }) {
                                 </p>
                             </div>
                         </div>
+
+                        {/* Accordion for Menu */}
+                        <div className="w-full p-2">
+                            <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
+                                {/* <h2 className="txt-2xl font-bold mb-2 text-black">
+                                    Menu
+                                </h2> */}
+
+                                <div className="border border-gray-200 rounded-lg">
+                                    <button
+                                        onClick={toggleMenuAccordion} // Toggle the accordion
+                                        className="flex justify-between w-full px-4 py-2 text-left text-2xl font-bold mb-2 text-black bg-gray-100 rounded-lg focus:outline-none"
+                                    >
+                                        {menuOpen ? 'Hide Menu' : 'Show Menu'}
+                                        <span className={`transform transition-transform duration-300 ${menuOpen ? 'rotate-180' : ''}`}>
+                                            ▼
+                                        </span>
+                                    </button>
+
+                                    {menuOpen && (
+                                        <div className="p-4 border-t border-gray-200">
+                                            <ul className="text-lg text-black">
+                                                {restaurant.menu ? (
+                                                    restaurant.menu.map((menuItem, index) => (
+                                                        <li key={index} className="mb-2">
+                                                            <span className="font-semibold">{menuItem.name}</span>: {menuItem.price}
+                                                        </li>
+                                                    ))
+                                                ) : (
+                                                    <p>No menu available.</p>
+                                                )}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
 
