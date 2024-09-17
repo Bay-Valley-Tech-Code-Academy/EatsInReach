@@ -14,59 +14,30 @@ export default function VendorPage() {
 
     // Fetch vendor items on component mount
     useEffect(() => {
-        async function fetchVendorItems() {
+        console.log('Fetching restaurant with ID:', restaurantId);
+
+        async function fetchRestaurant() {
             try {
-                const response = await fetch('/api/vendorItems');
+                const response = await fetch(`/api/restaurants/${restaurantId}`);
+                console.log('API Response:', response);
+                
                 if (!response.ok) {
-                    throw new Error('Failed to fetch vendor items');
+                    throw new Error("Failed to fetch restaurant");
                 }
+
                 const data = await response.json();
-                setVendorItems(data);
+                setRestaurant(data);
             } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
+                console.error("Error fetching restaurant data:", error);
             }
         }
 
-        fetchVendorItems();
-    }, []);
-
-    // Add a new vendor item
-    const addItem = async () => {
-        if (newItemName && newItemDesc && newItemPrice) {
-            const newItem = {
-                item_name: newItemName,
-                item_desc: newItemDesc,
-                item_price: parseFloat(newItemPrice.replace('$', '')),
-                image_path: '', // Add image functionality if needed
-                alt_text: ''
-            };
-
-            try {
-                const response = await fetch('/api/vendorItems', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(newItem),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to add new item');
-                }
-                const addedItem = await response.json();
-                setVendorItems([...vendorItems, addedItem]);
-                setNewItemName('');
-                setNewItemDesc('');
-                setNewItemPrice('');
-            } catch (error) {
-                setError(error.message);
-            }
+        if (restaurantId) {
+            fetchRestaurant();
         }
-    };
+    }, [restaurantId]);
 
-    if (loading) {
+    if (!restaurant) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-white text-lg text-black">
                 Loading...
@@ -83,12 +54,11 @@ export default function VendorPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-white">
-            <header className="w-full bg-white">
+        <div className="min-h-screen flex flex-col bg-Almond">
+            <header className="w-full">
                 <Navbar />
             </header>
 
-            {/* Main Content Section */}
             <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-white">
                 <section className="mb-4 p-2">
                     <h1 className="text-3xl font-bold text-center text-black">
@@ -96,61 +66,71 @@ export default function VendorPage() {
                     </h1>
                 </section>
 
-                {/* Input Form */}
-                <section className="mb-6 p-2">
-                    <div className="flex flex-col md:flex-row gap-4 items-center">
-                        <input
-                            type="text"
-                            placeholder="Item Name"
-                            value={newItemName}
-                            onChange={(e) => setNewItemName(e.target.value)}
-                            className="border p-2 rounded flex-grow"
+                {/* Restaurant Content */}
+                <section className="flex flex-col md:flex-row gap-6 items-start">
+                    {/* Image Section */}
+                    <div className="relative w-full md:w-1/3 p-2 flex-shrink-0">
+                        <img
+                            src={restaurant.image_url || '/default-image.jpg'} // Provide a default image if URL is missing
+                            alt={`${restaurant.name} main dish`}
+                            className="w-full h-auto object-cover rounded-lg"
                         />
-                        <input
-                            type="text"
-                            placeholder="Item Description"
-                            value={newItemDesc}
-                            onChange={(e) => setNewItemDesc(e.target.value)}
-                            className="border p-2 rounded flex-grow"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Item Price"
-                            value={newItemPrice}
-                            onChange={(e) => setNewItemPrice(e.target.value)}
-                            className="border p-2 rounded flex-grow"
-                        />
-                        <button
-                            onClick={addItem}
-                            className="bg-blue-500 text-white p-2 rounded"
-                        >
-                            Add Item
-                        </button>
+                    </div>
+
+                    {/* Restaurant Details */}
+                    <div className="w-full md:w-2/3 flex flex-col gap-6">
+                        {/* Contact Information */}
+                        <div className="w-full p-2">
+                            <div className="p-3 border border-gray-300 rounded-lg shadow-md" style={{ backgroundColor: '#AAD15F' }}>
+                                <h2 className="text-2xl font-bold mb-2 text-black">
+                                    Contact Information
+                                </h2>
+                                <p className="text-lg mb-6 text-black">
+                                    <span className="font-semibold">Phone:</span>{" "}
+                                    {restaurant.phone_number}
+                                </p>
+                                <p className="text-lg mb-6 text-black">
+                                    <span className="font-semibold">Email:</span>{" "}
+                                    {restaurant.email}
+                                </p>
+                                <p className="text-lg text-black">
+                                    <span className="font-semibold">Address:</span>{" "}
+                                    {restaurant.address}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Price Range and Other Details */}
+                        <div className="w-full p-2">
+                            <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
+                                <h2 className="text-2xl font-bold mb-2 text-black">Restaurant Details</h2>
+                                <p className="text-lg mb-4 text-black">
+                                    <span className="font-semibold">Price Range:</span> {restaurant.price_range}
+                                </p>
+                                <p className="text-lg mb-4 text-black">
+                                    <span className="font-semibold">Rating:</span> {restaurant.rating || 'N/A'}
+                                </p>
+                                <p className="text-lg mb-4 text-black">
+                                    <span className="font-semibold">Food Type:</span> {restaurant.food_type}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
-                {/* Display the list of items */}
-                <section className="grid grid-cols-2 grid-flow-row items-center justify-center gap-4">
-                    {vendorItems.map((item) => (
-                        <div key={item.item_id} className="-mt-2 p-2 mr-2 lg:mt-0 gap-x-6 grid lg:grid-flow-col grid-flow-row auto-cols-max justify-center gap-4 bg-slate-600 rounded-2xl">
-                            <div className="rounded-2xl bg-gray-50 text-center ring-1 ring-inset ring-gray-900/5">
-                                <div className="flex flex-col justify-center">
-                                    {item.image_path ? (
-                                        <img src={item.image_path} alt={item.alt_text} className="w-[80px] h-[80px] rounded-full object-cover" />
-                                    ) : (
-                                        <img src="/images/food-bg-images.jpg" alt="Food background" className="w-full h-auto object-cover" />
-                                    )}
-                                    <p className="text-black font-bold py-2">{item.item_name}</p>
-                                    <p className="text-black py-2">{item.item_desc}</p>
-                                    <p className="text-black py-2">${item.item_price.toFixed(2)}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                {/* Back Button */}
+                <section className="mt-4">
+                    <a
+                        href="/Pages/Restaurants"
+                        className="bg-Kobicha text-rosey-brown rounded-lg hover:bg-Chocolate-cosmos hover:text-white px-6 py-3 text-sm font-semibold shadow-lg transition-transform transform hover:-translate-y-1"
+                    >
+                        Back to Restaurants
+                    </a>
                 </section>
             </main>
 
-            <footer className="w-full bg-white">
+            {/* Footer */}
+            <footer className="bg-white mt-10">
                 <Footer />
             </footer>
         </div>
