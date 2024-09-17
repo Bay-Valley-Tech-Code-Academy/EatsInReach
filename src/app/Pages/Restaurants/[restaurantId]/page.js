@@ -59,7 +59,7 @@ export default function RestaurantPage({ params }) {
                     {/* Image Section */}
                     <div className="relative w-full md:w-1/3 p-2 flex-shrink-0">
                         <img
-                            src={restaurant.image_url || '/default-image.jpg'} // Provide a default image if URL is missing
+                            src={`/images/${restaurant.image_url}` || '/default-image.jpg'} // Provide a default image if URL is missing
                             alt={`${restaurant.name} main dish`}
                             className="w-full h-auto object-cover rounded-lg"
                         />
@@ -89,8 +89,8 @@ export default function RestaurantPage({ params }) {
                         </div>
 
                         {/* Price Range and Other Details */}
-                        <div className="w-full p-2">
-                            <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
+                        <div className="w-full p-2 ">
+                            <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white hover:bg-slate-300">
                                 <h2 className="text-2xl font-bold mb-2 text-black">Restaurant Details</h2>
                                 <p className="text-lg mb-4 text-black">
                                     <span className="font-semibold">Price Range:</span> {restaurant.price_range}
