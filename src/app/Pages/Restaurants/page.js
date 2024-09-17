@@ -178,12 +178,12 @@ export default function RestaurantPage() {
         </div>
 
         <h2 className="text-2xl font-bold my-4 text-black">All Restaurants</h2>
-        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4 ">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
               <div
                 key={restaurant.restaurant_id}
-                className="bg-white shadow-md rounded-3xl overflow-hidden flex"
+                className="bg-white  shadow-md rounded-3xl overflow-hidden flex"
               >
                 <Link
                   href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
@@ -194,7 +194,7 @@ export default function RestaurantPage() {
                     alt={`Image of ${restaurant.name}`}
                     className="w-1/2 h-auto object-cover cursor-pointer"
                   />
-                  <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
+                  <div className="p-4 -w-1/2  hover:bg-slate-300 hover:translate-y-1">
                     <h2 className="text-gray-700 text-xl font-semibold mb-2">
                       {restaurant.name}
                     </h2>
