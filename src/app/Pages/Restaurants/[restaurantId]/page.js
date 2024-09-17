@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/Components/Navbar';
 import Footer from '@/Components/Footer';
 
-export default function VendorPage() {
+export default function VendorPage({params}) {
     const [vendorItems, setVendorItems] = useState([]);
     const [newItemName, setNewItemName] = useState('');
     const [newItemDesc, setNewItemDesc] = useState('');
@@ -12,6 +12,8 @@ export default function VendorPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [restaurant, setRestaurant] = useState(null);
+    const { restaurantId } = params;
 
     // Fetch vendor items on component mount
     useEffect(() => {
