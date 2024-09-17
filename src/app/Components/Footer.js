@@ -20,12 +20,12 @@ export default function Footer() {
   ];
 
   return (
-    <div className="bg-[#D9D9D9] mt-auto w-full h-full">
+    <div className="bg-[#dfaf90] mt-auto w-full h-full">
       <div className="flex pt-4 pb-6 sm:flex">
         {sections.map((section, index) => (
           <div key={index} className="flex justify-center items-center">
             {section.title && (
-            <p className="font-light px-3 text-[#4B5E54] hover:underline">{section.title}</p>
+            <a key={index} href={section.href} className="font-light px-3 text-[#4B5E54] hover:underline">{section.title}</a>
             )}
           </div>
         ))}
