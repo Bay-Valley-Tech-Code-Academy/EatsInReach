@@ -67,11 +67,12 @@ export default function RestaurantPage() {
     <div className="min-h-screen bg-[#FDFBCE]">
       <Navbar />
       <div className="rounded-[84px]">
-        <h1 className="text-3xl font-bold mt-8 text-black text-center">
-          Featured Restaurants
-        </h1>
-        <div className="m-16 px-24 pt-3 pb-6 rounded-[164px] bg-Yellow-Green">
-        <Slider {...settings} className="container mt-4 mx-auto ">
+        <div className="flex items-center mt-8 ml-16 ">
+          <a className=" text-zinc-800 inline-block hover:underline" href="/"> Home </a> 
+          <p className="text-zinc-800 inline-block"> /Restaurants </p>
+        </div>
+        <div className="container mx-auto m-16 px-24 pt-3 pb-6 rounded-[164px] bg-Yellow-Green w-auto">
+        <Slider {...settings} className="container mt-4 ">
           {restaurants.slice(0, 5).map((restaurant) => (
             <div key={restaurant.restaurant_id} className="rounded-t-[84px] overflow-hidden">
               <img
@@ -179,7 +180,7 @@ export default function RestaurantPage() {
           </button>
         </div>
 
-        <h2 className="text-2xl font-bold my-4 text-black px-16 text-center">All Restaurants</h2>
+        <h2 className="text-2xl my-4 text-zinc-800 px-16 text-center">All Restaurants</h2>
         <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 gap-4 p-16">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
@@ -197,7 +198,7 @@ export default function RestaurantPage() {
                     alt={`Image of ${restaurant.name}`}
                     className="w-1/3 h-52 object-cover cursor-pointer"
                   />
-                  <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
+                  <div className="p-4 w-1/2 hover:bg-slate-300">
                     <h2 className="text-gray-700 text-xl font-semibold mb-2">
                       {restaurant.name}
                     </h2>
