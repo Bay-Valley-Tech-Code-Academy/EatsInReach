@@ -23,7 +23,10 @@ module.exports = {
       'penn-red':'#990000',
       'Dartmouth-green':'#065E0C',
       'rosey-brown':'#CC9A86',
-      'Kobicha':'#673d26'
+      'Kobicha':'#673d26',
+      'Cream':'#FDFBCE',
+      'Fern_green':'#5A804D',
+      'Lime':'#CCF551'
 
 
       },
