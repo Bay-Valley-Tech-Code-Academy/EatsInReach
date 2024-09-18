@@ -101,7 +101,7 @@ export default function VendorSubmission() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(submission),
     });
 
     if (response.ok) {

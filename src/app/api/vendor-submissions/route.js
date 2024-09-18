@@ -79,13 +79,15 @@ export async function POST(request) {
     const submissionId = submissionResult.rows[0].submission_id;
 
     // Insert images
-    const photoTypes = { display: 4, menu: 1, food: 2 };
-    for (const [type, url] of Object.entries(images)) {
-      if (url) {
-        await client.query(
-          "INSERT INTO Vendor_Submission_Images (submission_id, photo_type_id, image_url) VALUES ($1, $2, $3)",
-          [submissionId, photoTypes[type], url]
-        );
+    if (images) {
+      const photoTypes = { display: 4, menu: 1, food: 2 };
+      for (const [type, url] of Object.entries(images)) {
+        if (url) {
+          await client.query(
+            "INSERT INTO Vendor_Submission_Images (submission_id, photo_type_id, image_url) VALUES ($1, $2, $3)",
+            [submissionId, photoTypes[type], url]
+          );
+        }
       }
     }
 
