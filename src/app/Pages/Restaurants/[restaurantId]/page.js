@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/Components/Navbar';
 import Footer from '@/Components/Footer';
+import { PiHeartStraightThin, PiHeartStraightFill } from "react-icons/pi";
 
 export default function RestaurantPage({ params }) {
     const [restaurant, setRestaurant] = useState(null);
+    const [isFavorited, setIsFavorited] = useState(false);
     const { restaurantId } = params;
 
     useEffect(() => {
@@ -27,10 +29,42 @@ export default function RestaurantPage({ params }) {
             }
         }
 
+        async function fetchFavoriteStatus() {
+            try {
+                const response = await fetch(`/api/favorites/${restaurantId}`);
+                if (response.ok) {
+                    const isFavorited = await response.json();
+                    setIsFavorited(isFavorited);
+                }
+            } catch (error) {
+                console.error("Error fetching favorite status:", error)
+            }
+        }
+
         if (restaurantId) {
             fetchRestaurant();
         }
     }, [restaurantId]);
+
+    const handleFavoriteToggle = async() => {
+        const url = `/api/favorites/${restaurantId}`;
+        const method = isFavorited ? 'DELETE' : 'POST';
+
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ restaurantId })
+            });
+            if (response.ok) {
+                setIsFavorited(!isFavorited);
+            } else {
+                throw new Error("Failed to update status");
+            } 
+        } catch(error) {
+            console.error("Error updating favorite status", error);
+        }
+    }
 
     if (!restaurant) {
         return (
@@ -107,7 +141,14 @@ export default function RestaurantPage({ params }) {
                 </section>
 
                 {/* Back Button */}
-                <section className="mt-4">
+                <section className="mt-4 flex">
+                    <div onClick={handleFavoriteToggle} className="cursor-pointer text-3xl">
+                        {isFavorited ? (
+                            <PiHeartStraightFill />
+                        ) : (
+                            <PiHeartStraightThin />
+                        )}
+                    </div>
                     <a
                         href="/Pages/Restaurants"
                         className="bg-Kobicha text-rosey-brown rounded-lg hover:bg-Chocolate-cosmos hover:text-white px-6 py-3 text-sm font-semibold shadow-lg transition-transform transform hover:-translate-y-1"
