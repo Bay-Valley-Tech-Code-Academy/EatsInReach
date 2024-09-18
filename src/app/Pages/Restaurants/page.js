@@ -61,6 +61,7 @@ export default function RestaurantPage() {
     }
   }, [sortBy, filteredRestaurants]);
   
+  
 
   return (
     <div className="min-h-screen bg-Almond">
@@ -80,7 +81,7 @@ export default function RestaurantPage() {
               <div className="bg-white p-4">
                 <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                 <p>{restaurant.food_type}</p>
-                <p>{restaurant.price_range_id}</p>
+                <p>{restaurant.price_range}</p>
               </div>
             </div>
           ))}
@@ -113,11 +114,11 @@ export default function RestaurantPage() {
                 {isDropdownOpen && (
                   <div className="absolute bg-white shadow-md rounded-md mt-2 w-48">
                     <ul className="py-2">
-                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_asc")}>Price asc</li>
-                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_desc")}> Price desc</li>
-                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Food_Type")}> Food_type</li>
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_asc")}>Price (Low to High)</li>
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_desc")}>Price (High to Low)</li>
+                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Food_type")}>Cuisine</li>
 
-                      <li>Rating NOT IMPLEMENTED NEED TO DO WHEN RATINGS ARE IMPLEMENTED</li>
+                      <li>Rating</li>
                     </ul>
                   </div>
                 )}
