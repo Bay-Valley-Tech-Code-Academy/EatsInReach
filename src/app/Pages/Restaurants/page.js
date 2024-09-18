@@ -71,8 +71,8 @@ export default function RestaurantPage() {
           <a className=" text-zinc-800 inline-block hover:underline" href="/"> Home </a> 
           <p className="text-zinc-800 inline-block"> /Restaurants </p>
         </div>
-        <div className="container mx-auto m-16 px-24 pt-3 pb-6 rounded-[164px] bg-Yellow-Green w-auto">
-        <Slider {...settings} className="container mt-4 ">
+        <div className="container mx-auto m-16 px-24 pt-3 pb-6 rounded-[164px] bg-Yellow-Green w-4/6">
+        <Slider {...settings} className="container mt-4">
           {restaurants.slice(0, 5).map((restaurant) => (
             <div key={restaurant.restaurant_id} className="rounded-t-[84px] overflow-hidden">
               <img
@@ -187,16 +187,16 @@ export default function RestaurantPage() {
               <div className="bg-Yellow-Green p-3 rounded-3xl">
               <div
                 key={restaurant.restaurant_id}
-                className="bg-white  shadow-md rounded-3xl overflow-hidden flex"
+                className="bg-white shadow-md rounded-3xl overflow-hidden flex"
               >
                 <Link
                   href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-                  className="flex"
+                  className="flex max-lg:block"
                 >
                   <img
                     src={`/images/${restaurant.image_url}`}
                     alt={`Image of ${restaurant.name}`}
-                    className="w-1/3 h-52 object-cover cursor-pointer"
+                    className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
                   />
                   <div className="p-4 -w-1/2  hover:bg-slate-300 hover:translate-y-1">
                     <h2 className="text-gray-700 text-xl font-semibold mb-2">
