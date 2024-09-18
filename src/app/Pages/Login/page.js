@@ -27,19 +27,15 @@ export default function Login() {
   });
 
   useEffect(() => {
-    const checkUserRoleAndRedirect = async () => {
+    const redirectIfLoggedIn = async () => {
       if (!loading && currentUser) {
         try {
-          // Retrieve role from Firestore
+          // User is already logged in, redirect them based on their role
           const userRole = await getUserRole(currentUser.uid);
-
-          // Redirect based on role
           if (userRole === "vendor") {
             router.push("/Pages/VendorSubmission");
           } else if (userRole === "user") {
             router.push("/Pages/Restaurants");
-          } else {
-            console.error("Unable to determine user role.");
           }
         } catch (error) {
           console.error("Error fetching user role:", error);
@@ -47,10 +43,8 @@ export default function Login() {
       }
     };
 
-    if (!loading && redirecting) {
-      checkUserRoleAndRedirect();
-    }
-  }, [currentUser, loading, redirecting, router]);
+    redirectIfLoggedIn();
+  }, [currentUser, loading, router]);
 
   const updateForm = (e) => {
     const { name, value } = e.target;
@@ -131,7 +125,7 @@ export default function Login() {
   };
 
   // Show a loading indicator or null while checking auth state
-  if (loading || redirecting) {
+  if (loading || redirecting || currentUser) {
     return <div>{redirecting ? "Redirecting..." : "Loading..."}</div>; // Replace with a loading spinner if needed
   }
 
@@ -141,7 +135,9 @@ export default function Login() {
         <img
           src="/images/logo-placeholder.jpg"
           alt="logo"
-          className=" absolute top-0 left-0  " height="30" width="40"
+          className="absolute top-0 left-0"
+          height="30"
+          width="40"
         />
       </Link>
       <div className="w-3/4 sm:w-1/2 lg:w-1/4 bg-[#AAD15F] rounded-xl flex flex-col items-center">
