@@ -186,7 +186,7 @@ export default function RestaurantPage() {
               <div className="bg-Yellow-Green p-3 rounded-3xl">
               <div
                 key={restaurant.restaurant_id}
-                className="bg-white shadow-md rounded-3xl overflow-hidden flex"
+                className="bg-white  shadow-md rounded-3xl overflow-hidden flex"
               >
                 <Link
                   href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
@@ -197,7 +197,7 @@ export default function RestaurantPage() {
                     alt={`Image of ${restaurant.name}`}
                     className="w-1/3 h-52 object-cover cursor-pointer"
                   />
-                  <div className="p-4 w-1/2 hover:bg-slate-300 hover:translate-y-1">
+                  <div className="p-4 -w-1/2  hover:bg-slate-300 hover:translate-y-1">
                     <h2 className="text-gray-700 text-xl font-semibold mb-2">
                       {restaurant.name}
                     </h2>
