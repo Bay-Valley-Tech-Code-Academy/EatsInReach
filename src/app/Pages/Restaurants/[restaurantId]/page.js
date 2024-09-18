@@ -1,15 +1,23 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import Navbar from '@/Components/Navbar';
 import Footer from '@/Components/Footer';
 import { PiHeartStraightThin, PiHeartStraightFill } from "react-icons/pi";
 
-export default function RestaurantPage({ params }) {
+export default function VendorPage({params}) {
+    const [vendorItems, setVendorItems] = useState([]);
+    const [newItemName, setNewItemName] = useState('');
+    const [newItemDesc, setNewItemDesc] = useState('');
+    const [newItemPrice, setNewItemPrice] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(false);
     const [restaurant, setRestaurant] = useState(null);
     const [isFavorited, setIsFavorited] = useState(false);
     const { restaurantId } = params;
 
+    // Fetch vendor items on component mount
     useEffect(() => {
         console.log('Fetching restaurant with ID:', restaurantId);
 
@@ -73,6 +81,18 @@ export default function RestaurantPage({ params }) {
             </div>
         );
     }
+    // toggles menu accordion
+    const toggleMenuAccordion = () => {
+        setMenuOpen(!menuOpen);
+    };
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-white text-lg text-black">
+                <p>Error: {error}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen flex flex-col bg-Almond">
@@ -81,10 +101,9 @@ export default function RestaurantPage({ params }) {
             </header>
 
             <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-white">
-                {/* Restaurant Name */}
                 <section className="mb-4 p-2">
                     <h1 className="text-3xl font-bold text-center text-black">
-                        {restaurant.name}
+                        Vendor Items
                     </h1>
                 </section>
 
@@ -137,6 +156,44 @@ export default function RestaurantPage({ params }) {
                                 </p>
                             </div>
                         </div>
+
+                        {/* Accordion for Menu */}
+                        <div className="w-full p-2">
+                            <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
+                                {/* <h2 className="txt-2xl font-bold mb-2 text-black">
+                                    Menu
+                                </h2> */}
+
+                                <div className="border border-gray-200 rounded-lg">
+                                    <button
+                                        onClick={toggleMenuAccordion} // Toggle the accordion
+                                        className="flex justify-between w-full px-4 py-2 text-left text-2xl font-bold mb-2 text-black bg-gray-100 rounded-lg focus:outline-none"
+                                    >
+                                        {menuOpen ? 'Hide Menu' : 'Show Menu'}
+                                        <span className={`transform transition-transform duration-300 ${menuOpen ? 'rotate-180' : ''}`}>
+                                            ▼
+                                        </span>
+                                    </button>
+
+                                    {menuOpen && (
+                                        <div className="p-4 border-t border-gray-200">
+                                            <ul className="text-lg text-black">
+                                                {restaurant.menu ? (
+                                                    restaurant.menu.map((menuItem, index) => (
+                                                        <li key={index} className="mb-2">
+                                                            <span className="font-semibold">{menuItem.name}</span>: {menuItem.price}
+                                                        </li>
+                                                    ))
+                                                ) : (
+                                                    <p>No menu available.</p>
+                                                )}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
 
