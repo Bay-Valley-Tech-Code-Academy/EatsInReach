@@ -6,7 +6,7 @@ export async function GET(req) {
     const query = `
         SELECT Restaurants.*
         FROM Favorites
-        JOIN Restaurants ON Favorites.restaurant_id = Restaurants.restaurants_id
+        JOIN Restaurants ON Favorites.restaurants_id = Restaurants.restaurants_id
         WHERE Favorites.user_id = $1;
     `;
 
@@ -25,6 +25,7 @@ export async function POST(req) {
     const query = `
         INSERT INTO Favorites(user_id, restaurant_id)
         VALUES ($1,$2)
+        ON CONFLICT DO NOTHING;
     `;
     
     try {

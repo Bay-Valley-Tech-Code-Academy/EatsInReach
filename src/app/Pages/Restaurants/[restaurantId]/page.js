@@ -39,10 +39,12 @@ export default function VendorPage({params}) {
 
         async function fetchFavoriteStatus() {
             try {
-                const response = await fetch(`/api/favorites/${restaurantId}`);
+                const response = await fetch(`/api/favorites`);
                 if (response.ok) {
                     const isFavorited = await response.json();
                     setIsFavorited(isFavorited);
+                } else {
+                    throw new Error("Failed to fetch favorite status");
                 }
             } catch (error) {
                 console.error("Error fetching favorite status:", error)
@@ -55,14 +57,15 @@ export default function VendorPage({params}) {
     }, [restaurantId]);
 
     const handleFavoriteToggle = async() => {
-        const url = `/api/favorites/${restaurantId}`;
+
+        const url = `/api/favorites`;
         const method = isFavorited ? 'DELETE' : 'POST';
 
         try {
             const response = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ restaurantId })
+                body: JSON.stringify({ restaurant_id: restaurantId })
             });
             if (response.ok) {
                 setIsFavorited(!isFavorited);
