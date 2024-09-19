@@ -1,42 +1,80 @@
 "use client";
 import Link from "next/link";
 import Navbar from "@/Components/Navbar";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../../context/authContext";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../../../../firebase";
 
+export default function UserProfile() {
+  const router = useRouter();
+  const { currentUser, loading } = useAuth();
+  const [role, setRole] = useState(null);
+  const [isRoleLoading, setIsRoleLoading] = useState(true);
 
+  useEffect(() => {
+    // Redirect to the landing page if the user is not logged in
+    if (!loading && !currentUser) {
+      router.push("/");
+    }
+    if (currentUser) {
+      const fetchUserData = async () => {
+        const collections = ["users", "vendors", "admins"];
+        let found = false;
 
+        for (const collection of collections) {
+          if (found) break;
 
-export default function LoginVendor() {
+          try {
+            const userDoc = await getDoc(
+              doc(firestore, collection, currentUser.uid)
+            );
+
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              if (userData.role !== "user") {
+                router.push("/");
+              }
+              found = true;
+              setRole(userData.role);
+            }
+          } catch (error) {
+            console.error(
+              `Error fetching user data from ${collection} collection:`,
+              error
+            );
+          }
+        }
+
+        if (!found) {
+          console.log(
+            "User document does not exist in any of the collections."
+          );
+          setRole(null);
+        }
+        setIsRoleLoading(false);
+      };
+
+      fetchUserData();
+    }
+  }, [currentUser, loading, router]);
+
+  // Show a loading indicator or null while checking auth state
+  if (loading || isRoleLoading) {
+    return <div>Loading...</div>; // Replace with a loading spinner if needed
+  }
+
+  if (!currentUser || role !== "user") {
+    return <div>Redirecting...</div>;
+  }
+
   return (
     <div>
       <Navbar />
-        <div className="flex bg-green-300 justify-center ">
+      <div className="flex bg-green-300 justify-center ">
             <h1>Acount Setting</h1>
         </div>
-
- {/*Main Components*/}
-
- 
-      
-        {/* sidebar */}
-        <div className="flex ml-3 mt-3 justify-between">
-        <div className="flex bg-gray-200 w-52"> 
-        <ul>
-            <li>Account Settings</li>
-        </ul>
         </div>
-
-        {/* Sidebar content */}
-        <div className="flex h-96 w-1/2 flex-col mt-4">
-            <h1>Flavor Profile</h1>
-            {/* About me/What do you like to eat? */}
-        
-            <div className=" bg-green-300 justify-center">
-            
-           
-            </div>
-            </div>
-            {/* Top three favorites */}            
-        </div>
-    </div>
   );
 }

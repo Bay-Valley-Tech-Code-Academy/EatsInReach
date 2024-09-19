@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
     console.log("AuthProvider is rendering"); // Debug log
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("Auth state changed in provider:", user); // Debug log
       setCurrentUser(user);
       setLoading(false);
     });
