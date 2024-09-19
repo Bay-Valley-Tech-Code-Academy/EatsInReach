@@ -9,49 +9,33 @@ export default function LoginVendor() {
   return (
     <div>
       <Navbar />
-      <div className="flex bg-green-400 h-28 items-end"> {/* Profile image and background */}
-        <div className=" bg-white border w-fit rounded-full ml-3">
-            <img src="/images/profile-icon.png"
-                height="15"
-                width="25"
-                alt="Profile picture"
-                className="w-24 h-24  ">
-            </img>
+        <div className="flex bg-green-300 justify-center ">
+            <h1>Acount Setting</h1>
         </div>
-      </div>
 
  {/*Main Components*/}
 
  
       
         {/* sidebar */}
-        <div className="">
-        <div className="bg-gray-200 w-52 "> 
+        <div className="flex ml-3 mt-3 justify-between">
+        <div className="flex bg-gray-200 w-52"> 
         <ul>
-            <li>Profile</li>
-            <li>Favorites</li>
-
+            <li>Account Settings</li>
         </ul>
         </div>
 
         {/* Sidebar content */}
-        <div className="flex h-screen w-full items-center justify-center flex-col mt-4 mb-4">
+        <div className="flex h-96 w-1/2 flex-col mt-4">
             <h1>Flavor Profile</h1>
             {/* About me/What do you like to eat? */}
-
-
-
-
-            <div className="flex h-screen w-full justify-center ">
-            <div>
-                <h1>About Me</h1>
-            </div>
-            <div>
-                <h1>About My Pallet</h1>
-            </div>
-            </div>
-            </div>
+        
+            <div className=" bg-green-300 justify-center">
             
+           
+            </div>
+            </div>
+            {/* Top three favorites */}            
         </div>
     </div>
   );
