@@ -125,6 +125,15 @@ export default function VendorSubmission() {
         setPhotoTypeSelections(updatedSelections);
     };
 
+    const handleAltTextChange = (e, index) => {
+      const updatedSelections = [...photoTypeSelections];
+      updatedSelections[index] = {
+          ...updatedSelections[index],
+          alt_text: e.target.value
+      };
+      setPhotoTypeSelections(updatedSelections);
+  };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
     
@@ -322,6 +331,13 @@ export default function VendorSubmission() {
                                   </option>
                               ))}
                           </select>
+                          <label className="block text-gray-700 mt-2">Alt Text</label>
+                            <input 
+                                type="text" 
+                                value={photo.alt_text} 
+                                onChange={(e) => handleAltTextChange(e, index)} 
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
                           <label className="block text-gray-700 mt-2">Upload Images</label>
                             <input 
                                 type="file" 
