@@ -14,12 +14,13 @@ export async function GET() {
                 vs.submission_id,
                 vs.name,
                 vs.location,
-                pr.range AS price_range,
-                ft.type_name AS food_type,
                 vs.hours_of_operation,
                 vs.description,
+                vs.website,
                 vs.phone_number,
                 vs.email,
+                pr.range AS price_range,
+                ft.type_name AS food_type,
                 vs.image_url
             FROM Vendor_Submissions vs
             JOIN Price_Ranges pr ON vs.price_range_id = pr.price_range_id
@@ -37,27 +38,43 @@ export async function GET() {
 export async function POST(request) {
     try {
         const data = await request.json();
-        const { name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email, image_url, photo_types } = data;
+        const {
+            name, location, hours_of_operation, description, website,
+            phone_number, email, price_range_id, food_type_id,
+            photo_types, images
+        } = data;
 
         const client = await pool.connect();
 
         await client.query('BEGIN');
 
+        // Insert vendor submission
         const result = await client.query(
-            'INSERT INTO Vendor_Submissions (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING submission_id',
-            [name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email, image_url]
+            `INSERT INTO Vendor_Submissions (
+                name, location, hours_of_operation, description, website,
+                phone_number, email, price_range_id, food_type_id
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING submission_id`,
+            [name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id]
         );
 
-        const submissionId = result.rows[0].submission_id;
+        const vendorId = result.rows[0].submission_id;
 
-        const photoTypePromises = photo_types.map(photoType => {
-            return client.query(
-                'INSERT INTO Vendor_Restaurant_Pictures (vendor_id, photo_type_id, image_url, alt_text) VALUES ($1, $2, $3, $4)',
-                [submissionId, photoType.photo_type_id, photoType.image_url, photoType.alt_text]
-            );
-        });
+        // Insert images and photo types
+        if (images && images.length > 0) {
+            const insertPromises = images.map((image, index) => {
+                const imageUrl = image.base64; // Assuming base64 or URL format
+                const photoType = photo_types[index]?.photo_type_id || null; // Handle photo type id
+                const altText = photo_types[index]?.alt_text || ''; // Default to empty string if no alt text provided
+                
+                return client.query(
+                    `INSERT INTO Vendor_Restaurant_Pictures (vendor_id, image_url, photo_type_id, alt_text) 
+                    VALUES ($1, $2, $3, $4)`,
+                    [vendorId, imageUrl, photoType, altText]
+                );
+            });
 
-        await Promise.all(photoTypePromises);
+            await Promise.all(insertPromises);
+        }
 
         await client.query('COMMIT');
         client.release();

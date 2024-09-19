@@ -8,15 +8,15 @@ export default function VendorSubmission() {
     const [photoTypes, setPhotoTypes] = useState([]);
     const [submitStatus, setSubmitStatus] = useState(null);
     const [formData, setFormData] = useState({
-        name: '',
-        location: '',
-        price_range_id: '', 
-        food_type_id: '', 
-        hours_of_operation: '',
-        description: '',
-        phone_number: '',
-        email: '',
-        image_url: ''
+        name: 'Sample Restaurant',
+        location: '123 Main St, Sample City',
+        hours_of_operation: 'Mon-Fri, 9am-9pm',
+        description: 'A great place to enjoy delicious food!',
+        website: 'sample.com',
+        phone_number: '123-456-7890',
+        email: 'sample@restaurant.com',
+        price_range_id: '2',
+        food_type_id: '1'
     });
     const [imageFiles, setImageFiles] = useState([]);
     const [photoTypeSelections, setPhotoTypeSelections] = useState([]);
@@ -25,7 +25,6 @@ export default function VendorSubmission() {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const dropdownRef = useRef(null);
 
-    // Fetch available food types, price ranges, and photo types when the component loads
     useEffect(() => {
         async function fetchFoodTypes() {
             try {
@@ -54,17 +53,17 @@ export default function VendorSubmission() {
         }
 
         async function fetchPhotoTypes() {
-          try {
-              const response = await fetch('/api/photo-types');
-              if (!response.ok) {
-                  throw new Error('Failed to fetch photo types');
-              }
-              const data = await response.json();
-              setPhotoTypes(data);
-          } catch (error) {
-              console.error('Error fetching photo types:', error);
-          }
-      }
+            try {
+                const response = await fetch('/api/photo-types');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch photo types');
+                }
+                const data = await response.json();
+                setPhotoTypes(data);
+            } catch (error) {
+                console.error('Error fetching photo types:', error);
+            }
+        }
 
         fetchFoodTypes();
         fetchPriceRanges();
@@ -72,7 +71,6 @@ export default function VendorSubmission() {
     }, []);
 
     useEffect(() => {
-        // Close dropdown when clicking outside of it
         function handleClickOutside(event) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setDropdownVisible(false);
@@ -91,12 +89,32 @@ export default function VendorSubmission() {
         });
     };
 
-    const handleFileChange = (e, index) => {
-      const files = Array.from(e.target.files);
-      const updatedSelections = [...photoTypeSelections];
-      updatedSelections[index].images = files;
-      setPhotoTypeSelections(updatedSelections);
-  };
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        const fileReaders = files.map(file => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve({
+                        base64: reader.result,
+                        name: file.name
+                    });
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        });
+    
+        Promise.all(fileReaders).then(fileData => {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                images: fileData
+            }));
+        }).catch(error => {
+            console.error('Error reading files:', error);
+        });
+    };
+    
 
     const handlePhotoTypeChange = (e, index) => {
         const updatedSelections = [...photoTypeSelections];
@@ -107,18 +125,9 @@ export default function VendorSubmission() {
         setPhotoTypeSelections(updatedSelections);
     };
 
-    const handleAltTextChange = (e, index) => {
-        const updatedSelections = [...photoTypeSelections];
-        updatedSelections[index] = {
-            ...updatedSelections[index],
-            alt_text: e.target.value
-        };
-        setPhotoTypeSelections(updatedSelections);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const imageUploadPromises = imageFiles.map(file => {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -127,10 +136,10 @@ export default function VendorSubmission() {
                 reader.readAsDataURL(file);
             });
         });
-
+    
         try {
             const imageUrls = await Promise.all(imageUploadPromises);
-
+    
             const response = await fetch('/api/vendor-submissions', {
                 method: 'POST',
                 headers: {
@@ -145,19 +154,19 @@ export default function VendorSubmission() {
                     }))
                 })
             });
-
+    
             if (response.ok) {
                 setSubmitStatus('Submission successful! Your restaurant will be reviewed soon.');
                 setFormData({
                     name: '',
                     location: '',
-                    price_range_id: '',
-                    food_type_id: '',
                     hours_of_operation: '',
                     description: '',
+                    website: '',
                     phone_number: '',
                     email: '',
-                    image_url: ''
+                    price_range_id: '',
+                    food_type_id: '',
                 });
                 setImageFiles([]);
                 setPhotoTypeSelections([]);
@@ -169,14 +178,16 @@ export default function VendorSubmission() {
             setSubmitStatus('There was an error with your submission. Please try again.');
         }
     };
+    
 
     const addPhotoTypeSelection = () => {
         setPhotoTypeSelections([...photoTypeSelections, { photo_type_id: '', alt_text: '' }]);
     };
+
     const removePhotoTypeSelection = (index) => {
-      setPhotoTypeSelections(photoTypeSelections.filter((_, i) => i !== index));
-  };
-  
+        setPhotoTypeSelections(photoTypeSelections.filter((_, i) => i !== index));
+    };
+    
 
     return (
         <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
@@ -185,33 +196,86 @@ export default function VendorSubmission() {
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label className="block text-gray-700">Restaurant Name</label>
-                    <input 
-                        type="text" 
-                        name="name" 
-                        value={formData.name} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
                         className="w-full p-2 border border-gray-300 rounded"
                     />
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700">Location</label>
-                    <input 
-                        type="text" 
-                        name="location" 
-                        value={formData.location} 
-                        onChange={handleChange} 
-                        required 
+                    <input
+                        type="text"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700">Hours of Operation</label>
+                    <input
+                        type="text"
+                        name="hours_of_operation"
+                        value={formData.hours_of_operation}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700">Description</label>
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700">Website</label>
+                    <textarea
+                        name="website"
+                        value={formData.website}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700">Phone Number</label>
+                    <input
+                        type="text"
+                        name="phone_number"
+                        value={formData.phone_number}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
                         className="w-full p-2 border border-gray-300 rounded"
                     />
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700">Price Range</label>
-                    <select 
-                        name="price_range_id" 
-                        value={formData.price_range_id} 
-                        onChange={handleChange} 
-                        required 
+                    <select
+                        name="price_range_id"
+                        value={formData.price_range_id}
+                        onChange={handleChange}
+                        required
                         className="w-full p-2 border border-gray-300 rounded"
                     >
                         <option value="">Select Price Range</option>
@@ -222,11 +286,11 @@ export default function VendorSubmission() {
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700">Food Type</label>
-                    <select 
-                        name="food_type_id" 
-                        value={formData.food_type_id} 
-                        onChange={handleChange} 
-                        required 
+                    <select
+                        name="food_type_id"
+                        value={formData.food_type_id}
+                        onChange={handleChange}
+                        required
                         className="w-full p-2 border border-gray-300 rounded"
                     >
                         <option value="">Select Food Type</option>
@@ -234,49 +298,6 @@ export default function VendorSubmission() {
                             <option key={ft.food_type_id} value={ft.food_type_id}>{ft.type_name}</option>
                         ))}
                     </select>
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Hours of Operation</label>
-                    <input 
-                        type="text" 
-                        name="hours_of_operation" 
-                        value={formData.hours_of_operation} 
-                        onChange={handleChange} 
-                        required 
-                        className="w-full p-2 border border-gray-300 rounded"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Description</label>
-                    <textarea 
-                        name="description" 
-                        value={formData.description} 
-                        onChange={handleChange} 
-                        required 
-                        className="w-full p-2 border border-gray-300 rounded"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Phone Number</label>
-                    <input 
-                        type="text" 
-                        name="phone_number" 
-                        value={formData.phone_number} 
-                        onChange={handleChange} 
-                        required 
-                        className="w-full p-2 border border-gray-300 rounded"
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Email</label>
-                    <input 
-                        type="email" 
-                        name="email" 
-                        value={formData.email} 
-                        onChange={handleChange} 
-                        required 
-                        className="w-full p-2 border border-gray-300 rounded"
-                    />
                 </div>
                 <div className="mb-4">
                   <button 
@@ -301,13 +322,6 @@ export default function VendorSubmission() {
                                   </option>
                               ))}
                           </select>
-                          <label className="block text-gray-700 mt-2">Alt Text</label>
-                          <input 
-                              type="text" 
-                              value={photo.alt_text} 
-                              onChange={(e) => handleAltTextChange(e, index)} 
-                              className="w-full p-2 border border-gray-300 rounded"
-                          />
                           <label className="block text-gray-700 mt-2">Upload Images</label>
                             <input 
                                 type="file" 
@@ -325,14 +339,15 @@ export default function VendorSubmission() {
                       </div>
                   ))}
               </div>
-                <button 
-                    type="submit" 
-                    className="bg-blue-500 text-white p-2 rounded"
+
+                <button
+                    type="submit"
+                    className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
                 >
                     Submit
                 </button>
+                {submitStatus && <p className="mt-4 text-center">{submitStatus}</p>}
             </form>
-            {submitStatus && <p className="mt-4 text-green-500">{submitStatus}</p>}
         </div>
     );
 }
