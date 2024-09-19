@@ -46,7 +46,7 @@ export default function Login() {
     };
 
     redirectIfLoggedIn();
-  }, [currentUser, loading, router]);
+  }, [currentUser, loading, router, redirecting]);
 
   const updateForm = (e) => {
     const { name, value } = e.target;
