@@ -36,6 +36,8 @@ export default function Login() {
             router.push("/Pages/VendorSubmission");
           } else if (userRole === "user") {
             router.push("/Pages/Restaurants");
+          } else if (userRole === "admin") {
+            router.push("/Pages/Admin");
           }
         } catch (error) {
           console.error("Error fetching user role:", error);
@@ -44,7 +46,7 @@ export default function Login() {
     };
 
     redirectIfLoggedIn();
-  }, [currentUser, loading, router]);
+  }, [currentUser, loading, router, redirecting]);
 
   const updateForm = (e) => {
     const { name, value } = e.target;
