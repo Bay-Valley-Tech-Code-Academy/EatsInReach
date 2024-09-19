@@ -41,7 +41,7 @@ export default function VendorPage() {
                 item_name: newItemName,
                 item_desc: newItemDesc,
                 item_price: parseFloat(newItemPrice.replace('$', '')),
-                image_path: {fallbackImage}, // Set to an empty string if no image is provided
+                image_path: fallbackImage, // Set to an empty string if no image is provided
                 alt_text: ''
             };
 
@@ -68,6 +68,28 @@ export default function VendorPage() {
             }
         } else {
             console.error('Validation failed: All fields are required');
+        }
+    };
+
+    // Function to remove an item from the list
+    const removeItem = async (itemId) => {
+        try {
+            const res = await fetch('/api/vendor-items/remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ item_id: itemId }),
+            });
+
+            if (res.ok) {
+                // Update state to remove the item
+                setVendorItems((prevItems) => prevItems.filter(item => item.item_id !== itemId));
+            } else {
+                console.error('Failed to remove item');
+            }
+        } catch (error) {
+            console.error('Error removing item:', error);
         }
     };
 
@@ -132,6 +154,12 @@ export default function VendorPage() {
                                     <p className="text-black font-bold py-2">{item.item_name}</p>
                                     <p className="text-black py-2">{item.item_desc}</p>
                                     <p className="text-black py-2">${item.item_price}</p>
+                                    <button
+                                        onClick={() => removeItem(item.item_id)}
+                                        className="bg-red-500 text-white p-2 rounded mt-2"
+                                    >
+                                        Remove Item
+                                    </button>
                                 </div>
                             </div>
                         </div>
