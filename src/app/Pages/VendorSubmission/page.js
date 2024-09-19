@@ -17,17 +17,19 @@ export default function VendorSubmission() {
         location: "",
         price_range_id: "",
         food_type_id: "",
-        hours_of_operation: "swapped to other hours",
+        hours_of_operation: "",
         description: "",
         phone_number: "",
         email: "",
         image_url: "",
+        days_open: "",
     });
+
+
 
     const [searchTerm, setSearchTerm] = useState("");
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const dropdownRef = useRef(null);
-
 
     const [open, setOpen] = useState(false)
     const [monday, setMonday] = useState("12:00");
@@ -35,41 +37,44 @@ export default function VendorSubmission() {
     const [mondayClosing, setMondayClosing] = useState("12:00");
     const [mondayAmPmClosing, setMondayAmPmClosing] = useState("AM");
 
-    const [openTuesday, setOpenTuesday] = useState(false)
-    const [tuesday, setTuesday] = useState("12:00");
-    const [tuesdayAmPm, setTuesdayAmPm] = useState("AM");
-    const [tuesdayClosing, setTuesdayClosing] = useState("12:00");
-    const [tuesdayAmPmClosing, setTuesdayAmPmClosing] = useState("AM");
+    const [startOfWeek, setStartOfWeek] = useState("")
+    const [endOfWeek, setEndOfWeek] = useState("")
 
-    const [openWednesday, setOpenWednesday] = useState(false);
-    const [wednesday, setWednesday] = useState("12:00");
-    const [wednesdayAmPm, setWednesdayAmPm] = useState("AM");
-    const [wednesdayClosing, setWednesdayClosing] = useState("12:00");
-    const [wednesdayAmPmClosing, setWednesdayAmPmClosing] = useState("AM");
+    // const [openTuesday, setOpenTuesday] = useState(false)
+    // const [tuesday, setTuesday] = useState("12:00");
+    // const [tuesdayAmPm, setTuesdayAmPm] = useState("AM");
+    // const [tuesdayClosing, setTuesdayClosing] = useState("12:00");
+    // const [tuesdayAmPmClosing, setTuesdayAmPmClosing] = useState("AM");
 
-    const [openThursday, setOpenThursday] = useState(false);
-    const [thursday, setThursday] = useState("12:00");
-    const [thursdayAmPm, setThursdayAmPm] = useState("AM");
-    const [thursdayClosing, setThursdayClosing] = useState("12:00");
-    const [thursdayAmPmClosing, setThursdayAmPmClosing] = useState("AM");
+    // const [openWednesday, setOpenWednesday] = useState(false);
+    // const [wednesday, setWednesday] = useState("12:00");
+    // const [wednesdayAmPm, setWednesdayAmPm] = useState("AM");
+    // const [wednesdayClosing, setWednesdayClosing] = useState("12:00");
+    // const [wednesdayAmPmClosing, setWednesdayAmPmClosing] = useState("AM");
 
-    const [openFriday, setOpenFriday] = useState(false);
-    const [friday, setFriday] = useState("12:00");
-    const [fridayAmPm, setFridayAmPm] = useState("AM");
-    const [fridayClosing, setFridayClosing] = useState("12:00");
-    const [fridayAmPmClosing, setFridayAmPmClosing] = useState("AM");
+    // const [openThursday, setOpenThursday] = useState(false);
+    // const [thursday, setThursday] = useState("12:00");
+    // const [thursdayAmPm, setThursdayAmPm] = useState("AM");
+    // const [thursdayClosing, setThursdayClosing] = useState("12:00");
+    // const [thursdayAmPmClosing, setThursdayAmPmClosing] = useState("AM");
 
-    const [openSaturday, setOpenSaturday] = useState(false);
-    const [saturday, setSaturday] = useState("12:00");
-    const [saturdayAmPm, setSaturdayAmPm] = useState("AM");
-    const [saturdayClosing, setSaturdayClosing] = useState("12:00");
-    const [saturdayAmPmClosing, setSaturdayAmPmClosing] = useState("AM");
+    // const [openFriday, setOpenFriday] = useState(false);
+    // const [friday, setFriday] = useState("12:00");
+    // const [fridayAmPm, setFridayAmPm] = useState("AM");
+    // const [fridayClosing, setFridayClosing] = useState("12:00");
+    // const [fridayAmPmClosing, setFridayAmPmClosing] = useState("AM");
 
-    const [openSunday, setOpenSunday] = useState(false);
-    const [sunday, setSunday] = useState("12:00");
-    const [sundayAmPm, setSundayAmPm] = useState("AM");
-    const [sundayClosing, setSundayClosing] = useState("12:00");
-    const [sundayAmPmClosing, setSundayAmPmClosing] = useState("AM");
+    // const [openSaturday, setOpenSaturday] = useState(false);
+    // const [saturday, setSaturday] = useState("12:00");
+    // const [saturdayAmPm, setSaturdayAmPm] = useState("AM");
+    // const [saturdayClosing, setSaturdayClosing] = useState("12:00");
+    // const [saturdayAmPmClosing, setSaturdayAmPmClosing] = useState("AM");
+
+    // const [openSunday, setOpenSunday] = useState(false);
+    // const [sunday, setSunday] = useState("12:00");
+    // const [sundayAmPm, setSundayAmPm] = useState("AM");
+    // const [sundayClosing, setSundayClosing] = useState("12:00");
+    // const [sundayAmPmClosing, setSundayAmPmClosing] = useState("AM");
 
     // Fetch available food types and price ranges when the component loads
     useEffect(() => {
@@ -125,6 +130,21 @@ export default function VendorSubmission() {
         });
     };
 
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            days_open: `${startOfWeek.toUpperCase()} - ${endOfWeek.toUpperCase()}`,
+        });
+    }, [startOfWeek, endOfWeek]);
+
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            hours_of_operation: `${monday}${mondayAmPm} - ${mondayClosing}${mondayAmPmClosing}`,
+        });
+    }, [monday, mondayAmPm, mondayClosing, mondayAmPmClosing]);
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -155,7 +175,9 @@ export default function VendorSubmission() {
         } else {
             setSubmitStatus(
                 "There was an error with your submission. Please try again."
+
             );
+            console.log(formData)
         }
     };
 
@@ -190,19 +212,19 @@ export default function VendorSubmission() {
         if (day == "monday") {
             setOpen(!open);
         }
-        else if (day === "tuesday") {
-            setOpenTuesday(!openTuesday);
-        } else if (day === "wednesday") {
-            setOpenWednesday(!openWednesday);
-        } else if (day === "thursday") {
-            setOpenThursday(!openThursday);
-        } else if (day === "friday") {
-            setOpenFriday(!openFriday);
-        } else if (day === "saturday") {
-            setOpenSaturday(!openSaturday);
-        } else if (day === "sunday") {
-            setOpenSunday(!openSunday);
-        }
+        // else if (day === "tuesday") {
+        //     setOpenTuesday(!openTuesday);
+        // } else if (day === "wednesday") {
+        //     setOpenWednesday(!openWednesday);
+        // } else if (day === "thursday") {
+        //     setOpenThursday(!openThursday);
+        // } else if (day === "friday") {
+        //     setOpenFriday(!openFriday);
+        // } else if (day === "saturday") {
+        //     setOpenSaturday(!openSaturday);
+        // } else if (day === "sunday") {
+        //     setOpenSunday(!openSunday);
+        // }
     };
 
 
@@ -219,7 +241,7 @@ export default function VendorSubmission() {
                     <h2>Sign Out</h2>
                 </div>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form >
                 <div className="mb-4">
                     <label className="block text-gray-700">Restaurant Name</label>
                     <input
@@ -227,7 +249,7 @@ export default function VendorSubmission() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        required
+                        // required
                         className="w-full p-2 border border-gray-300 rounded"
                     />
                 </div>
@@ -238,7 +260,7 @@ export default function VendorSubmission() {
                         name="location"
                         value={formData.location}
                         onChange={handleChange}
-                        required
+                        // required
                         className="w-full p-2 border border-gray-300 rounded"
                     />
                 </div>
@@ -278,7 +300,7 @@ export default function VendorSubmission() {
                         name="price_range_id"
                         value={formData.price_range_id}
                         onChange={handleChange}
-                        required
+                    // required
                     >
                         <option value="">Select a price range</option>
                         {priceRanges.map((range) => (
@@ -339,15 +361,38 @@ export default function VendorSubmission() {
                         className="w-full p-2 border border-gray-300 rounded"
                     />
                 </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Monday Hours of Operation</label>
 
-                    <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" value="" class="sr-only peer"
+                <div className="mb-4">
+                    <label className="block text-gray-700">Dates Open</label>
+                    <div className="inline-flex space-x-6 items-center">
+                        <input
+                            type="text"
+                            name="days_open"
+                            value={startOfWeek}
+                            onChange={(e) => setStartOfWeek(e.target.value)}
+                            className="w-1/3 p-2 border border-gray-300 rounded"
+                        />
+                        <p className="text-center w-1/6"> thru </p>
+                        <input
+                            type="text"
+                            name="days_open"
+                            value={endOfWeek}
+                            onChange={(e) => setEndOfWeek(e.target.value)}
+                            className="w-1/3 p-2 border border-gray-300 rounded"
+                        />
+                    </div>
+
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-gray-700"> Hours of Operation</label>
+
+                    <label className="inline-flex items-center cursor-pointer">
+                        <input type="checkbox" value="" className="sr-only peer"
                             onChange={() => openOrNot("monday")}
                         ></input>
-                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{open ? 'Open' : 'Closed'}</span>
+                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{open ? 'Open' : 'Closed'}</span>
                     </label>
                     <div>
                         {open && (
@@ -384,246 +429,9 @@ export default function VendorSubmission() {
                     </div>
                 </div>
 
-                <div className="mb-4">
-                    <label className="block text-gray-700">Tuesday Hours of Operation</label>
-                    <label className="inline-flex items-center cursor-pointer">
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            onChange={() => openOrNot("tuesday")}
-                        />
-                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        <span className="ms-3 text-sm font-medium text-gray-900">{openTuesday ? "Open" : "Closed"}</span>
-                    </label>
-
-                    {openTuesday && (
-                        <div>
-                            <div className="flex">
-                                <label className="block text-gray-700 w-1/2">Opening Hours</label>
-                                <label className="block text-gray-700 w-1/2">Closing Hours</label>
-                            </div>
-                            <div className="flex">
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{tuesday}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{tuesdayAmPm}</p>
-                                    </div>
-                                    <DropdownTime setTime={setTuesday} setAmPm={setTuesdayAmPm}></DropdownTime>
-                                </div>
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{tuesdayClosing}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{tuesdayAmPmClosing}</p>
-                                    </div>
-                                    <DropdownTime setTime={setTuesdayClosing} setAmPm={setTuesdayAmPmClosing}></DropdownTime>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-gray-700">Wednesday Hours of Operation</label>
-                    <label className="inline-flex items-center cursor-pointer">
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            onChange={() => openOrNot("wednesday")}
-                        />
-                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        <span className="ms-3 text-sm font-medium text-gray-900">{openWednesday ? "Open" : "Closed"}</span>
-                    </label>
-
-                    {openWednesday && (
-                        <div>
-                            <div className="flex">
-                                <label className="block text-gray-700 w-1/2">Opening Hours</label>
-                                <label className="block text-gray-700 w-1/2">Closing Hours</label>
-                            </div>
-                            <div className="flex">
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{wednesday}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{wednesdayAmPm}</p>
-                                    </div>
-                                    <DropdownTime setTime={setWednesday} setAmPm={setWednesdayAmPm}></DropdownTime>
-                                </div>
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{wednesdayClosing}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{wednesdayAmPmClosing}</p>
-                                    </div>
-                                    <DropdownTime setTime={setWednesdayClosing} setAmPm={setWednesdayAmPmClosing}></DropdownTime>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700">Thursday Hours of Operation</label>
-                    <label className="inline-flex items-center cursor-pointer">
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            onChange={() => openOrNot("thursday")}
-                        />
-                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        <span className="ms-3 text-sm font-medium text-gray-900">{openThursday ? "Open" : "Closed"}</span>
-                    </label>
-
-                    {openThursday && (
-                        <div>
-                            <div className="flex">
-                                <label className="block text-gray-700 w-1/2">Opening Hours</label>
-                                <label className="block text-gray-700 w-1/2">Closing Hours</label>
-                            </div>
-                            <div className="flex">
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{thursday}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{thursdayAmPm}</p>
-                                    </div>
-                                    <DropdownTime setTime={setThursday} setAmPm={setThursdayAmPm}></DropdownTime>
-                                </div>
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{thursdayClosing}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{thursdayAmPmClosing}</p>
-                                    </div>
-                                    <DropdownTime setTime={setThursdayClosing} setAmPm={setThursdayAmPmClosing}></DropdownTime>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-gray-700">Friday Hours of Operation</label>
-                    <label className="inline-flex items-center cursor-pointer">
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            onChange={() => openOrNot("friday")}
-                        />
-                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        <span className="ms-3 text-sm font-medium text-gray-900">{openFriday ? "Open" : "Closed"}</span>
-                    </label>
-
-                    {openFriday && (
-                        <div>
-                            <div className="flex">
-                                <label className="block text-gray-700 w-1/2">Opening Hours</label>
-                                <label className="block text-gray-700 w-1/2">Closing Hours</label>
-                            </div>
-                            <div className="flex">
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{friday}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{fridayAmPm}</p>
-                                    </div>
-                                    <DropdownTime setTime={setFriday} setAmPm={setFridayAmPm}></DropdownTime>
-                                </div>
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{fridayClosing}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{fridayAmPmClosing}</p>
-                                    </div>
-                                    <DropdownTime setTime={setFridayClosing} setAmPm={setFridayAmPmClosing}></DropdownTime>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-gray-700">Saturday Hours of Operation</label>
-                    <label className="inline-flex items-center cursor-pointer">
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            onChange={() => openOrNot("saturday")}
-                        />
-                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        <span className="ms-3 text-sm font-medium text-gray-900">{openSaturday ? "Open" : "Closed"}</span>
-                    </label>
-
-                    {openSaturday && (
-                        <div>
-                            <div className="flex">
-                                <label className="block text-gray-700 w-1/2">Opening Hours</label>
-                                <label className="block text-gray-700 w-1/2">Closing Hours</label>
-                            </div>
-                            <div className="flex">
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{saturday}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{saturdayAmPm}</p>
-                                    </div>
-                                    <DropdownTime setTime={setSaturday} setAmPm={setSaturdayAmPm}></DropdownTime>
-                                </div>
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{saturdayClosing}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{saturdayAmPmClosing}</p>
-                                    </div>
-                                    <DropdownTime setTime={setSaturdayClosing} setAmPm={setSaturdayAmPmClosing}></DropdownTime>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <div className="mb-4">
-                    <label className="block text-gray-700">Sunday Hours of Operation</label>
-                    <label className="inline-flex items-center cursor-pointer">
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            onChange={() => openOrNot("sunday")}
-                        />
-                        <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                        <span className="ms-3 text-sm font-medium text-gray-900">{openSunday ? "Open" : "Closed"}</span>
-                    </label>
-
-                    {openSunday && (
-                        <div>
-                            <div className="flex">
-                                <label className="block text-gray-700 w-1/2">Opening Hours</label>
-                                <label className="block text-gray-700 w-1/2">Closing Hours</label>
-                            </div>
-                            <div className="flex">
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{sunday}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{sundayAmPm}</p>
-                                    </div>
-                                    <DropdownTime setTime={setSunday} setAmPm={setSundayAmPm}></DropdownTime>
-                                </div>
-                                <div>
-                                    <div className="w-full flex">
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{sundayClosing}</p>
-                                        <p className="w-1/2 p-2 border border-gray-300 rounded">{sundayAmPmClosing}</p>
-                                    </div>
-                                    <DropdownTime setTime={setSundayClosing} setAmPm={setSundayAmPmClosing}></DropdownTime>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
 
 
-
-
-
-
-
-                <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+                <button type="submit" className="bg-blue-500 text-white p-2 rounded" onClick={handleSubmit}>
                     Submit
                 </button>
             </form >
