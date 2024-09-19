@@ -36,6 +36,8 @@ export default function Login() {
             router.push("/Pages/VendorSubmission");
           } else if (userRole === "user") {
             router.push("/Pages/Restaurants");
+          } else if (userRole === "admin") {
+            router.push("/Pages/Admin");
           }
         } catch (error) {
           console.error("Error fetching user role:", error);
