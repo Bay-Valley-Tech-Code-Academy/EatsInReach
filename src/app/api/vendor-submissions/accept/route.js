@@ -22,6 +22,19 @@ export async function POST(request) {
             });
         }
 
+        // Check if price_range_id and food_type_id are valid
+        const [priceRangeResult, foodTypeResult] = await Promise.all([
+            pool.query('SELECT 1 FROM Price_Ranges WHERE price_range_id = $1', [submission.price_range_id]),
+            pool.query('SELECT 1 FROM Food_Types WHERE food_type_id = $1', [submission.food_type_id])
+        ]);
+
+        if (priceRangeResult.rowCount === 0 || foodTypeResult.rowCount === 0) {
+            return new Response(JSON.stringify({ message: 'Invalid price range or food type ID' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
         // Insert into Restaurants
         await pool.query(
             'INSERT INTO Restaurants (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',

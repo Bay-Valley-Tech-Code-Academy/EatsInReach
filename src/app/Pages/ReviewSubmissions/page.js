@@ -80,7 +80,18 @@ export default function ReviewSubmissions() {
                                 <p><strong>Description:</strong> {submission.description}</p>
                                 <p><strong>Phone Number:</strong> {submission.phone_number}</p>
                                 <p><strong>Email:</strong> {submission.email}</p>
-                                <p><strong>Image URL:</strong> <a href={submission.image_url} target="_blank" rel="noopener noreferrer">{submission.image_url}</a></p>
+                                
+                                {/* Display the image */}
+                                {submission.image_url && (
+                                    <div className="my-4">
+                                        <img 
+                                            src={submission.image_url} 
+                                            alt={submission.name} 
+                                            className="w-full max-h-64 object-cover" 
+                                        />
+                                    </div>
+                                )}
+
                                 <div className="flex justify-center">
                                     <button onClick={() => handleAction(submission.submission_id, 'accept')} className='rounded-full font-thin bg-[#AAD15F] px-4 py-1 mx-1 my-2 hover:bg-[#627937]'>Accept</button>
                                     <button onClick={() => handleAction(submission.submission_id, 'reject')} className='rounded-full font-thin bg-[#D22701] px-4 py-1 mx-1 my-2 hover:bg-[#963a25]'>Reject</button>
