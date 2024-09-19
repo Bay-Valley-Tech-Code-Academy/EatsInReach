@@ -71,8 +71,8 @@ export default function RestaurantPage() {
           <a className=" text-zinc-800 inline-block hover:underline" href="/"> Home </a> 
           <p className="text-zinc-800 inline-block"> /Restaurants </p>
         </div>
-        <div className="container mx-auto m-16 px-24 pt-3 pb-6 rounded-[164px] bg-Yellow-Green w-4/6">
-        <Slider {...settings} className="container mt-4">
+        <div className="container mx-auto my-16 px-24 pt-3 pb-6 max-sm:px-1 rounded-[164px] max-sm:rounded-[84px] bg-Yellow-Green w-4/6 max-sm:w-5/6">
+        <Slider {...settings} className="container mt-4 max-sm:w-full">
           {restaurants.slice(0, 5).map((restaurant) => (
             <div key={restaurant.restaurant_id} className="rounded-t-[84px] overflow-hidden">
               <img
