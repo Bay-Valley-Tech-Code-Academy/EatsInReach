@@ -17,17 +17,33 @@ export default function Navbar() {
   useEffect(() => {
     if (currentUser) {
       const fetchUserData = async () => {
-        const userDoc = await getDoc(doc(firestore, "users", currentUser.uid));
-
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setRole(userData.role);
-          setUserName(userData.userName);
-        } else {
-          console.log("User document does not exist in Firestore.");
+        const collections = ["users", "vendors", "admins"];
+        let found = false;
+  
+        for (const collection of collections) {
+          if (found) break;
+  
+          try {
+            const userDoc = await getDoc(doc(firestore, collection, currentUser.uid));
+            
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              setRole(userData.role); // This will now be "users", "vendors", or "admins"
+              setUserName(userData.userName);
+              found = true; // Stop checking further collections once the user is found
+            }
+          } catch (error) {
+            console.error(`Error fetching user data from ${collection} collection:`, error);
+          }
+        }
+  
+        if (!found) {
+          console.log("User document does not exist in any of the collections.");
+          setRole(null);
+          setUserName(null);
         }
       };
-
+  
       fetchUserData();
     } else {
       setRole(null);
@@ -52,6 +68,9 @@ export default function Navbar() {
             alt="Yum Yummers"
           />
         </Link>
+        
+        {currentUser && role === "vendor" && <h2 className="sm:block pl-2">Vendor: </h2>}
+        {currentUser && role === "admin" && <h2 className="sm:block pl-2">Admin: </h2>}
         {userName && <h2 className="sm:block pl-2">{userName}</h2>}
       </div>
 
@@ -97,7 +116,7 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {currentUser && role === "user" ? (
+        {currentUser && role === "user" && (
           <>
             <Link href="/Pages/Favorites">
               <div className="hover:bg-[#bb9277] p-2 sm:p-4">
@@ -110,14 +129,15 @@ export default function Navbar() {
                 <h2>User Profile</h2>
               </div>
             </Link>
-
-            <div
-              className="hover:bg-[#bb9277] p-2 sm:p-4 cursor-pointer"
-              onClick={handleSignOut}
-            >
-              <h2>Sign Out</h2>
-            </div>
           </>
+        )}
+        {currentUser ? (
+          <div
+            className="hover:bg-[#bb9277] p-2 sm:p-4 cursor-pointer"
+            onClick={handleSignOut}
+          >
+            <h2>Sign Out</h2>
+          </div>
         ) : (
           <Link href="/Pages/Login">
             <div className="hover:bg-[#bb9277] p-2 sm:p-4">

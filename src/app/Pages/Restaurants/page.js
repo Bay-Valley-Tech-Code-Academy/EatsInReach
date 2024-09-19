@@ -64,21 +64,23 @@ export default function RestaurantPage() {
   
 
   return (
-    <div className="min-h-screen bg-Almond">
+    <div className="min-h-screen bg-[#FDFBCE]">
       <Navbar />
-      <div className="container p-10 mt-4 mx-auto rounded-3xl bg-Yellow-Green">
-        <h1 className="text-3xl font-bold mb-4 text-black">
-          Featured Restaurants
-        </h1>
-        <Slider {...settings}>
+      <div className="rounded-[84px]">
+        <div className="flex items-center mt-8 ml-16 ">
+          <a className=" text-zinc-800 inline-block hover:underline" href="/"> Home </a> 
+          <p className="text-zinc-800 inline-block"> /Restaurants </p>
+        </div>
+        <div className="container mx-auto my-16 px-24 pt-3 pb-6 max-sm:px-1 rounded-[164px] max-sm:rounded-[84px] bg-Yellow-Green w-4/6 max-sm:w-5/6">
+        <Slider {...settings} className="container mt-4 max-sm:w-full">
           {restaurants.slice(0, 5).map((restaurant) => (
-            <div key={restaurant.restaurant_id}>
+            <div key={restaurant.restaurant_id} className="rounded-t-[84px] overflow-hidden">
               <img
                 src={`/images/${restaurant.image_url}`}
                 alt={`Image of ${restaurant.name}`}
                 className="w-full h-64 object-cover"
               />
-              <div className="bg-white p-4">
+              <div className="bg-white p-4 rounded-b-full pl-16">
                 <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                 <p>{restaurant.food_type}</p>
                 <p>{restaurant.price_range_id}</p>
@@ -86,6 +88,7 @@ export default function RestaurantPage() {
             </div>
           ))}
         </Slider>
+        </div>
 
         <div className="flex items-center max-w-sm mx-auto mt-8">
           <label htmlFor="simple-search" className="sr-only">
@@ -177,22 +180,23 @@ export default function RestaurantPage() {
           </button>
         </div>
 
-        <h2 className="text-2xl font-bold my-4 text-black">All Restaurants</h2>
-        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-4 ">
+        <h2 className="text-2xl my-4 text-zinc-800 px-16 text-center">All Restaurants</h2>
+        <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 gap-4 p-16">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
+              <div className="bg-Yellow-Green p-3 rounded-3xl">
               <div
                 key={restaurant.restaurant_id}
-                className="bg-white  shadow-md rounded-3xl overflow-hidden flex"
+                className="bg-white shadow-md rounded-3xl overflow-hidden flex"
               >
                 <Link
                   href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-                  className="flex"
+                  className="flex max-lg:block"
                 >
                   <img
                     src={`/images/${restaurant.image_url}`}
                     alt={`Image of ${restaurant.name}`}
-                    className="w-1/2 h-auto object-cover cursor-pointer"
+                    className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
                   />
                   <div className="p-4 -w-1/2  hover:bg-slate-300 hover:translate-y-1">
                     <h2 className="text-gray-700 text-xl font-semibold mb-2">
@@ -210,18 +214,20 @@ export default function RestaurantPage() {
                   </div>
                 </Link>
               </div>
+              </div>
             ))
           ) : (
             <p className="text-center text-lg text-black">No restaurants match your search.</p>
           )}
         </div>
-
+        <div className="px-16 py-8">
         <Link
           href="/"
           className="bg-Kobicha text-rosey-brown rounded-lg hover:bg-Chocolate-cosmos hover:text-white mt-4 inline-block px-6 py-3 text-sm font-semibold shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-transform transform hover:-translate-y-1 scale-105"
         >
           Home
         </Link>
+        </div>
       </div>
           <Footer></Footer>
     </div>

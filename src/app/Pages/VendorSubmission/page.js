@@ -3,11 +3,17 @@ import { useState, useEffect, useRef, Component } from "react";
 import { auth } from "../../../../firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../../../../context/authContext";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../../../../firebase";
 
 import DropdownTime from "@/Components/DropDownTime";
 
 export default function VendorSubmission() {
     const router = useRouter();
+    const { currentUser, loading } = useAuth();
+    const [role, setRole] = useState(null);
+    const [isRoleLoading, setIsRoleLoading] = useState(true);
     const [foodTypes, setFoodTypes] = useState([]);
     const [filteredFoodTypes, setFilteredFoodTypes] = useState([]);
     const [priceRanges, setPriceRanges] = useState([]);
@@ -30,6 +36,53 @@ export default function VendorSubmission() {
     const [searchTerm, setSearchTerm] = useState("");
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        // Redirect to the landing page if the user is not logged in
+        if (!loading && !currentUser) {
+            router.push("/");
+        }
+        if (currentUser) {
+            const fetchUserData = async () => {
+                const collections = ["users", "vendors", "admins"];
+                let found = false;
+
+                for (const collection of collections) {
+                    if (found) break;
+
+                    try {
+                        const userDoc = await getDoc(
+                            doc(firestore, collection, currentUser.uid)
+                        );
+
+                        if (userDoc.exists()) {
+                            const userData = userDoc.data();
+                            if (userData.role !== 'vendor') {
+                                router.push("/");
+                            }
+                            found = true;
+                            setRole(userData.role);
+                        }
+                    } catch (error) {
+                        console.error(
+                            `Error fetching user data from ${collection} collection:`,
+                            error
+                        );
+                    }
+                }
+
+                if (!found) {
+                    console.log(
+                        "User document does not exist in any of the collections."
+                    );
+                    setRole(null);
+                }
+                setIsRoleLoading(false);
+            };
+
+            fetchUserData();
+        }
+    }, [currentUser, loading, router]);
 
     const [open, setOpen] = useState(false)
     const [monday, setMonday] = useState("12:00");
@@ -207,6 +260,15 @@ export default function VendorSubmission() {
             .then(() => router.push("/"))
             .catch((error) => console.error("Sign out error: ", error));
     };
+
+    // Show a loading indicator or null while checking auth state
+    if (loading || isRoleLoading) {
+        return <div>Loading...</div>; // Replace with a loading spinner if needed
+    }
+
+    if (!currentUser || role !== "vendor") {
+        return <div>Redirecting...</div>;
+    }
 
     const openOrNot = (day) => {
         if (day == "monday") {
