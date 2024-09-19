@@ -26,7 +26,8 @@ module.exports = {
       'Kobicha':'#673d26',
       'Cream':'#FDFBCE',
       'Fern_green':'#5A804D',
-      'Lime':'#CCF551'
+      'Lime':'#CCF551',
+      'Buff':'#dfaf90'
 
 
       },
