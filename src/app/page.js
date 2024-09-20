@@ -30,7 +30,7 @@ export default function Landing() {
       <Navbar />
       <div className="w-full flex flex-col items-center landing-page">
         <h1
-          className={`p-4 text-6xl sm:text-8xl md:text-9xl landing-header ${italiana.className} mt-4`}
+          className={`p-4 text-6xl sm:text-8xl md:text-9xl landing-header ${italiana.className} mt-4 text-center`}
         >
           Eats in Reach
         </h1>
@@ -48,7 +48,7 @@ export default function Landing() {
         )}
       </div>
 
-      <div className=" flex flex-col min-h-[calc(100vh-120px)] items-center p-4  ">
+      <div className=" flex flex-col items-center p-4  ">
         <h3 className="text-2xl text-black bg-Cream mt-4 mb-3 p-1 rounded-4xl hover:underline hover:-translate-y-1">
           Our Favorites
         </h3>
