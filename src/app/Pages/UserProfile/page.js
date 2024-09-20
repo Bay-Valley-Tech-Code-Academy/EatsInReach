@@ -108,12 +108,11 @@ export default function UserProfile() {
                 placeholder="Enter new username... "
                 className="outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
               <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">Change</button>
             </form>
 
             <form className="flex justify-center">
-              <h1 className="text-white mr-2 text-white">Change Password</h1>
+              <h1 className="mr-2 text-white">Change Password</h1>
               <input
                 type="text"
                 placeholder="Enter new password... "
@@ -122,7 +121,6 @@ export default function UserProfile() {
               <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
             </form>
             <form className="flex justify-center">
-              <h1 className="mr-2 text-white">Change Email</h1>
               <h1 className="text-white mr-2">Change Email</h1>
               <input
                 type="text"
