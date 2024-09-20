@@ -58,14 +58,14 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-[#dfaf90] flex w-full items-center h-screen max-h-14 justify-between ">
+    <header className="bg-Buff flex w-full items-center h-screen max-h-14 justify-between ">
       <div className="flex mx-4 justify-between items-center">
         <Link href="/">
           <img
             src="/images/phLogo.png"
             height="30"
             width="40"
-            alt="Yum Yummers"
+            alt="Yum Yummers" classname = "hover:cursor-pointer "
           />
         </Link>
         

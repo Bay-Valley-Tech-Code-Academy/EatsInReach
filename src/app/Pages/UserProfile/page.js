@@ -12,6 +12,7 @@ export default function UserProfile() {
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
+  
 
   useEffect(() => {
     // Redirect to the landing page if the user is not logged in
@@ -70,10 +71,67 @@ export default function UserProfile() {
   }
 
   return (
-    <div>
+    <>
       <Navbar />
-      <div>User Profile</div>
-      <Link href="/">Home</Link>
-    </div>
+      <div className="flex bg-green-400 justify-center items-center h-11 ">
+        <h1>Account Settings</h1>
+      </div>
+
+      <div className="flex h-[calc(100vh-100px)] justify-between overflow-hidden">
+        {/* sidebar */}
+        <div className="bg-gray-50 h-[calc(100vh-120px)] w-2/6 ml-10 mt-3">
+          <ul>
+            <li className="hover:bg-green-300">
+              <div className="flex ml-3 mt-5">
+                <img
+                  src="/images/profile-icon.png"
+                  height="15"
+                  width="25"
+                  alt="Profile"
+                />
+                <h1 className="ml-5">Profile</h1>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div className=" bg-green-400 flex flex-col h-[calc(100vh-130px)] w-full justify-between items-center m-5 ml-14 rounded-lg">
+          <div className="flex justify-self-start mt-5 underline">
+            <h1>Profile Settings</h1>
+          </div>
+
+          <div className=" bg-green-500 flex flex-col justify-center items-center space-y-10 h-full px-10 my-16 rounded-md  ">
+            <form className="flex">
+              <h1 className="mr-2">Change Username</h1>
+              <input
+                type="text"
+                placeholder="Enter new username... "
+                className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
+              />
+              <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
+            </form>
+
+            <form className="flex justify-center">
+              <h1 className="mr-2">Change Password</h1>
+              <input
+                type="text"
+                placeholder="Enter new password... "
+                className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
+              />
+              <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
+            </form>
+            <form className="flex justify-center">
+              <h1 className="mr-2">Change Email</h1>
+              <input
+                type="text"
+                placeholder="Enter new email... "
+                className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
+              />
+              <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
