@@ -81,7 +81,7 @@ export default function UserProfile() {
         {/* sidebar */}
         <div className="bg-[#FDE4CE] drop-shadow-xl h-[calc(100vh-120px)] w-2/6 ml-10 mt-3 rounded-lg">
           <ul>
-            <li className="hover:bg-Yellow-Green">
+            <li className="hover:bg-Yellow-Green active:bg-green-700">
               <div className="flex ml-3 mt-5">
                 <img
                   src="/images/profile-icon.png"
@@ -116,9 +116,9 @@ export default function UserProfile() {
               <input
                 type="text"
                 placeholder="Enter new password... "
-                className=" outline-none mr-2 pl-2  rounded-md"
+                className=" outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
+              <button className="bg-Almond outline-2 px-2 rounded-md"> Change </button>
             </form>
             <form className="flex justify-center">
               <h1 className="text-white mr-2">Change Email</h1>
@@ -127,7 +127,7 @@ export default function UserProfile() {
                 placeholder="Enter new email... "
                 className=" outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
+              <button className="bg-Almond outline-2 px-2 rounded-md"> Change </button>
             </form>
           </div>
         </div>
