@@ -67,10 +67,6 @@ export default function RestaurantPage() {
     <div className="min-h-screen bg-[#FDFBCE]">
       <Navbar />
       <div className="rounded-[84px]">
-        <div className="flex items-center mt-8 ml-16 ">
-          <a className=" text-zinc-800 inline-block hover:underline" href="/"> Home </a> 
-          <p className="text-zinc-800 inline-block"> /Restaurants </p>
-        </div>
         <div className="container mx-auto my-16 px-24 pt-3 pb-6 max-sm:px-1 rounded-[164px] max-sm:rounded-[84px] bg-Yellow-Green w-4/6 max-sm:w-5/6">
         <Slider {...settings} className="container mt-4 max-sm:w-full">
           {restaurants.slice(0, 5).map((restaurant) => (
@@ -198,7 +194,7 @@ export default function RestaurantPage() {
                     alt={`Image of ${restaurant.name}`}
                     className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
                   />
-                  <div className=" w-1/2  hover:bg-slate-300 hover:translate-y-1">
+                  <div className=" lg:w-1/2  hover:bg-slate-300 hover:translate-y-1">
                     <h2 className="text-gray-700 text-xl font-semibold mb-2">
                       {restaurant.name}
                     </h2>

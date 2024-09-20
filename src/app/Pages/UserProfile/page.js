@@ -95,39 +95,39 @@ export default function UserProfile() {
           </ul>
         </div>
 
-        <div className=" bg-Yellow-Green flex flex-col h-[calc(100vh-130px)] w-full justify-between items-center m-5 ml-14 rounded-lg">
+        <div className=" bg-[#b5d773] flex flex-col h-[calc(100vh-130px)] w-full justify-between items-center m-5 ml-14 rounded-lg">
           <div className="flex justify-self-start mt-5 underline">
             <h1>Profile Settings</h1>
           </div>
 
-          <div className=" bg-[#b5d773] flex flex-col justify-center items-center space-y-10 h-full px-10 my-16 rounded-md  ">
+          <div className="  bg-Dartmouth-green flex flex-col justify-center items-center space-y-10 h-full px-10 my-16 rounded-md  ">
             <form className="flex">
-              <h1 className="mr-2">Change Username</h1>
+              <h1 className="text-white mr-2">Change Username</h1>
               <input
                 type="text"
                 placeholder="Enter new username... "
-                className="bg-[#cae29a] outline-none mr-2 pl-2 rounded-md"
+                className="outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-Yellow-Green outline-2 px-2 rounded-md">Change</button>
+              <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">Change</button>
             </form>
 
             <form className="flex justify-center">
-              <h1 className="mr-2">Change Password</h1>
+              <h1 className="text-white mr-2">Change Password</h1>
               <input
                 type="text"
                 placeholder="Enter new password... "
-                className="bg-[#cae29a] outline-none mr-2 pl-2  rounded-md"
+                className=" outline-none mr-2 pl-2  rounded-md"
               />
-              <button className="bg-Yellow-Green outline-none px-2 rounded-md">Change</button>
+              <button className="bg-[#FDE4CE] outline-none px-2 rounded-md">Change</button>
             </form>
             <form className="flex justify-center">
-              <h1 className="mr-2">Change Email</h1>
+              <h1 className="text-white mr-2">Change Email</h1>
               <input
                 type="text"
                 placeholder="Enter new email... "
-                className="bg-[#cae29a] outline-none mr-2 pl-2 rounded-md"
+                className=" outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-Yellow-Green outline-2 px-2 rounded-md">Change</button>
+              <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">Change</button>
             </form>
           </div>
         </div>
