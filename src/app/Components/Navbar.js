@@ -65,7 +65,7 @@ export default function Navbar() {
             src="/images/phLogo.png"
             height="30"
             width="40"
-            alt="Yum Yummers" classname = "hover:cursor-pointer "
+            alt="Yum Yummers" className = "hover:cursor-pointer "
           />
         </Link>
         
@@ -127,6 +127,36 @@ export default function Navbar() {
             <Link href="/Pages/UserProfile">
               <div className="hover:bg-[#bb9277] p-2 sm:p-4">
                 <h2>User Profile</h2>
+              </div>
+            </Link>
+          </>
+        )}
+        {currentUser && role === "vendor" && (
+          <>
+            <Link href="/Pages/VendorSubmission">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <h2>Submit Restaurant</h2>
+              </div>
+            </Link>
+
+            <Link href="/Pages/VendorPage">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <h2>Vendor Page</h2>
+              </div>
+            </Link>
+          </>
+        )}
+        {currentUser && role === "admin" && (
+          <>
+            <Link href="/Pages/Admin">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <h2>Admin Page</h2>
+              </div>
+            </Link>
+
+            <Link href="/Pages/ReviewSubmissions">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <h2>Review Submissions</h2>
               </div>
             </Link>
           </>
