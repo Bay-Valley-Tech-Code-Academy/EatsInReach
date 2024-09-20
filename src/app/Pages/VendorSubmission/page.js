@@ -287,52 +287,6 @@ export default function VendorSubmission() {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-          <div className="mb-4 relative" ref={dropdownRef}>
-            <label className="block text-gray-700">Food Type:</label>
-            <input
-              type="text"
-              aria-expanded={dropdownVisible}
-              aria-controls="food-type-dropdown"
-              aria-haspopup="true"
-              value={searchTerm}
-              onClick={toggleDropdown}
-              onChange={handleSearchChange}
-              placeholder="Search for a food type"
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-            {dropdownVisible && (
-              <div
-                id="food-type-dropdown"
-                className="absolute z-10 bg-white border border-gray-300 rounded w-full mt-1 max-h-60 overflow-auto"
-              >
-                {filteredFoodTypes.map((type) => (
-                  <div
-                    key={type.food_type_id}
-                    className="p-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSelectFoodType(type)}
-                  >
-                    {type.type_name}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Price Range:</label>
-            <select
-              name="price_range_id"
-              value={formData.price_range_id}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select a price range</option>
-              {priceRanges.map((range) => (
-                <option key={range.price_range_id} value={range.price_range_id}>
-                  {range.range}
-                </option>
-              ))}
-            </select>
-          </div>
           <div className="mb-4">
             <label className="block text-gray-700">Hours of Operation</label>
             <input
@@ -374,15 +328,82 @@ export default function VendorSubmission() {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Image URL</label>
-            <input
-              type="text"
-              name="image_url"
-              value={formData.image_url}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
+                    <label className="block text-gray-700">Price Range</label>
+                    <select
+                        name="price_range_id"
+                        value={formData.price_range_id}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    >
+                        <option value="">Select Price Range</option>
+                        {priceRanges.map(pr => (
+                            <option key={pr.price_range_id} value={pr.price_range_id}>{pr.range}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700">Food Type</label>
+                    <select
+                        name="food_type_id"
+                        value={formData.food_type_id}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border border-gray-300 rounded"
+                    >
+                        <option value="">Select Food Type</option>
+                        {foodTypes.map(ft => (
+                            <option key={ft.food_type_id} value={ft.food_type_id}>{ft.type_name}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mb-4">
+                  <button 
+                      type="button" 
+                      onClick={addPhotoTypeSelection} 
+                      className="bg-blue-500 text-white p-2 rounded"
+                  >
+                      Add Photo Type
+                  </button>
+                  {photoTypeSelections.map((photo, index) => (
+                      <div key={index} className="mb-4">
+                          <label className="block text-gray-700">Photo Type</label>
+                          <select 
+                              value={photo.photo_type_id} 
+                              onChange={(e) => handlePhotoTypeChange(e, index)} 
+                              className="w-full p-2 border border-gray-300 rounded"
+                          >
+                              <option value="">Select Photo Type</option>
+                              {photoTypes.map(pt => (
+                                  <option key={pt.photo_type_id} value={pt.photo_type_id}>
+                                      {pt.type_name}
+                                  </option>
+                              ))}
+                          </select>
+                          <label className="block text-gray-700 mt-2">Alt Text</label>
+                            <input 
+                                type="text" 
+                                value={photo.alt_text} 
+                                onChange={(e) => handleAltTextChange(e, index)} 
+                                className="w-full p-2 border border-gray-300 rounded"
+                            />
+                          <label className="block text-gray-700 mt-2">Upload Images</label>
+                            <input 
+                                type="file" 
+                                multiple 
+                                onChange={(e) => handleFileChange(e, index)} 
+                                className="w-full p-2 border border-gray-300 rounded"
+                          />
+                          <button
+                              type="button"
+                              onClick={() => removePhotoTypeSelection(index)}
+                              className="mt-2 bg-red-500 text-white p-2 rounded"
+                          >
+                              Remove
+                          </button>
+                      </div>
+                  ))}
+              </div>
           <button type="submit" className="bg-blue-500 text-white p-2 rounded">
             Submit
           </button>
