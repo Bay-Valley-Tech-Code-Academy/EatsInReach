@@ -100,7 +100,7 @@ export default function UserProfile() {
             <h1>Profile Settings</h1>
           </div>
 
-          <div className="  bg-Dartmouth-green flex flex-col justify-center items-center space-y-10 h-full px-10 my-16 rounded-md  ">
+          <div className=" bg-Dartmouth-green flex flex-col justify-center items-center space-y-10 h-full px-10 my-16 rounded-3xl  ">
             <form className="flex">
               <h1 className="text-white mr-2">Change Username</h1>
               <input
@@ -108,26 +108,28 @@ export default function UserProfile() {
                 placeholder="Enter new username... "
                 className="outline-none mr-2 pl-2 rounded-md"
               />
+              <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
               <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">Change</button>
             </form>
 
             <form className="flex justify-center">
-              <h1 className="text-white mr-2">Change Password</h1>
+              <h1 className="text-white mr-2 text-white">Change Password</h1>
               <input
                 type="text"
                 placeholder="Enter new password... "
                 className=" outline-none mr-2 pl-2  rounded-md"
               />
-              <button className="bg-[#FDE4CE] outline-none px-2 rounded-md">Change</button>
+              <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
             </form>
             <form className="flex justify-center">
+              <h1 className="mr-2 text-white">Change Email</h1>
               <h1 className="text-white mr-2">Change Email</h1>
               <input
                 type="text"
                 placeholder="Enter new email... "
                 className=" outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">Change</button>
+              <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
             </form>
           </div>
         </div>
