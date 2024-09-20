@@ -78,7 +78,7 @@ export default function RestaurantPage() {
               <img
                 src={`/images/${restaurant.image_url}`}
                 alt={`Image of ${restaurant.name}`}
-                className="w-full h-64 object-cover"
+                className="w-full h-64 object-cover rounded-3x1 "
               />
               <div className="bg-white p-4 rounded-b-full pl-16">
                 <h2 className="text-xl font-semibold">{restaurant.name}</h2>
@@ -198,7 +198,7 @@ export default function RestaurantPage() {
                     alt={`Image of ${restaurant.name}`}
                     className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
                   />
-                  <div className="p-4 -w-1/2  hover:bg-slate-300 hover:translate-y-1">
+                  <div className=" w-1/2  hover:bg-slate-300 hover:translate-y-1">
                     <h2 className="text-gray-700 text-xl font-semibold mb-2">
                       {restaurant.name}
                     </h2>

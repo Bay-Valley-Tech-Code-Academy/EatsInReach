@@ -2,12 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-.landing-page{
-  height: calc(100vh - 56px);
+.landing-page {
+  height: calc(100vh - 50px); /* Adjust based on your layout needs */
+
+  background-image: url(/images/landing-page.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.login-page{
+.login-page {
   height: 100vh;
+}
+
+.login-page::before {
+  background-image: url(/images/login-page.jpg);
 }
 
 .landing-page, .login-page {
@@ -19,14 +28,6 @@
   overflow: hidden;
 }
 
-.landing-page::before{
-  background-image: url(/images/landing-page.jpg);
-}
-
-.login-page::before{
-  background-image: url(/images/login-page.jpg);
-}
-
 .landing-page::before, .login-page::before {
   content: "";
   position: absolute;
@@ -36,6 +37,8 @@
   height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
+  background-color: #f0f0f0; /* Fallback background color */
   filter: blur(7px);
   z-index: -1;
 }
