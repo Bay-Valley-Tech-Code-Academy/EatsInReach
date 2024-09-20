@@ -40,8 +40,8 @@ export async function POST(request) {
 
         // Insert into Restaurants and get the new restaurant_id
         const insertRestaurantResult = await pool.query(
-            `INSERT INTO Restaurants (name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING restaurant_id`,
+            `INSERT INTO Restaurants (name, location, hours_of_operation, description, website, phone_number, email, price_range_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING restaurant_id`,
             [
                 submission.name,
                 submission.location,
@@ -51,12 +51,18 @@ export async function POST(request) {
                 submission.phone_number,
                 submission.email,
                 submission.price_range_id,
-                submission.food_type_id,
             ]
         );
         const newRestaurantId = insertRestaurantResult.rows[0].restaurant_id;
-        const tempImage = 'smiley-temp.jpg'
+        const tempImage = 'smiley-temp.jpg';
 
+        console.log('Inserting into Restaurant_Pictures:', {
+            restaurant_id: newRestaurantId,
+            photo_type_id: picture_submission.photo_type_id,
+            image_url: tempImage,
+            alt_text: picture_submission.alt_text,
+        });
+        
         // Insert into Restaurant_Pictures using the new restaurant_id
         await pool.query(
             `INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text) 
@@ -66,6 +72,16 @@ export async function POST(request) {
                 picture_submission.photo_type_id,
                 tempImage,  // Later replace with: picture_submission.image_url
                 picture_submission.alt_text
+            ]
+        );
+
+        // Insert into Restaurant_Food_Types
+        await pool.query(
+            `INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id) 
+            VALUES ($1, $2)`,
+            [
+                newRestaurantId,
+                submission.food_type_id
             ]
         );
 
