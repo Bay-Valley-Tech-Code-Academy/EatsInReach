@@ -68,9 +68,10 @@ export default function Navbar() {
             alt="Yum Yummers" classname = "hover:cursor-pointer "
           />
         </Link>
+        
+        {currentUser && role === "vendor" && <h2 className="sm:block pl-2">Vendor: </h2>}
+        {currentUser && role === "admin" && <h2 className="sm:block pl-2">Admin: </h2>}
         {userName && <h2 className="sm:block pl-2">{userName}</h2>}
-        {currentUser && role === "vendor" && <h2 className="sm:block pl-2">Vendor</h2>}
-        {currentUser && role === "admin" && <h2 className="sm:block pl-2">Admin</h2>}
       </div>
 
       {/* Hamburger icon */}
