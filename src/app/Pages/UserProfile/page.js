@@ -81,7 +81,7 @@ export default function UserProfile() {
         {/* sidebar */}
         <div className="bg-[#FDE4CE] drop-shadow-xl h-[calc(100vh-120px)] w-2/6 ml-10 mt-3 rounded-lg">
           <ul>
-            <li className="hover:bg-Yellow-Green">
+            <li className="hover:bg-Yellow-Green active:bg-green-700">
               <div className="flex ml-3 mt-5">
                 <img
                   src="/images/profile-icon.png"
