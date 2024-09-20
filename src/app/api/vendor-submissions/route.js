@@ -20,8 +20,7 @@ export async function GET() {
                 vs.phone_number,
                 vs.email,
                 pr.range AS price_range,
-                ft.type_name AS food_type,
-                vs.image_url
+                ft.type_name AS food_type
             FROM Vendor_Submissions vs
             JOIN Price_Ranges pr ON vs.price_range_id = pr.price_range_id
             JOIN Food_Types ft ON vs.food_type_id = ft.food_type_id

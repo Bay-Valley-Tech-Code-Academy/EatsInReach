@@ -215,20 +215,20 @@ VALUES
 INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text)
 VALUES
     (1, 1, 'pizza-menu.jpg', 'Menu at Pasta Palace'),
-    (1, 2, 'pizza-2.jpg', 'Signature pasta dish at Pasta Palace'),
+    (1, 4, 'pizza-2.jpg', 'Signature pasta dish at Pasta Palace'),
     (2, 1, 'sushi-menu.jpg', 'Menu at Sushi Central'),
-    (2, 2, 'sushi-1.jpg', 'Fresh sashimi platter at Sushi Central'),
+    (2, 4, 'sushi-1.jpg', 'Fresh sashimi platter at Sushi Central'),
     (3, 1, 'burger-menu.jpg', 'Menu at Burger Bonanza'),
-    (3, 2, 'burger-1.jpg', 'Signature burger at Burger Bonanza'),
+    (3, 4, 'burger-1.jpg', 'Signature burger at Burger Bonanza'),
     (4, 1, 'taco-menu.jpg', 'Menu at Taco Town'),
-    (4, 2, 'taco-1.jpg', 'Fresh tacos at Taco Town'),
+    (4, 4, 'taco-1.jpg', 'Fresh tacos at Taco Town'),
     (5, 1, 'steak-menu.jpg', 'Menu at Steak House'),
-    (5, 2, 'steak-1.jpg', 'Premium steak dish at Steak House');
+    (5, 4, 'steak-1.jpg', 'Premium steak dish at Steak House');
 
 -- Insert dummy data into the Vendor_Submissions table
-INSERT INTO Vendor_Submissions (name, location, hours_of_operation, description, phone_number, email, price_range_id, food_type_id)
+INSERT INTO Vendor_Submissions (name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id)
 VALUES
-    ('Tasty Thai', 'Meow St, Merced, CA', '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com', 1, 31);
+    ('Tasty Thai', 'Meow St, Merced, CA', '10:00 AM - 8:00 PM', 'The thai is good.', 'tastythai.com','209-209-2009', 'info@tastythai.com', 1, 31);
 
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES
