@@ -74,7 +74,7 @@ export default function UserProfile() {
     <>
       <Navbar />
       <div className="flex bg-green-400 justify-center items-center h-11 ">
-        <h1>Acount Settings</h1>
+        <h1>Account Settings</h1>
       </div>
 
       <div className="flex h-[calc(100vh-100px)] justify-between overflow-hidden">
@@ -102,10 +102,10 @@ export default function UserProfile() {
 
           <div className=" bg-green-500 flex flex-col justify-center items-center space-y-10 h-full px-10 my-16 rounded-md  ">
             <form className="flex">
-              <h1 className="mr-2">Change UserName</h1>
+              <h1 className="mr-2">Change Username</h1>
               <input
                 type="text"
-                placeholder="Enter  New UserName... "
+                placeholder="Enter new username... "
                 className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
               />
               <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
@@ -115,7 +115,7 @@ export default function UserProfile() {
               <h1 className="mr-2">Change Password</h1>
               <input
                 type="text"
-                placeholder="Enter new UserName... "
+                placeholder="Enter new password... "
                 className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
               />
               <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
@@ -124,7 +124,7 @@ export default function UserProfile() {
               <h1 className="mr-2">Change Email</h1>
               <input
                 type="text"
-                placeholder="Enter new UserName... "
+                placeholder="Enter new email... "
                 className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
               />
               <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
