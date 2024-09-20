@@ -65,7 +65,7 @@ export default function Navbar() {
             src="/images/phLogo.png"
             height="30"
             width="40"
-            alt="Yum Yummers" classname = "hover:cursor-pointer "
+            alt="Yum Yummers" className = "hover:cursor-pointer "
           />
         </Link>
         

@@ -12,21 +12,25 @@ export default function VendorSubmission() {
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
-  const [foodTypes, setFoodTypes] = useState([]);
   const [filteredFoodTypes, setFilteredFoodTypes] = useState([]);
+  const [photoTypes, setPhotoTypes] = useState([]);
   const [priceRanges, setPriceRanges] = useState([]);
+  const [foodTypes, setFoodTypes] = useState([]);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    location: "",
-    price_range_id: "",
-    food_type_id: "",
-    hours_of_operation: "",
-    description: "",
-    phone_number: "",
-    email: "",
-    image_url: "",
-  });
+    name: 'Sample Restaurant',
+    location: '123 Main St, Sample City',
+    hours_of_operation: 'Mon-Fri, 9am-9pm',
+    description: 'A great place to enjoy delicious food!',
+    website: 'sample.com',
+    phone_number: '123-456-7890',
+    email: 'sample@restaurant.com',
+    price_range_id: '2',
+    food_type_id: '1'
+});
+
+  const [imageFiles, setImageFiles] = useState([]);
+  const [photoTypeSelections, setPhotoTypeSelections] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -254,7 +258,6 @@ export default function VendorSubmission() {
 
     return (
         <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
-            <Navbar />
             <h1 className="text-2xl font-bold mb-6">Submit Your Restaurant</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
