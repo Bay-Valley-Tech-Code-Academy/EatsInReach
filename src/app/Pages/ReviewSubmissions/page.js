@@ -74,12 +74,13 @@ export default function ReviewSubmissions() {
                             <li key={submission.submission_id} className="mb-4 p-4 border border-gray-300 rounded">
                                 <h2 className="text-xl font-bold">{submission.name}</h2>
                                 <p><strong>Location:</strong> {submission.location}</p>
-                                <p><strong>Price Range:</strong> {submission.price_range}</p> {/* Show actual price range */}
-                                <p><strong>Food Type:</strong> {submission.food_type}</p> {/* Show actual food type */}
                                 <p><strong>Hours of Operation:</strong> {submission.hours_of_operation}</p>
                                 <p><strong>Description:</strong> {submission.description}</p>
+                                <p><strong>Website:</strong> {submission.website}</p>
                                 <p><strong>Phone Number:</strong> {submission.phone_number}</p>
                                 <p><strong>Email:</strong> {submission.email}</p>
+                                <p><strong>Price Range:</strong> {submission.price_range}</p>
+                                <p><strong>Food Type:</strong> {submission.food_type}</p>
                                 
                                 {/* Display the image */}
                                 {submission.image_url && (

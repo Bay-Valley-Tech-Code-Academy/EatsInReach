@@ -15,6 +15,9 @@ export async function POST(request) {
         const result = await pool.query('SELECT * FROM Vendor_Submissions WHERE submission_id = $1', [submissionId]);
         const submission = result.rows[0];
 
+        const picture_results = await pool.query('SELECT * FROM Vendor_Restaurant_Pictures WHERE vendor_id = $1', [submissionId]);
+        const picture_submission = picture_results.rows[0];
+
         if (!submission) {
             return new Response(JSON.stringify({ message: 'Submission not found' }), {
                 status: 404,
@@ -37,20 +40,34 @@ export async function POST(request) {
 
         // Insert into Restaurants
         await pool.query(
-            'INSERT INTO Restaurants (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+            `INSERT INTO Restaurants (name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
             [
                 submission.name,
                 submission.location,
-                submission.price_range_id,
-                submission.food_type_id,
                 submission.hours_of_operation,
                 submission.description,
+                submission.website,
                 submission.phone_number,
-                submission.email
+                submission.email,
+                submission.price_range_id,
+                submission.food_type_id,
             ]
         );
 
-        // Delete from Vendor_Submissions
+        await pool.query(
+            `INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text) 
+            VALUES ($1, $2, $3, $4)`,
+            [
+                picture_submission.vendor_id,
+                picture_submission.photo_type_id,
+                picture_submission.alt_text, // change back to image_url eventually
+                picture_submission.alt_text
+            ]
+        );
+
+        // Delete from Vendor_Submissions and Vendor_Restaurant_Pictures
+        await pool.query('DELETE FROM Vendor_Restaurant_Pictures WHERE vendor_id = $1', [submissionId]);
         await pool.query('DELETE FROM Vendor_Submissions WHERE submission_id = $1', [submissionId]);
 
         return new Response(JSON.stringify({ message: 'Submission accepted and added to Restaurants' }), {
