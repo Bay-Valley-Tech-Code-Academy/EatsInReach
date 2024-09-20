@@ -1,29 +1,83 @@
 "use client";
-import { useState, useEffect, useRef } from 'react';
-import Navbar from '@/Components/Navbar';
+import { useState, useEffect, useRef } from "react";
+import { auth } from "../../../../firebase";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../../context/authContext";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../../../../firebase";
 
 export default function VendorSubmission() {
-    const [foodTypes, setFoodTypes] = useState([]);
-    const [priceRanges, setPriceRanges] = useState([]);
-    const [photoTypes, setPhotoTypes] = useState([]);
-    const [submitStatus, setSubmitStatus] = useState(null);
-    const [formData, setFormData] = useState({
-        name: 'Sample Restaurant',
-        location: '123 Main St, Sample City',
-        hours_of_operation: 'Mon-Fri, 9am-9pm',
-        description: 'A great place to enjoy delicious food!',
-        website: 'sample.com',
-        phone_number: '123-456-7890',
-        email: 'sample@restaurant.com',
-        price_range_id: '2',
-        food_type_id: '1'
-    });
-    const [imageFiles, setImageFiles] = useState([]);
-    const [photoTypeSelections, setPhotoTypeSelections] = useState([]);
+  const router = useRouter();
+  const { currentUser, loading } = useAuth();
+  const [role, setRole] = useState(null);
+  const [isRoleLoading, setIsRoleLoading] = useState(true);
+  const [foodTypes, setFoodTypes] = useState([]);
+  const [filteredFoodTypes, setFilteredFoodTypes] = useState([]);
+  const [priceRanges, setPriceRanges] = useState([]);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    location: "",
+    price_range_id: "",
+    food_type_id: "",
+    hours_of_operation: "",
+    description: "",
+    phone_number: "",
+    email: "",
+    image_url: "",
+  });
 
-    const [searchTerm, setSearchTerm] = useState('');
-    const [dropdownVisible, setDropdownVisible] = useState(false);
-    const dropdownRef = useRef(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    // Redirect to the landing page if the user is not logged in
+    if (!loading && !currentUser) {
+      router.push("/");
+    }
+    if (currentUser) {
+      const fetchUserData = async () => {
+        const collections = ["users", "vendors", "admins"];
+        let found = false;
+
+        for (const collection of collections) {
+          if (found) break;
+
+          try {
+            const userDoc = await getDoc(
+              doc(firestore, collection, currentUser.uid)
+            );
+
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              if (userData.role !== 'vendor') {
+                router.push("/");
+              }
+              found = true;
+              setRole(userData.role);
+            }
+          } catch (error) {
+            console.error(
+              `Error fetching user data from ${collection} collection:`,
+              error
+            );
+          }
+        }
+
+        if (!found) {
+          console.log(
+            "User document does not exist in any of the collections."
+          );
+          setRole(null);
+        }
+        setIsRoleLoading(false);
+      };
+
+      fetchUserData();
+    }
+  }, [currentUser, loading, router]);
 
     useEffect(() => {
         async function fetchFoodTypes() {
