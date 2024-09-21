@@ -12,7 +12,6 @@ export default function UserProfile() {
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
-  
 
   useEffect(() => {
     // Redirect to the landing page if the user is not logged in
@@ -108,7 +107,9 @@ export default function UserProfile() {
                 placeholder="Enter new username... "
                 className="outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">Change</button>
+              <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">
+                Change
+              </button>
             </form>
 
             <form className="flex justify-center">
@@ -118,7 +119,10 @@ export default function UserProfile() {
                 placeholder="Enter new password... "
                 className=" outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-Almond outline-2 px-2 rounded-md"> Change </button>
+              <button className="bg-Almond outline-2 px-2 rounded-md">
+                {" "}
+                Change{" "}
+              </button>
             </form>
             <form className="flex justify-center">
               <h1 className="text-white mr-2">Change Email</h1>
@@ -127,7 +131,10 @@ export default function UserProfile() {
                 placeholder="Enter new email... "
                 className=" outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-Almond outline-2 px-2 rounded-md"> Change </button>
+              <button className="bg-Almond outline-2 px-2 rounded-md">
+                {" "}
+                Change{" "}
+              </button>
             </form>
           </div>
         </div>
