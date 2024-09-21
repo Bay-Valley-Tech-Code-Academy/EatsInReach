@@ -19,13 +19,13 @@ export default function Navbar() {
       const fetchUserData = async () => {
         const collections = ["users", "vendors", "admins"];
         let found = false;
-  
+
         for (const collection of collections) {
           if (found) break;
-  
+
           try {
             const userDoc = await getDoc(doc(firestore, collection, currentUser.uid));
-            
+
             if (userDoc.exists()) {
               const userData = userDoc.data();
               setRole(userData.role); // This will now be "users", "vendors", or "admins"
@@ -36,14 +36,14 @@ export default function Navbar() {
             console.error(`Error fetching user data from ${collection} collection:`, error);
           }
         }
-  
+
         if (!found) {
           console.log("User document does not exist in any of the collections.");
           setRole(null);
           setUserName(null);
         }
       };
-  
+
       fetchUserData();
     } else {
       setRole(null);
@@ -65,10 +65,10 @@ export default function Navbar() {
             src="/images/phLogo.png"
             height="30"
             width="40"
-            alt="Yum Yummers" classname = "hover:cursor-pointer "
+            alt="Yum Yummers" className="hover:cursor-pointer "
           />
         </Link>
-        
+
         {currentUser && role === "vendor" && <h2 className="sm:block pl-2">Vendor: </h2>}
         {currentUser && role === "admin" && <h2 className="sm:block pl-2">Admin: </h2>}
         {userName && <h2 className="sm:block pl-2">{userName}</h2>}
