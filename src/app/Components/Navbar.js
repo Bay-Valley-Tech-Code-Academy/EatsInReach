@@ -24,7 +24,9 @@ export default function Navbar() {
           if (found) break;
 
           try {
-            const userDoc = await getDoc(doc(firestore, collection, currentUser.uid));
+            const userDoc = await getDoc(
+              doc(firestore, collection, currentUser.uid)
+            );
 
             if (userDoc.exists()) {
               const userData = userDoc.data();
@@ -33,12 +35,17 @@ export default function Navbar() {
               found = true; // Stop checking further collections once the user is found
             }
           } catch (error) {
-            console.error(`Error fetching user data from ${collection} collection:`, error);
+            console.error(
+              `Error fetching user data from ${collection} collection:`,
+              error
+            );
           }
         }
 
         if (!found) {
-          console.log("User document does not exist in any of the collections.");
+          console.log(
+            "User document does not exist in any of the collections."
+          );
           setRole(null);
           setUserName(null);
         }
@@ -65,12 +72,17 @@ export default function Navbar() {
             src="/images/phLogo.png"
             height="30"
             width="40"
-            alt="Yum Yummers" className="hover:cursor-pointer "
+            alt="Yum Yummers"
+            className="hover:cursor-pointer "
           />
         </Link>
 
-        {currentUser && role === "vendor" && <h2 className="sm:block pl-2">Vendor: </h2>}
-        {currentUser && role === "admin" && <h2 className="sm:block pl-2">Admin: </h2>}
+        {currentUser && role === "vendor" && (
+          <h2 className="sm:block pl-2">Vendor: </h2>
+        )}
+        {currentUser && role === "admin" && (
+          <h2 className="sm:block pl-2">Admin: </h2>
+        )}
         {userName && <h2 className="sm:block pl-2">{userName}</h2>}
       </div>
 
@@ -131,6 +143,36 @@ export default function Navbar() {
             </Link>
           </>
         )}
+        {currentUser && role === "vendor" && (
+          <>
+            <Link href="/Pages/VendorSubmission">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <h2>Submit Restaurant</h2>
+              </div>
+            </Link>
+
+            <Link href="/Pages/VendorPage">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <h2>Vendor Page</h2>
+              </div>
+            </Link>
+          </>
+        )}
+        {currentUser && role === "admin" && (
+          <>
+            <Link href="/Pages/Admin">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <h2>Admin Page</h2>
+              </div>
+            </Link>
+
+            <Link href="/Pages/ReviewSubmissions">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <h2>Review Submissions</h2>
+              </div>
+            </Link>
+          </>
+        )}
         {currentUser ? (
           <div
             className="hover:bg-[#bb9277] p-2 sm:p-4 cursor-pointer"
@@ -167,30 +209,61 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {currentUser && role === "user" ? (
+          {currentUser && role === "user" && (
             <>
-              <Link href="/Pages/Favorites" className="w-full">
-                <div className="hover:bg-[#bb9277] w-full text-center p-2">
+              <Link href="/Pages/Favorites">
+                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
                   <h2>Favorites</h2>
                 </div>
               </Link>
 
-              <Link href="/Pages/UserProfile" className="w-full">
-                <div className="hover:bg-[#bb9277] p-1 w-full text-center p-2">
+              <Link href="/Pages/UserProfile">
+                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
                   <h2>User Profile</h2>
                 </div>
               </Link>
-
-              <div
-                className="hover:bg-[#bb9277] p-1 w-full text-center cursor-pointer p-2"
-                onClick={handleSignOut}
-              >
-                <h2>Sign Out</h2>
-              </div>
             </>
+          )}
+          {currentUser && role === "vendor" && (
+            <>
+              <Link href="/Pages/VendorSubmission">
+                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                  <h2>Submit Restaurant</h2>
+                </div>
+              </Link>
+
+              <Link href="/Pages/VendorPage">
+                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                  <h2>Vendor Page</h2>
+                </div>
+              </Link>
+            </>
+          )}
+          {currentUser && role === "admin" && (
+            <>
+              <Link href="/Pages/Admin">
+                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                  <h2>Admin Page</h2>
+                </div>
+              </Link>
+
+              <Link href="/Pages/ReviewSubmissions">
+                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                  <h2>Review Submissions</h2>
+                </div>
+              </Link>
+            </>
+          )}
+          {currentUser ? (
+            <div
+              className="hover:bg-[#bb9277] p-2 sm:p-4 cursor-pointer"
+              onClick={handleSignOut}
+            >
+              <h2>Sign Out</h2>
+            </div>
           ) : (
-            <Link href="/Pages/Login" className="w-full">
-              <div className="hover:bg-[#bb9277] p-1 w-full text-center">
+            <Link href="/Pages/Login">
+              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
                 <h2>Login</h2>
               </div>
             </Link>

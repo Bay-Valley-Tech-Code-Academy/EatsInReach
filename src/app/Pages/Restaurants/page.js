@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/Components/Navbar";
 import Slider from "react-slick";
-import Footer from "@/Components/Footer"
+import Footer from "@/Components/Footer";
 
 // Import css files for react-slick
 import "slick-carousel/slick/slick.css";
@@ -36,9 +36,8 @@ export default function RestaurantPage() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    pauseOnHover: true,  // This pauses autoplay when hovered
+    pauseOnHover: true, // This pauses autoplay when hovered
   };
-
 
   // Handle search query and filter the restaurants based on name, location, etc.
   useEffect(() => {
@@ -52,29 +51,35 @@ export default function RestaurantPage() {
 
   useEffect(() => {
     if (sortBy === "Price_asc") {
-      setFilteredRestaurants([...filteredRestaurants].sort((a, b) => a.price_range.length - b.price_range.length));
+      setFilteredRestaurants(
+        [...filteredRestaurants].sort(
+          (a, b) => a.price_range.length - b.price_range.length
+        )
+      );
     }
     if (sortBy === "Price_desc") {
-      setFilteredRestaurants([...filteredRestaurants].sort((a, b) => b.price_range.length - a.price_range.length));
+      setFilteredRestaurants(
+        [...filteredRestaurants].sort(
+          (a, b) => b.price_range.length - a.price_range.length
+        )
+      );
     }
     if (sortBy === "Food_Type") {
       setFilteredRestaurants([...filteredRestaurants].sort((a, b) => a.food_type.localeCompare(b.food_type)));  //a.food_type.localeCompare(b.food_type))
     }
   }, [sortBy, filteredRestaurants]);
 
-
   return (
     <div className="min-h-screen bg-[#FDFBCE]">
       <Navbar />
       <div className="rounded-[84px]">
-        <div className="flex items-center mt-8 ml-16 ">
-          <a className=" text-zinc-800 inline-block hover:underline" href="/"> Home </a>
-          <p className="text-zinc-800 inline-block"> /Restaurants </p>
-        </div>
         <div className="container mx-auto my-16 px-24 pt-3 pb-6 max-sm:px-1 rounded-[164px] max-sm:rounded-[84px] bg-Yellow-Green w-4/6 max-sm:w-5/6">
           <Slider {...settings} className="container mt-4 max-sm:w-full">
             {restaurants.slice(0, 5).map((restaurant) => (
-              <div key={restaurant.restaurant_id} className="rounded-t-[84px] overflow-hidden">
+              <div
+                key={restaurant.restaurant_id}
+                className="rounded-t-[84px] overflow-hidden"
+              >
                 <img
                   src={`/images/${restaurant.image_url}`}
                   alt={`Image of ${restaurant.name}`}
@@ -95,53 +100,62 @@ export default function RestaurantPage() {
             Search
           </label>
 
-
           <div className="relative w-full">
             <div className="absolute inset-y-0 -start-0 flex items-center ps-3">
-              <button type="button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24" height="24" viewBox="0 0 24 24"
-                  fill="none" stroke="#000000" strokeWidth="2"
-                  strokeLinecap="round" strokeLinejoin="round">
-                  <line
-                    x1="4" y1="21" x2="4" y2="14">
-                  </line>
-                  <line
-                    x1="4" y1="10" x2="4" y2="3">
-                  </line>
-                  <line
-                    x1="12" y1="21" x2="12" y2="12">
-                  </line>
-                  <line
-                    x1="12" y1="8" x2="12" y2="3">
-                  </line>
-                  <line
-                    x1="20" y1="21" x2="20" y2="16">
-                  </line>
-                  <line
-                    x1="20" y1="12" x2="20" y2="3">
-                  </line>
-                  <line
-                    x1="1" y1="14" x2="7" y2="14">
-                  </line>
-                  <line
-                    x1="9" y1="8" x2="15" y2="8">
-                  </line>
-                  <line
-                    x1="17" y1="16" x2="23" y2="16">
-                  </line>
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#000000"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="4" y1="21" x2="4" y2="14"></line>
+                  <line x1="4" y1="10" x2="4" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12" y2="3"></line>
+                  <line x1="20" y1="21" x2="20" y2="16"></line>
+                  <line x1="20" y1="12" x2="20" y2="3"></line>
+                  <line x1="1" y1="14" x2="7" y2="14"></line>
+                  <line x1="9" y1="8" x2="15" y2="8"></line>
+                  <line x1="17" y1="16" x2="23" y2="16"></line>
                 </svg>
 
                 {isDropdownOpen && (
                   <div className="absolute bg-white shadow-md rounded-md mt-2 w-48">
                     <ul className="py-2">
-                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_asc")}>Price asc</li>
-                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Price_desc")}> Price desc</li>
-                      <li className="px-4 py-2 hover:bg-gray-100" onClick={() => setSortBy("Food_Type")}> Food_type</li>
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100"
+                        onClick={() => setSortBy("Price_asc")}
+                      >
+                        Price asc
+                      </li>
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100"
+                        onClick={() => setSortBy("Price_desc")}
+                      >
+                        {" "}
+                        Price desc
+                      </li>
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100"
+                        onClick={() => setSortBy("Food_Type")}
+                      >
+                        {" "}
+                        Food_type
+                      </li>
 
-                      <li>Rating NOT IMPLEMENTED NEED TO DO WHEN RATINGS ARE IMPLEMENTED</li>
+                      <li>
+                        Rating NOT IMPLEMENTED NEED TO DO WHEN RATINGS ARE
+                        IMPLEMENTED
+                      </li>
                     </ul>
                   </div>
                 )}
@@ -180,11 +194,13 @@ export default function RestaurantPage() {
           </button>
         </div>
 
-        <h2 className="text-2xl my-4 text-zinc-800 px-16 text-center">All Restaurants</h2>
+        <h2 className="text-2xl my-4 text-zinc-800 px-16 text-center">
+          All Restaurants
+        </h2>
         <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 gap-4 p-16">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-              <div className="bg-Yellow-Green p-3 rounded-3xl">
+              <div className="bg-Yellow-Green p-3 rounded-3xl group">
                 <div
                   key={restaurant.restaurant_id}
                   className="bg-white shadow-md rounded-3xl overflow-hidden flex"
@@ -198,7 +214,7 @@ export default function RestaurantPage() {
                       alt={`Image of ${restaurant.name}`}
                       className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
                     />
-                    <div className=" w-1/2  hover:bg-slate-300 hover:translate-y-1">
+                    <div className=" lg:w-1/2  group-hover:bg-slate-300 group-hover:translate-y-1">
                       <h2 className="text-gray-700 text-xl font-semibold mb-2">
                         {restaurant.name}
                       </h2>
@@ -217,7 +233,9 @@ export default function RestaurantPage() {
               </div>
             ))
           ) : (
-            <p className="text-center text-lg text-black">No restaurants match your search.</p>
+            <p className="text-center text-lg text-black">
+              No restaurants match your search.
+            </p>
           )}
         </div>
         <div className="px-16 py-8">

@@ -73,15 +73,15 @@ export default function UserProfile() {
   return (
     <>
       <Navbar />
-      <div className="flex bg-green-400 justify-center items-center h-11 ">
+      <div className="flex bg-Yellow-Green justify-center items-center h-11 ">
         <h1>Account Settings</h1>
       </div>
 
-      <div className="flex h-[calc(100vh-100px)] justify-between overflow-hidden">
+      <div className="flex h-[calc(100vh-100px)] bg-Almond justify-between overflow-hidden">
         {/* sidebar */}
-        <div className="bg-gray-50 h-[calc(100vh-120px)] w-2/6 ml-10 mt-3">
+        <div className="bg-[#FDE4CE] drop-shadow-xl h-[calc(100vh-120px)] w-2/6 ml-10 mt-3 rounded-lg">
           <ul>
-            <li className="hover:bg-green-300">
+            <li className="hover:bg-Yellow-Green active:bg-green-700">
               <div className="flex ml-3 mt-5">
                 <img
                   src="/images/profile-icon.png"
@@ -95,39 +95,39 @@ export default function UserProfile() {
           </ul>
         </div>
 
-        <div className=" bg-green-400 flex flex-col h-[calc(100vh-130px)] w-full justify-between items-center m-5 ml-14 rounded-lg">
+        <div className=" bg-[#b5d773] flex flex-col h-[calc(100vh-130px)] w-full justify-between items-center m-5 ml-14 rounded-lg">
           <div className="flex justify-self-start mt-5 underline">
             <h1>Profile Settings</h1>
           </div>
 
-          <div className=" bg-green-500 flex flex-col justify-center items-center space-y-10 h-full px-10 my-16 rounded-md  ">
+          <div className=" bg-Dartmouth-green flex flex-col justify-center items-center space-y-10 h-full px-10 my-16 rounded-3xl  ">
             <form className="flex">
-              <h1 className="mr-2">Change Username</h1>
+              <h1 className="text-white mr-2">Change Username</h1>
               <input
                 type="text"
                 placeholder="Enter new username... "
-                className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
+                className="outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
+              <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">Change</button>
             </form>
 
             <form className="flex justify-center">
-              <h1 className="mr-2">Change Password</h1>
+              <h1 className="mr-2 text-white">Change Password</h1>
               <input
                 type="text"
                 placeholder="Enter new password... "
-                className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
+                className=" outline-none mr-2 pl-2  rounded-md"
               />
-              <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
+              <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
             </form>
             <form className="flex justify-center">
-              <h1 className="mr-2">Change Email</h1>
+              <h1 className="text-white mr-2">Change Email</h1>
               <input
                 type="text"
                 placeholder="Enter new email... "
-                className="text-black outline-4 mr-2 pl-2 bg-green-100 rounded-md"
+                className=" outline-none mr-2 pl-2 rounded-md"
               />
-              <button className="bg-green-700 outline-2 px-2 rounded-md"> Sign In </button>
+              <button className="bg-Almond outline-2 px-2 rounded-md"> Sign In </button>
             </form>
           </div>
         </div>
