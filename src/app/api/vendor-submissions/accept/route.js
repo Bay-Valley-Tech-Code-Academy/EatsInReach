@@ -54,25 +54,16 @@ export async function POST(request) {
             ]
         );
         const newRestaurantId = insertRestaurantResult.rows[0].restaurant_id;
-        const tempImage = 'smiley-temp.jpg';
 
-        console.log('Inserting into Restaurant_Pictures:', {
-            restaurant_id: newRestaurantId,
-            photo_type_id: picture_submission.photo_type_id,
-            image_url: tempImage,
-            alt_text: picture_submission.alt_text,
-        });
-        
-        // Insert into Restaurant_Pictures using the new restaurant_id
+        // Automatically set photo_type_id to 4 and use the uploaded image URL
+        const imageUrl = picture_submission.image_url;
+        const tempImage = 'smiley_temp.jpg';
+        const photoType = 4; // Automatically set photo_type_id to 4
+
         await pool.query(
             `INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text) 
             VALUES ($1, $2, $3, $4)`,
-            [
-                newRestaurantId,  // Use the new restaurant_id here
-                picture_submission.photo_type_id,
-                tempImage,  // Later replace with: picture_submission.image_url
-                picture_submission.alt_text
-            ]
+            [newRestaurantId, photoType, tempImage, picture_submission.alt_text]
         );
 
         // Insert into Restaurant_Food_Types

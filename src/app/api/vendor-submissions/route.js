@@ -39,8 +39,7 @@ export async function POST(request) {
         const data = await request.json();
         const {
             name, location, hours_of_operation, description, website,
-            phone_number, email, price_range_id, food_type_id,
-            photo_types, images
+            phone_number, email, price_range_id, food_type_id, image, alt_text
         } = data;
 
         const client = await pool.connect();
@@ -58,22 +57,15 @@ export async function POST(request) {
 
         const vendorId = result.rows[0].submission_id;
 
-        // Insert images and photo types
-        if (images && images.length > 0) {
-            const insertPromises = images.map((image, index) => {
-                const imageUrl = image.base64; // Assuming base64 or URL format
-                const photoType = photo_types[index]?.photo_type_id || null; // Handle photo type id
-                const altText = photo_types[index]?.alt_text || ''; // Default to empty string if no alt text provided
-                
-                return client.query(
-                    `INSERT INTO Vendor_Restaurant_Pictures (vendor_id, image_url, photo_type_id, alt_text) 
-                    VALUES ($1, $2, $3, $4)`,
-                    [vendorId, imageUrl, photoType, altText]
-                );
-            });
+        // Insert a single image with photo_type_id set to 4
+        const imageUrl = image; // Assuming image is passed as base64 or URL
+        const photoType = 4; // Automatically set photo_type_id to 4
 
-            await Promise.all(insertPromises);
-        }
+        await client.query(
+            `INSERT INTO Vendor_Restaurant_Pictures (vendor_id, image_url, photo_type_id, alt_text) 
+            VALUES ($1, $2, $3, $4)`,
+            [vendorId, imageUrl, photoType, alt_text]
+        );
 
         await client.query('COMMIT');
         client.release();
