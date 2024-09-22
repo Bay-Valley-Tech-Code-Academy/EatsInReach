@@ -8,9 +8,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "../../../firebase";
 
 export default function Navbar() {
-  const { currentUser } = useAuth();
+  const { currentUser, userName, setUserName } = useAuth();
   const [role, setRole] = useState(null);
-  const [userName, setUserName] = useState(null);
 
   const [isOpen, setIsOpen] = useState(false); // State to toggle the hamburger menu
 
