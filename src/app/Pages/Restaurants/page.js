@@ -50,28 +50,29 @@ export default function RestaurantPage() {
   }, [searchQuery, restaurants]);
 
   useEffect(() => {
+    let sortedRestaurants = [...restaurants];
     if (sortBy === "Price_asc") {
-      setFilteredRestaurants(
-        [...filteredRestaurants].sort(
+      (
+        sortedRestaurants.sort(
           (a, b) => a.price_range.length - b.price_range.length
         )
       );
     }
     if (sortBy === "Price_desc") {
-      setFilteredRestaurants(
-        [...filteredRestaurants].sort(
+      (
+        sortedRestaurants.sort(
           (a, b) => b.price_range.length - a.price_range.length
         )
       );
     }
-    if (sortBy === "Food_type") {
-      setFilteredRestaurants(
-        [...filteredRestaurants].sort((a, b) =>
-          a.food_type.localeCompare(b.food_type)
-        )
-      );
+    if (sortBy === "Food_Type") {
+      (sortedRestaurants.sort((a, b) => a.food_type.localeCompare(b.food_type)));  //a.food_type.localeCompare(b.food_type))
     }
-  }, [sortBy, filteredRestaurants]);
+    if (sortBy === "Name") {
+      (sortedRestaurants.sort((a, b) => a.name.localeCompare(b.name)));  //a.food_type.localeCompare(b.food_type))
+    }
+    setFilteredRestaurants(sortedRestaurants)
+  }, [sortBy]);
 
   return (
     <div className="min-h-screen bg-[#FDFBCE]">
@@ -139,23 +140,29 @@ export default function RestaurantPage() {
                         className="px-4 py-2 hover:bg-gray-100"
                         onClick={() => setSortBy("Price_asc")}
                       >
-                        Price asc
+                        Sort prices low to high
                       </li>
                       <li
                         className="px-4 py-2 hover:bg-gray-100"
                         onClick={() => setSortBy("Price_desc")}
                       >
                         {" "}
-                        Price desc
+                        Sort prices high to low
                       </li>
                       <li
                         className="px-4 py-2 hover:bg-gray-100"
                         onClick={() => setSortBy("Food_Type")}
                       >
                         {" "}
-                        Food_type
+                        Order by cuisine
                       </li>
-
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100"
+                        onClick={() => setSortBy("Name")}
+                      >
+                        {" "}
+                        Order by Name
+                      </li>
                       <li>
                         Rating NOT IMPLEMENTED NEED TO DO WHEN RATINGS ARE
                         IMPLEMENTED
