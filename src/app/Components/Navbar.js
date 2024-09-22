@@ -129,19 +129,11 @@ export default function Navbar() {
         </Link>
 
         {currentUser && role === "user" && (
-          <>
-            <Link href="/Pages/Favorites">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-                <h2>Favorites</h2>
-              </div>
-            </Link>
-
-            <Link href="/Pages/UserProfile">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-                <h2>User Profile</h2>
-              </div>
-            </Link>
-          </>
+          <Link href="/Pages/Favorites">
+            <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+              <h2>Favorites</h2>
+            </div>
+          </Link>
         )}
         {currentUser && role === "vendor" && (
           <>
@@ -150,7 +142,6 @@ export default function Navbar() {
                 <h2>Submit Restaurant</h2>
               </div>
             </Link>
-
             <Link href="/Pages/VendorPage">
               <div className="hover:bg-[#bb9277] p-2 sm:p-4">
                 <h2>Vendor Page</h2>
@@ -172,6 +163,13 @@ export default function Navbar() {
               </div>
             </Link>
           </>
+        )}
+        {currentUser && (role === "user" || role === "vendor") && (
+          <Link href="/Pages/AccountSettings">
+            <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+              <h2>Account Settings</h2>
+            </div>
+          </Link>
         )}
         {currentUser ? (
           <div
