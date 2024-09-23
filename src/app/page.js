@@ -4,7 +4,6 @@ import Navbar from "./Components/Navbar";
 import Link from "next/link";
 import { Italiana } from "next/font/google";
 import { useAuth } from "../../context/authContext";
-import { useState, useEffect } from "react";
 import Footer from "@/Components/Footer";
 
 const italiana = Italiana({
@@ -14,15 +13,14 @@ const italiana = Italiana({
 
 export default function Landing() {
   const { currentUser } = useAuth();
-  const [role, setRole] = useState(null);
 
   // Example of hardcoded restaurant data (this would typically come from an API)
   const restaurants = [
-    { name: "Pasta Palace", image_url: "pizza-2.jpg" },
-    { name: "Sushi Central", image_url: "sushi-1.jpg" },
-    { name: "Burger Bonanza", image_url: "burger-1.jpg" },
-    { name: "Taco Town", image_url: "taco-1.jpg" },
-    { name: "Steak House", image_url: "steak-1.jpg" },
+    { name: "Pasta Palace", image_url: "pizza-2.jpg", restaurant_id: "1" },
+    { name: "Sushi Central", image_url: "sushi-1.jpg", restaurant_id: "2" },
+    { name: "Burger Bonanza", image_url: "burger-1.jpg", restaurant_id: "3" },
+    { name: "Taco Town", image_url: "taco-1.jpg", restaurant_id: "4" },
+    { name: "Steak House", image_url: "steak-1.jpg", restaurant_id: "5" },
   ];
 
   return (
@@ -49,25 +47,31 @@ export default function Landing() {
         )}
       </div>
 
-      <div className=" flex flex-col items-center p-4  ">
-        <h3 className="text-2xl text-black bg-Cream mt-4 mb-3 p-1 rounded-4xl hover:underline hover:-translate-y-1">
+      <div className=" flex flex-col items-center p-4 bg-White ">
+        <h3 className="text-2xl text-black bg-Cream mt-4 mb-3 p-1 rounded-4xl hover:underline rounded-2xl hover:-translate-y-1">
           Our Favorites
         </h3>
 
         {/* Displaying restaurants dynamically */}
         <div className="bg-Cream grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 rounded-3xl gap-5 mt-4 scrollbar-hidden overflow-y-auto">
           {restaurants.slice(0, 5).map((restaurant, index) => (
-            <div key={index} className=" h-64 w-48 p-4 rounded-2xl ">
-              <img
-                src={`/images/${restaurant.image_url}`}
-                alt={`Image of ${restaurant.name}`}
-                className=" w-full h-40 object-cover rounded-xl cursor-pointer"
-                loading="lazy"
-              />
-              <p className="w-full text-center bg-Yellow-Green mt-2 p-1 rounded2xl hover:bg-Yellow-Green">
-                {restaurant.name}
-              </p>
-            </div>
+            <Link
+              href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
+              className="flg:w-1/2  group-hover:bg-slate-300 group-hover:translate-y-1"
+              key={restaurant.restaurant_id}
+            >
+              <div className=" h-64 w-48 p-4 rounded-2xl cursor-pointer">
+                <img
+                  src={`/images/${restaurant.image_url}`}
+                  alt={`Image of ${restaurant.name}`}
+                  className="w-full h-40 object-cover rounded-xl"
+                  loading="lazy"
+                />
+                <p className="w-full text-center bg-Yellow-Green mt-2 p-1 rounded-3xl hover:bg-Lime">
+                  {restaurant.name}
+                </p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

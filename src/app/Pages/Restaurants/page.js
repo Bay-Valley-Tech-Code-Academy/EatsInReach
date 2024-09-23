@@ -86,7 +86,7 @@ export default function RestaurantPage() {
                 className="rounded-t-[84px] overflow-hidden"
               >
                 <img
-                  src={`/images/${restaurant.image_url}`}
+                  src={restaurant.image_url}
                   alt={`Image of ${restaurant.name}`}
                   className="w-full h-64 object-cover rounded-3x1 "
                 />
@@ -209,6 +209,7 @@ export default function RestaurantPage() {
         <h2 className="text-2xl my-4 text-zinc-800 px-16 text-center">
           All Restaurants
         </h2>
+        
         <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 gap-4 p-16">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
@@ -222,7 +223,7 @@ export default function RestaurantPage() {
                     className="flex max-lg:block"
                   >
                     <img
-                      src={`/images/${restaurant.image_url}`}
+                      src={restaurant.image_url}
                       alt={`Image of ${restaurant.name}`}
                       className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
                     />
@@ -250,6 +251,7 @@ export default function RestaurantPage() {
             </p>
           )}
         </div>
+
         <div className="px-16 py-8">
           <Link
             href="/"
