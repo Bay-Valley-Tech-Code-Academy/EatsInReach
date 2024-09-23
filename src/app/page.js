@@ -28,7 +28,8 @@ export default function Landing() {
   return (
     <div className="">
       <Navbar />
-      <div className="w-full flex flex-col items-center landing-page">
+    
+      <div className="w-full flex flex-col items-center landing-page text-white bg-black bg-opacity-50 bg-blend-darken">
         <h1
           className={`p-4 text-6xl sm:text-8xl md:text-9xl landing-header ${italiana.className} mt-4 text-center`}
         >
