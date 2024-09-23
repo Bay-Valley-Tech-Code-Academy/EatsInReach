@@ -145,7 +145,7 @@ VALUES
 INSERT INTO Photo_Types (type_name)
 VALUES
     ('Menu'),
-    ('Food'),
+    ('Food'), -- Pops up on Restaurant search page
     ('Restaurant');
 
 -- Insert dummy data into the Food_Types table
@@ -189,39 +189,51 @@ INSERT INTO Food_Types (type_name) VALUES
 -- Insert dummy data into the Restaurants table
 INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, is_open, description, food_type_id, average_rating, total_reviews, website, phone_number, email)
 VALUES
-    ('Pasta Palace', '123 Main St, Merced, CA', 2, '11:00 AM - 10:00 PM', TRUE, 'A cozy Italian restaurant specializing in homemade pasta.', 1, 4.2, 50, 'www.pastapalace.com','209-555-1111', 'contact@pastapalace.com'),
-    ('Sushi Central', '456 Elm St, Merced, CA', 3, '12:00 PM - 11:00 PM', FALSE, 'Fresh sushi and sashimi with a modern twist.', 2, 4.5, 75, 'www.sushicentral.com', '209-555-2222', 'info@sushicentral.com'),
-    ('Burger Bonanza', '789 Oak St, Merced, CA', 1, '10:00 AM - 8:00 PM', TRUE, 'The best burgers in town with secret sauces.',2, 4.5, 75, 'www.sushicentral.com', '209-555-1234', 'info@burgerbonanza.com'),
-    ('Taco Town', '987 Maple Ave, Merced, CA', 2, '9:00 AM - 9:00 PM', TRUE, 'Authentic Mexican tacos made fresh daily.',2, 4.5, 75, 'www.sushicentral.com', '209-555-9876', 'contact@tacotown.com'),
-    ('Steak House', '321 Pine St, Merced, CA', 4, '5:00 PM - 11:00 PM', FALSE, 'Fine dining steakhouse with premium cuts.',2, 4.5, 75, 'www.sushicentral.com', '209-555-6543', 'reservations@steakhouse.com');
+    ('Tonis Courtyard Cafe', '516 W 18th St, Merced, CA', 2, '7:30 AM - 3:00 PM', TRUE, 'Featuring an extensive menu of casual Italian-inspired American eats & an idyllic courtyard patio.', 1, 4.6, 704, 'http://www.toniscourtyardcafe.com/','209-384-2580', 'contact@example.com'),
+    ('Joystiq', '325 W Main St, Merced, CA', 2, '3:00 PM - 12:00 AM', TRUE, 'Experience great vibes and nostalgia at one of the best bars in town, featuring old arcade games, fantastic drinks, and lively music.', 1, 4.3, 206, 'http://www.joystiqmerced.com/', '209-455-3300', 'joystiqmerced@gmail.com'),
+    ('Kind Neighbor', '1635 M St, Merced, CA', 2, '7:30 AM - 6:00 PM', TRUE, 'Enjoy one of the best smoothies ever, like our refreshing strawberry smoothie with almond milk, for a delicious treat worth the wait.',1, 4.7, 49, 'http://www.kindneighborjuicebar.com/', '209-617-6538', 'kindneighborinfo@gmail.com'),
+    ('Oishi Teri Sushi Bar', '235 W Main St, Merced, CA', 2, '11:00 AM - 8:00 PM', TRUE, 'Enduring, spacious eatery preparing traditional Thai staples & some Vietnamese options in calm digs.', 17, 4.3, 599, 'http://www.oishisushibar.com', '209-653-5859', 'contact@example.com'),
+    ('El Palmar Taqueria', '1127 Martin Luther King Jr Way, Merced, CA', 2, '10:00 AM - 9:00 PM', TRUE, 'Enjoy some of the best Mexican food in a relaxed atmosphere with reasonable prices',21, 4.2, 364, 'http://www.elpalmartaqueria.com/', '209-726-8855', 'contact@example.com');
 
 -- Insert dummy data into the Restaurant_Food_Types table
 INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id)
 VALUES
-    (1, 16),  -- Pasta Palace serves Italian food
-    (2, 17),  -- Sushi Central serves Japanese food
-    (3, 1),  -- Burger Bonanza serves American food
-    (4, 21),  -- Taco Town serves Mexican food
-    (5, 30);  -- Steak House serves Steakhouse food
+    (1, 1),  -- Courtyard Cafe serves American
+    (2, 1),  -- Joystiq serves American
+    (3, 1),  -- Kind Neighbor serves American food
+    (4, 17),  -- Oishi Teri serves Japanese
+    (5, 21);  -- El Palmar serves Mexican
 
 -- Insert dummy data into the Restaurant_Pictures table
 INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text)
 VALUES
-    (1, 1, 'pizza-menu.jpg', 'Menu at Pasta Palace'),
-    (1, 2, 'pizza-2.jpg', 'Signature pasta dish at Pasta Palace'),
-    (2, 1, 'sushi-menu.jpg', 'Menu at Sushi Central'),
-    (2, 2, 'sushi-1.jpg', 'Fresh sashimi platter at Sushi Central'),
-    (3, 1, 'burger-menu.jpg', 'Menu at Burger Bonanza'),
-    (3, 2, 'burger-1.jpg', 'Signature burger at Burger Bonanza'),
-    (4, 1, 'taco-menu.jpg', 'Menu at Taco Town'),
-    (4, 2, 'taco-1.jpg', 'Fresh tacos at Taco Town'),
-    (5, 1, 'steak-menu.jpg', 'Menu at Steak House'),
-    (5, 2, 'steak-1.jpg', 'Premium steak dish at Steak House');
+    (1, 1, 'toni.jpg', 'Toni Courtyard Cafe'), -- Restaurant Building
+    (1, 2, 'toni_burger.jpg', 'Bacon Hamburger'), -- Food
+    (1, 1, 'toni_avo.jpg', 'Strawberry French Toast'), -- Menu Item
+    (1, 1, 'toni_toast.jpg', 'Avocado Toast'), -- Menu Item
+    (2, 1, 'joy2.jpg', 'Joystiq'), -- Restaurant Building
+    (2, 2, 'joy_burger.jpg', 'Burger'), -- Food
+    (2, 1, 'joy_salad.jpg', 'Salad'), -- Menu Item
+    (2, 1, 'joy_moz.jpg', 'Mozzarella Sticks'), -- Menu Item
+    (3, 1, 'kind.jpg', 'Kind Neighbor'), -- Restaurant Building
+    (3, 2, 'kind_bowl.jpg', 'Acai Bowl'), -- Food
+    (3, 1, 'kind_toast.jpg', 'Avocado Toast'), -- Menu Item
+    (3, 1, 'kind_oats.jpg', 'Overnight Oats'), -- Menu Item
+    (4, 1, 'oishi.jpg', 'Oishi Teri Sushi Bar'), -- Restaurant Building
+    (4, 2, 'oishi_sashimi.jpg', 'Sashimi'), -- Food
+    (4, 1, 'oishi_heart.jpg', 'Sushi Heart'), -- Menu Item
+    (4, 1, 'oishi_shrimp.jpg', 'Shrimp Head Sushi'), -- Menu Item
+    (5, 1, 'elpalmar.jpg', 'El Palmar Taqueria'), -- Restaurant Building
+    (5, 2, 'tac_bur.jpg', 'Wet Burrito'), -- Food
+    (5, 1, 'tac_nacho.jpg', 'Nachos'), -- Menu Item
+    (5, 1, 'tac_torta.jpg', 'Torta'); -- Menu Item
 
+
+-- Insert dummy data into the Vendor_Submissions table
 -- Insert dummy data into the Vendor_Submissions table
 INSERT INTO Vendor_Submissions (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email)
 VALUES
-    ('Tasty Thai', 'Meow St, Merced, CA', 1, 31, '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com');
+    ('Native Son', '609 W Main St, Merced, CA', 2, 1, '6:00 AM - 10:00 PM', 'New American cafe.', '209-446-4027', 'Reservations@ElCapitanHotelMerced.com');
 
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES
@@ -259,4 +271,4 @@ VALUES
     (2, 'Salmon Sashimi', 'Freshly sliced salmon sashimi.', 15.99, 'salmon-sashimi.jpg', 'Salmon Sashimi at Sushi Central');
 
 -- Uncomment to drop the database (use with caution)
---  DROP DATABASE eats_in_reach_db;
+-- -- DROP DATABASE eats_in_reach_db;
