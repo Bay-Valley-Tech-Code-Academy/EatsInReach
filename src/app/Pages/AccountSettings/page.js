@@ -15,8 +15,6 @@ import {
 export default function UserProfile() {
   const router = useRouter();
   const { currentUser, loading, setUserName } = useAuth();
-  const [role, setRole] = useState(null);
-  const [isRoleLoading, setIsRoleLoading] = useState(true);
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -29,46 +27,6 @@ export default function UserProfile() {
     // Redirect to the landing page if the user is not logged in
     if (!loading && !currentUser) {
       router.push("/");
-    }
-    if (currentUser) {
-      const fetchUserData = async () => {
-        const collections = ["users", "vendors", "admins"];
-        let found = false;
-
-        for (const collection of collections) {
-          if (found) break;
-
-          try {
-            const userDoc = await getDoc(
-              doc(firestore, collection, currentUser.uid)
-            );
-
-            if (userDoc.exists()) {
-              const userData = userDoc.data();
-              if (userData.role !== "user") {
-                router.push("/");
-              }
-              found = true;
-              setRole(userData.role);
-            }
-          } catch (error) {
-            console.error(
-              `Error fetching user data from ${collection} collection:`,
-              error
-            );
-          }
-        }
-
-        if (!found) {
-          console.log(
-            "User document does not exist in any of the collections."
-          );
-          setRole(null);
-        }
-        setIsRoleLoading(false);
-      };
-
-      fetchUserData();
     }
   }, [currentUser, loading, router]);
 
@@ -152,11 +110,11 @@ export default function UserProfile() {
   };
 
   // Show a loading indicator or null while checking auth state
-  if (loading || isRoleLoading) {
+  if (loading) {
     return <div>Loading...</div>; // Replace with a loading spinner if needed
   }
 
-  if (!currentUser || role !== "user") {
+  if (!currentUser) {
     return <div>Redirecting...</div>;
   }
 
