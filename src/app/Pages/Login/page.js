@@ -91,6 +91,9 @@ export default function Login() {
           role: formData.role,
         });
 
+        //Add user.uid to users table
+
+        
         // Set redirecting to true to avoid race conditions
         setRedirecting(true);
       } else {
