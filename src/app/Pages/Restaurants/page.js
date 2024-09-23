@@ -213,9 +213,8 @@ export default function RestaurantPage() {
         <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 gap-4 p-16">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-              <div className="bg-Yellow-Green p-3 rounded-3xl group">
+              <div className="bg-Yellow-Green p-3 rounded-3xl group" key={restaurant.restaurant_id}>
                 <div
-                  key={restaurant.restaurant_id}
                   className="bg-white shadow-md rounded-3xl overflow-hidden flex"
                 >
                   <Link

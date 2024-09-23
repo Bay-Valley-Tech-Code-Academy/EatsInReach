@@ -92,8 +92,19 @@ export default function Login() {
         });
 
         //Add user.uid to users table
+        await fetch("/api/add-user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uid: user.uid,
+            username: formData.userName,
+            email: formData.email,
+            role: formData.role,
+          }),
+        });
 
-        
         // Set redirecting to true to avoid race conditions
         setRedirecting(true);
       } else {
