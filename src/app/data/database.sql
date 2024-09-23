@@ -209,24 +209,24 @@ INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_te
 VALUES
     (1, 1, 'toni.jpg', 'Toni Courtyard Cafe'), -- Restaurant Building
     (1, 2, 'toni_burger.jpg', 'Bacon Hamburger'), -- Food
-    (1, 1, 'toni_avo.jpg', 'Strawberry French Toast'), -- Menu Item
-    (1, 1, 'toni_toast.jpg', 'Avocado Toast'), -- Menu Item
+    (1, 3, 'toni_avo.jpg', 'Strawberry French Toast'), -- Menu Item
+    (1, 3, 'toni_toast.jpg', 'Avocado Toast'), -- Menu Item
     (2, 1, 'joy2.jpg', 'Joystiq'), -- Restaurant Building
     (2, 2, 'joy_burger.jpg', 'Burger'), -- Food
-    (2, 1, 'joy_salad.jpg', 'Salad'), -- Menu Item
-    (2, 1, 'joy_moz.jpg', 'Mozzarella Sticks'), -- Menu Item
+    (2, 3, 'joy_salad.jpg', 'Salad'), -- Menu Item
+    (2, 3, 'joy_moz.jpg', 'Mozzarella Sticks'), -- Menu Item
     (3, 1, 'kind.jpg', 'Kind Neighbor'), -- Restaurant Building
     (3, 2, 'kind_bowl.jpg', 'Acai Bowl'), -- Food
-    (3, 1, 'kind_toast.jpg', 'Avocado Toast'), -- Menu Item
-    (3, 1, 'kind_oats.jpg', 'Overnight Oats'), -- Menu Item
+    (3, 3, 'kind_toast.jpg', 'Avocado Toast'), -- Menu Item
+    (3, 3, 'kind_oats.jpg', 'Overnight Oats'), -- Menu Item
     (4, 1, 'oishi.jpg', 'Oishi Teri Sushi Bar'), -- Restaurant Building
     (4, 2, 'oishi_sashimi.jpg', 'Sashimi'), -- Food
-    (4, 1, 'oishi_heart.jpg', 'Sushi Heart'), -- Menu Item
-    (4, 1, 'oishi_shrimp.jpg', 'Shrimp Head Sushi'), -- Menu Item
+    (4, 3, 'oishi_heart.jpg', 'Sushi Heart'), -- Menu Item
+    (4, 3, 'oishi_shrimp.jpg', 'Shrimp Head Sushi'), -- Menu Item
     (5, 1, 'elpalmar.jpg', 'El Palmar Taqueria'), -- Restaurant Building
     (5, 2, 'tac_bur.jpg', 'Wet Burrito'), -- Food
-    (5, 1, 'tac_nacho.jpg', 'Nachos'), -- Menu Item
-    (5, 1, 'tac_torta.jpg', 'Torta'); -- Menu Item
+    (5, 3, 'tac_nacho.jpg', 'Nachos'), -- Menu Item
+    (5, 3, 'tac_torta.jpg', 'Torta'); -- Menu Item
 
 
 -- Insert dummy data into the Vendor_Submissions table
