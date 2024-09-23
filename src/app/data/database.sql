@@ -225,8 +225,8 @@ VALUES
 
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES
-    (1, 'Lunch', 'Weekday lunch specials'),
-    (1, 'Dinner', 'Evening fine dining experience'),
+    (1, 'Appetizer', 'Light starter meals'),
+    (5, 'Dinner', 'Evening fine dining experience'),
     (2, 'All Day', 'Our full menu, available all day');
 
 INSERT INTO Menu_Items (menu_id, name, description, price, is_vegetarian, is_vegan, is_gluten_free)
