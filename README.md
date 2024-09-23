@@ -59,6 +59,47 @@ Do not include the brackets when adding in the password.
 8. Go to http://localhost:3000 to view the website.
 9. Kill the program by pressing `CTRL+C` in the terminal.
 
+# Firebase Setup
+
+## Prerequisites
+
+Before setting up Firebase, ensure you have the following:
+
+- A Firebase account: [Sign up here](https://firebase.google.com/).
+- Node.js version 14 or later
+
+## Firebase Setup Instructions
+
+### 1. Create a Firebase Project
+
+1. Go to the [Firebase Console](https://console.firebase.google.com/).
+2. Click on **Add Project** and follow the steps to create your project.
+3. After the project is created, navigate to the **Project Overview**.
+
+### 2. Enable Firestore and Authentication
+
+- **Firestore**: Go to the **Firestore Database** section in the Firebase Console and enable it.
+- **Authentication**: Navigate to the **Authentication** section, then enable **Email/Password** authentication.
+
+### 3. Add a Web App to Firebase
+
+1. In the Firebase Console, go to **Project Overview > Add App**.
+2. Choose the **Web** option and register your app with a name.
+3. After registering the app, Firebase will provide you with a config object containing keys like `apiKey`, `authDomain`, etc. This will end up going in the `.env` file as follows:
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-app.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-app.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+```
+
+### 4. Update Firebase Rules
+1. By default the rules will allow anyone to read/write to the Firebase
+2. Update these rules based on the roles of the users
+
 ## Enhanced Food Recommendation App Database Schema
 
 ## Existing Tables (with potential additions)
