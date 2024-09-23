@@ -86,14 +86,14 @@ export default function RestaurantPage() {
                 className="rounded-t-[84px] overflow-hidden"
               >
                 <img
-                  src={`/images/${restaurant.image_url}`}
+                  src={restaurant.image_url}
                   alt={`Image of ${restaurant.name}`}
                   className="w-full h-64 object-cover rounded-3x1 "
                 />
                 <div className="bg-white p-4 rounded-b-full pl-16">
                   <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                   <p>{restaurant.food_type}</p>
-                  <p>{restaurant.price_range_id}</p>
+                  <p>{restaurant.price_range}</p>
                 </div>
               </div>
             ))}
@@ -151,7 +151,7 @@ export default function RestaurantPage() {
                       </li>
                       <li
                         className="px-4 py-2 hover:bg-gray-100"
-                        onClick={() => setSortBy("Food_Type")}
+                        onClick={() => setSortBy("Food_type")}
                       >
                         {" "}
                         Order by cuisine
@@ -167,6 +167,7 @@ export default function RestaurantPage() {
                         Rating NOT IMPLEMENTED NEED TO DO WHEN RATINGS ARE
                         IMPLEMENTED
                       </li>
+                      <li>Rating</li>
                     </ul>
                   </div>
                 )}
@@ -221,7 +222,7 @@ export default function RestaurantPage() {
                     className="flex max-lg:block"
                   >
                     <img
-                      src={`/images/${restaurant.image_url}`}
+                      src={restaurant.image_url}
                       alt={`Image of ${restaurant.name}`}
                       className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
                     />

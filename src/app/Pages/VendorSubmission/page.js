@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../../../../firebase";
+import { UploadButton } from "../../../../libs/uploadthing";
 import Navbar from "@/Components/Navbar";
 
 export default function VendorSubmission() {
@@ -13,24 +14,24 @@ export default function VendorSubmission() {
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
-  const [foodTypes, setFoodTypes] = useState([]);
-  const [filteredFoodTypes, setFilteredFoodTypes] = useState([]);
   const [priceRanges, setPriceRanges] = useState([]);
+  const [foodTypes, setFoodTypes] = useState([]);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    location: "",
-    price_range_id: "",
-    food_type_id: "",
-    hours_of_operation: "",
-    description: "",
-    phone_number: "",
-    email: "",
-    image_url: "",
-  });
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+    name: 'Sample Restaurant',
+    location: '123 Main St, Sample City',
+    hours_of_operation: 'Mon-Fri, 9am-9pm',
+    description: 'A great place to enjoy delicious food!',
+    website: 'sample.com',
+    phone_number: '123-456-7890',
+    email: 'sample@restaurant.com',
+    price_range_id: '2',
+    food_type_id: '1',
+    image: '', // Single image input
+    alt_text: 'Image description', // Alt text for the image
+});
+  const [ imageURL, setImageURL ] = useState("")
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -80,127 +81,97 @@ export default function VendorSubmission() {
     }
   }, [currentUser, loading, router]);
 
-  // Fetch available food types and price ranges when the component loads
   useEffect(() => {
     async function fetchFoodTypes() {
-      try {
-        const response = await fetch("/api/food-types");
-        if (!response.ok) {
-          throw new Error("Failed to fetch food types");
+        try {
+            const response = await fetch('/api/food-types');
+            if (!response.ok) {
+                throw new Error('Failed to fetch food types');
+            }
+            const data = await response.json();
+            setFoodTypes(data);
+        } catch (error) {
+            console.error(error);
         }
-        const data = await response.json();
-        setFoodTypes(data);
-        setFilteredFoodTypes(data); // Initialize filteredFoodTypes
-      } catch (error) {
-        console.error(error);
-      }
     }
 
-    async function fetchPriceRanges() {
-      try {
-        const response = await fetch("/api/price-ranges");
-        if (!response.ok) {
-          throw new Error("Failed to fetch price ranges");
-        }
-        const data = await response.json();
-        setPriceRanges(data);
-      } catch (error) {
-        console.error(error);
+      async function fetchPriceRanges() {
+          try {
+              const response = await fetch('/api/price-ranges');
+              if (!response.ok) {
+                  throw new Error('Failed to fetch price ranges');
+              }
+              const data = await response.json();
+              setPriceRanges(data);
+          } catch (error) {
+              console.error(error);
+          }
       }
-    }
 
-    fetchFoodTypes();
-    fetchPriceRanges();
+      fetchFoodTypes();
+      fetchPriceRanges();
   }, []);
 
   useEffect(() => {
-    // Close dropdown when clicking outside of it
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownVisible(false);
+      function handleClickOutside(event) {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+              setDropdownVisible(false);
+          }
       }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+      };
   }, []);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+      setFormData({
+          ...formData,
+          [e.target.name]: e.target.value
+      });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("/api/vendor-submissions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+        const response = await fetch('/api/vendor-submissions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ...formData,
+                image: imageURL, // Include the imageURL in the submission
+                photo_type_id: 4,
+            })
+        });
 
-    if (response.ok) {
-      setSubmitStatus(
-        "Submission successful! Your restaurant will be reviewed soon."
-      );
-      setFormData({
-        name: "",
-        location: "",
-        price_range_id: "",
-        food_type_id: "",
-        hours_of_operation: "",
-        description: "",
-        phone_number: "",
-        email: "",
-        image_url: "",
-      });
-      setSearchTerm(""); // Clear search term on successful submission
-    } else {
-      setSubmitStatus(
-        "There was an error with your submission. Please try again."
-      );
+        if (response.ok) {
+            setSubmitStatus('Submission successful! Your restaurant will be reviewed soon.');
+            setFormData({
+                name: '',
+                location: '',
+                hours_of_operation: '',
+                description: '',
+                website: '',
+                phone_number: '',
+                email: '',
+                price_range_id: '',
+                food_type_id: '',
+                image: '',
+                alt_text: '',
+            });
+            setImageURL(''); // Clear image URL after submission
+        } else {
+            setSubmitStatus('There was an error with your submission. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error submitting vendor:', error);
+        setSubmitStatus('There was an error with your submission. Please try again.');
     }
-  };
+};
 
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    setSearchTerm(searchTerm);
-    setFilteredFoodTypes(
-      foodTypes.filter((type) =>
-        type.type_name.toLowerCase().includes(searchTerm)
-      )
-    );
-  };
-
-  const handleSelectFoodType = (type) => {
-    setFormData({ ...formData, food_type_id: type.food_type_id });
-    setSearchTerm(type.type_name); // Set search term to selected food type name
-    setDropdownVisible(false);
-  };
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
-
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => router.push("/"))
-      .catch((error) => console.error("Sign out error: ", error));
-  };
-
-  // Show a loading indicator or null while checking auth state
-  if (loading || isRoleLoading) {
-    return <div>Loading...</div>; // Replace with a loading spinner if needed
-  }
-
-  if (!currentUser || role !== "vendor") {
-    return <div>Redirecting...</div>;
-  }
 
   return (
     <>
@@ -215,7 +186,7 @@ export default function VendorSubmission() {
             <input
               type="text"
               name="name"
-              value={formData.name}
+              value={formData.name || ''}
               onChange={handleChange}
               required
               className="w-full p-2 border border-gray-300 rounded"
@@ -226,64 +197,18 @@ export default function VendorSubmission() {
             <input
               type="text"
               name="location"
-              value={formData.location}
+              value={formData.location || ''}
               onChange={handleChange}
               required
               className="w-full p-2 border border-gray-300 rounded"
             />
-          </div>
-          <div className="mb-4 relative" ref={dropdownRef}>
-            <label className="block text-gray-700">Food Type:</label>
-            <input
-              type="text"
-              aria-expanded={dropdownVisible}
-              aria-controls="food-type-dropdown"
-              aria-haspopup="true"
-              value={searchTerm}
-              onClick={toggleDropdown}
-              onChange={handleSearchChange}
-              placeholder="Search for a food type"
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-            {dropdownVisible && (
-              <div
-                id="food-type-dropdown"
-                className="absolute z-10 bg-white border border-gray-300 rounded w-full mt-1 max-h-60 overflow-auto"
-              >
-                {filteredFoodTypes.map((type) => (
-                  <div
-                    key={type.food_type_id}
-                    className="p-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSelectFoodType(type)}
-                  >
-                    {type.type_name}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Price Range:</label>
-            <select
-              name="price_range_id"
-              value={formData.price_range_id}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select a price range</option>
-              {priceRanges.map((range) => (
-                <option key={range.price_range_id} value={range.price_range_id}>
-                  {range.range}
-                </option>
-              ))}
-            </select>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">Hours of Operation</label>
             <input
               type="text"
               name="hours_of_operation"
-              value={formData.hours_of_operation}
+              value={formData.hours_of_operation || ''}
               onChange={handleChange}
               required
               className="w-full p-2 border border-gray-300 rounded"
@@ -293,7 +218,7 @@ export default function VendorSubmission() {
             <label className="block text-gray-700">Description</label>
             <textarea
               name="description"
-              value={formData.description}
+              value={formData.description || ''}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             ></textarea>
@@ -303,7 +228,7 @@ export default function VendorSubmission() {
             <input
               type="text"
               name="phone_number"
-              value={formData.phone_number}
+              value={formData.phone_number || ''}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             />
@@ -313,20 +238,57 @@ export default function VendorSubmission() {
             <input
               type="email"
               name="email"
-              value={formData.email}
+              value={formData.email || ''}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Image URL</label>
-            <input
-              type="text"
-              name="image_url"
-              value={formData.image_url}
+            <label className="block text-gray-700">Price Range</label>
+              <select
+                name="price_range_id"
+                value={formData.price_range_id || ''}
+                onChange={handleChange}
+                required
+                className="w-full p-2 border border-gray-300 rounded"
+              >
+                <option value="">Select Price Range</option>
+                {priceRanges.map(pr => (
+                <option key={pr.price_range_id} value={pr.price_range_id}>{pr.range}</option>
+                ))}
+              </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Food Type</label>
+            <select
+              name="food_type_id"
+              value={formData.food_type_id || ''}
               onChange={handleChange}
+              required
               className="w-full p-2 border border-gray-300 rounded"
-            />
+            >
+              <option value="">Select Food Type</option>
+              {foodTypes.map(ft => (
+              <option key={ft.food_type_id} value={ft.food_type_id}>{ft.type_name}</option>
+            ))}
+            </select>
+          </div>
+          <div className="mb-4">
+              {isImageUploaded ? (
+                  <div className="text-green-500">Image uploaded successfully!</div>
+              ) : (
+                  <UploadButton
+                      endpoint="imageUploader"
+                      onClientUploadComplete={(res) => {
+                          console.log("Files: ", res[0].url);
+                          setImageURL(res[0].url);
+                          setIsImageUploaded(true);
+                      }}
+                      onUploadError={(error) => {
+                          console.log(`ERROR! ${error.message}`);
+                      }}
+                  />
+              )}
           </div>
           <button type="submit" className="bg-blue-500 text-white p-2 rounded">
             Submit
