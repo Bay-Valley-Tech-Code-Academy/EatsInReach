@@ -33,6 +33,7 @@ export default function VendorSubmission() {
   const [ imageURL, setImageURL ] = useState("")
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const dropdownRef = useRef(null);
+  const sidebar = ["Profile","Tbd"]
 
   useEffect(() => {
     // Redirect to the landing page if the user is not logged in

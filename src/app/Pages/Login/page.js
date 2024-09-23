@@ -151,7 +151,7 @@ export default function Login() {
     <div className="w-full flex flex-col items-center place-content-center h-screen login-page">
       <Link href="/">
         <img
-          src="/images/logo-placeholder.jpg"
+          src="/images/actual_logo.png"
           alt="logo"
           className="absolute top-0 left-0"
           height="30"

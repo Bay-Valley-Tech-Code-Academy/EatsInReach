@@ -235,6 +235,7 @@ export default function RestaurantPage() {
             </p>
           )}
         </div>
+
         <div className="px-16 py-8">
           <Link
             href="/"
