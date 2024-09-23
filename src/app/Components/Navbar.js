@@ -68,7 +68,7 @@ export default function Navbar() {
       <div className="flex mx-4 justify-between items-center">
         <Link href="/">
           <img
-            src="/images/phLogo.png"
+            src="/images/actual_logo.png"
             height="30"
             width="40"
             alt="Yum Yummers"
