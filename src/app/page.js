@@ -48,27 +48,37 @@ export default function Landing() {
         )}
       </div>
 
-      <div className=" flex flex-col items-center p-4  ">
-        <h3 className="text-2xl text-black bg-Cream mt-4 mb-3 p-1 rounded-4xl hover:underline hover:-translate-y-1">
+      <div className=" flex flex-col items-center p-4 bg-White ">
+        <h3 className="text-2xl text-black bg-Cream mt-4 mb-3 p-1 rounded-4xl hover:underline rounded-2xl hover:-translate-y-1">
           Our Favorites
         </h3>
 
         {/* Displaying restaurants dynamically */}
         <div className="bg-Cream grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 rounded-3xl gap-5 mt-4 scrollbar-hidden overflow-y-auto">
-          {restaurants.slice(0, 5).map((restaurant, index) => (
-            <div key={index} className=" h-64 w-48 p-4 rounded-2xl ">
-              <img
-                src={`/images/${restaurant.image_url}`}
-                alt={`Image of ${restaurant.name}`}
-                className=" w-full h-40 object-cover rounded-xl cursor-pointer"
-                loading="lazy"
-              />
-              <p className="w-full text-center bg-Yellow-Green mt-2 p-1 rounded2xl hover:bg-Yellow-Green">
-                {restaurant.name}
-              </p>
-            </div>
-          ))}
-        </div>
+  {restaurants.slice(0, 5).map((restaurant, index) => (
+
+
+          <Link
+          href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
+          className="flex max-lg:block"
+        >
+
+          
+      <div className=" h-64 w-48 p-4 rounded-2xl cursor-pointer">
+        <img
+          src={`/images/${restaurant.image_url}`}
+          alt={`Image of ${restaurant.name}`}
+          className="w-full h-40 object-cover rounded-xl"
+          loading="lazy"
+        />
+        <p className="w-full text-center bg-Yellow-Green mt-2 p-1 rounded-3xl hover:bg-Lime">
+          {restaurant.name}
+        </p>
+      </div>
+    </Link>
+  ))}
+</div>
+
       </div>
 
       <Footer />
