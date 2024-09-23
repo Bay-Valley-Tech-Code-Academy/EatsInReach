@@ -18,11 +18,11 @@ export default function Landing() {
 
   // Example of hardcoded restaurant data (this would typically come from an API)
   const restaurants = [
-    { name: "Pasta Palace", image_url: "pizza-2.jpg" },
-    { name: "Sushi Central", image_url: "sushi-1.jpg" },
-    { name: "Burger Bonanza", image_url: "burger-1.jpg" },
-    { name: "Taco Town", image_url: "taco-1.jpg" },
-    { name: "Steak House", image_url: "steak-1.jpg" },
+    { name: "Pasta Palace", image_url: "pizza-2.jpg", restaurant_id:"1" },
+    { name: "Sushi Central", image_url: "sushi-1.jpg", restaurant_id:"2"},
+    { name: "Burger Bonanza", image_url: "burger-1.jpg",restaurant_id:"3" },
+    { name: "Taco Town", image_url: "taco-1.jpg",restaurant_id:"4" },
+    { name: "Steak House", image_url: "steak-1.jpg",restaurant_id:"5" },
   ];
 
   return (
@@ -60,8 +60,10 @@ export default function Landing() {
 
           <Link
           href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-          className="flex max-lg:block"
+                    className="flg:w-1/2  group-hover:bg-slate-300 group-hover:translate-y-1"
         >
+
+          
 
           
       <div className=" h-64 w-48 p-4 rounded-2xl cursor-pointer">
@@ -75,6 +77,10 @@ export default function Landing() {
           {restaurant.name}
         </p>
       </div>
+
+     
+      
+
     </Link>
   ))}
 </div>
