@@ -208,20 +208,11 @@ export default function RestaurantPage() {
         <h2 className="text-2xl my-4 text-zinc-800 px-16 text-center">
           All Restaurants
         </h2>
-
-
         <div className="grid grid-col-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 px-14">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-              // <div className="bg-Yellow-Green p-3 rounded-3xl group">
-                <div
-                  key={restaurant.restaurant_id}
-                  // className="bg-white shadow-md rounded-3xl overflow-hidden flex"
-                >
-                  <Link
-                    href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-                    // className="flex max-lg:block"
-                  >
+                <div key={restaurant.restaurant_id}>
+                  <Link href={`/Pages/Restaurants/${restaurant.restaurant_id}`}>
                     <div className="bg-white flex flex-col md:flex-row shadow-xl rounded-xl overflow-hidden">
                         <div className="flex-shrink-0 w-full md:w-36 h-40 overflow-hidden">
                             <img
@@ -237,7 +228,6 @@ export default function RestaurantPage() {
                     </div>
                   </Link>
                 </div>
-              // </div>
             ))
           ) : (
             <p className="text-center text-lg text-black">
