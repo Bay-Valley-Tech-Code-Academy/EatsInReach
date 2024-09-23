@@ -8,6 +8,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { useAuth } from "../../../../context/authContext";
@@ -16,6 +17,8 @@ export default function Login() {
   const router = useRouter();
   const { currentUser, loading } = useAuth();
   const [signUp, setSignUp] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [redirecting, setRedirecting] = useState(false);
   const [formData, setFormData] = useState({
@@ -106,6 +109,19 @@ export default function Login() {
     }
   };
 
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+    setError("");
+    setMessage("");
+    try {
+      // Send password reset email
+      await sendPasswordResetEmail(auth, formData.email);
+      setMessage("Password reset email sent! Check your inbox.");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const getUserRole = async (uid) => {
     const userDoc = await getDoc(doc(firestore, "users", uid));
     if (userDoc.exists()) {
@@ -144,110 +160,153 @@ export default function Login() {
       </Link>
       <div className="w-3/4 sm:w-1/2 lg:w-1/4 bg-[#AAD15F] rounded-xl flex flex-col items-center">
         <h1 className="text-6xl p-3 text-center">Let's Eat!</h1>
-        <form onSubmit={handleAuth} className="flex flex-col w-3/4 pt-6">
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={updateForm}
-            placeholder="Email"
-            required
-            className="mb-4 p-1"
-          />
-          {signUp && (
+        {!forgotPassword ? (
+          <form onSubmit={handleAuth} className="flex flex-col w-3/4 pt-6">
             <input
-              type="text"
-              name="userName"
-              value={formData.userName}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={updateForm}
-              placeholder="User Name"
+              placeholder="Email"
               required
               className="mb-4 p-1"
             />
-          )}
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={updateForm}
-            placeholder="Password"
-            required
-            className="mb-4 p-1"
-          />
-          {signUp && (
+            {signUp && (
+              <input
+                type="text"
+                name="userName"
+                value={formData.userName}
+                onChange={updateForm}
+                placeholder="User Name"
+                required
+                className="mb-4 p-1"
+              />
+            )}
             <input
               type="password"
-              name="verifyPassword"
-              value={formData.verifyPassword}
+              name="password"
+              value={formData.password}
               onChange={updateForm}
-              placeholder="Verify Password"
+              placeholder="Password"
               required
               className="mb-4 p-1"
             />
-          )}
-          {signUp && (
-            <div>
-              <label className="mr-4">
-                <input
-                  type="radio"
-                  name="role"
-                  value="user"
-                  checked={formData.role === "user"}
-                  onChange={updateForm}
-                  className="mb-4 mr-1"
-                  required
-                />
-                User
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="role"
-                  value="vendor"
-                  checked={formData.role === "vendor"}
-                  onChange={updateForm}
-                  className="mb-4 mr-1"
-                />
-                Vendor
-              </label>
-            </div>
-          )}
-          <div className="text-center p-2">
-            <button
-              type="submit"
-              className="bg-[#FDE4CE] hover:bg-[#FBCDAC] p-2 rounded-xl"
-            >
-              {signUp ? "Sign Up" : "Sign In"}
-            </button>
-          </div>
-          {error && <p className="text-red-500 text-center">{error}!</p>}
-          <div className="text-center p-2">
-            {signUp ? (
-              <p>
-                Have an account:
-                <span
-                  className="text-[#D22701] hover:cursor-pointer hover:text-[#4E070C] pl-1"
-                  onClick={() => {
-                    setSignUp(!signUp);
-                    setError("");
-                  }}
-                >
-                  Sign In
-                </span>
-              </p>
-            ) : (
-              <p>
-                Don't have an account:
-                <span
-                  className="text-[#D22701] hover:cursor-pointer hover:text-[#4E070C] pl-1"
-                  onClick={() => setSignUp(!signUp)}
-                >
-                  Sign Up
-                </span>
-              </p>
+            {signUp && (
+              <input
+                type="password"
+                name="verifyPassword"
+                value={formData.verifyPassword}
+                onChange={updateForm}
+                placeholder="Verify Password"
+                required
+                className="mb-4 p-1"
+              />
             )}
-          </div>
-        </form>
+            {signUp && (
+              <div>
+                <label className="mr-4">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="user"
+                    checked={formData.role === "user"}
+                    onChange={updateForm}
+                    className="mb-4 mr-1"
+                    required
+                  />
+                  User
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="vendor"
+                    checked={formData.role === "vendor"}
+                    onChange={updateForm}
+                    className="mb-4 mr-1"
+                  />
+                  Vendor
+                </label>
+              </div>
+            )}
+            <div className="text-center p-2">
+              <button
+                type="submit"
+                className="bg-[#FDE4CE] hover:bg-[#FBCDAC] p-2 rounded-xl"
+              >
+                {signUp ? "Sign Up" : "Sign In"}
+              </button>
+            </div>
+            {error && <p className="text-red-500 text-center">{error}!</p>}
+            <div className="text-center p-2">
+              {signUp ? (
+                <p>
+                  Have an account:
+                  <span
+                    className="text-[#D22701] hover:cursor-pointer hover:text-[#4E070C] pl-1"
+                    onClick={() => {
+                      setSignUp(!signUp);
+                      setError("");
+                    }}
+                  >
+                    Sign In
+                  </span>
+                </p>
+              ) : (
+                <p>
+                  Don't have an account:
+                  <span
+                    className="text-[#D22701] hover:cursor-pointer hover:text-[#4E070C] pl-1"
+                    onClick={() => setSignUp(!signUp)}
+                  >
+                    Sign Up
+                  </span>
+                </p>
+              )}
+              <p>
+                <span
+                  className="text-[#D22701] hover:cursor-pointer hover:text-[#4E070C] pl-1"
+                  onClick={() => setForgotPassword(true)}
+                >
+                  Forgot Password?
+                </span>
+              </p>
+            </div>
+          </form>
+        ) : (
+          <form
+            onSubmit={handlePasswordReset}
+            className="flex flex-col w-3/4 pt-6"
+          >
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={updateForm}
+              placeholder="Email"
+              required
+              className="mb-4 p-1"
+            />
+            <div className="text-center p-2">
+              <button
+                type="submit"
+                className="bg-[#FDE4CE] hover:bg-[#FBCDAC] p-2 rounded-xl"
+              >
+                Reset
+              </button>
+            </div>
+            <p className="text-center">
+              <span
+                className="text-[#D22701] hover:cursor-pointer hover:text-[#4E070C]"
+                onClick={() => setForgotPassword(false)}
+              >
+                Back to Sign In
+              </span>
+            </p>
+            {error && <p className="text-red-500 text-center">{error}!</p>}
+            {message && <p className="text-black text-center">{message}</p>}
+          </form>
+        )}
       </div>
     </div>
   );
