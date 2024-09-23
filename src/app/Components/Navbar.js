@@ -109,17 +109,7 @@ export default function Navbar() {
       </div>
 
       {/* Desktop menu */}
-      <div className="hidden sm:flex">
-        <Link href="/Pages/Cart">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-            <img
-              src="/images/shoppingcart.png"
-              height="15"
-              width="25"
-              alt="Your Shopping Cart"
-            />
-          </div>
-        </Link>
+      <div className="hidden sm:flex"> 
 
         <Link href="/Pages/Restaurants">
           <div className="hover:bg-[#bb9277] p-2 sm:p-4">
