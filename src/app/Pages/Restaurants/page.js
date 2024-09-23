@@ -86,7 +86,7 @@ export default function RestaurantPage() {
                 className="rounded-t-[84px] overflow-hidden"
               >
                 <img
-                  src={`/images/${restaurant.image_url}`}
+                  src={restaurant.image_url}
                   alt={`Image of ${restaurant.name}`}
                   className="w-full h-64 object-cover rounded-3x1 "
                 />
@@ -222,7 +222,7 @@ export default function RestaurantPage() {
                     className="flex max-lg:block"
                   >
                     <img
-                      src={`/images/${restaurant.image_url}`}
+                      src={restaurant.image_url}
                       alt={`Image of ${restaurant.name}`}
                       className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
                     />

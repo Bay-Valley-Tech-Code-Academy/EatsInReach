@@ -20,10 +20,12 @@ export async function GET() {
                 vs.phone_number,
                 vs.email,
                 pr.range AS price_range,
-                ft.type_name AS food_type
+                ft.type_name AS food_type,
+                rp.image_url -- Add this line to fetch the image URL
             FROM Vendor_Submissions vs
             JOIN Price_Ranges pr ON vs.price_range_id = pr.price_range_id
             JOIN Food_Types ft ON vs.food_type_id = ft.food_type_id
+            LEFT JOIN Vendor_Restaurant_Pictures rp ON vs.submission_id = rp.vendor_id -- Adjust JOIN as needed
         `);
 
         client.release();
@@ -33,6 +35,7 @@ export async function GET() {
         return NextResponse.json({ error: 'Failed to fetch vendor submissions' }, { status: 500 });
     }
 }
+
 
 export async function POST(request) {
     try {
@@ -59,6 +62,7 @@ export async function POST(request) {
 
         // Insert a single image with photo_type_id set to 4
         const imageUrl = image; // Assuming image is passed as base64 or URL
+        console.log("IMAGE URL: ", imageUrl)
         const photoType = 4; // Automatically set photo_type_id to 4
 
         await client.query(
