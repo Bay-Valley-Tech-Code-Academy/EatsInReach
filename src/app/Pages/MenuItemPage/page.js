@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/Components/Navbar';
 
-export default function VendorItemPage() {
+export default function MenuItemPage() {
     const [vendorItems, setVendorItems] = useState([]);
     const [newItemName, setNewItemName] = useState('');
     const [newItemDesc, setNewItemDesc] = useState('');
