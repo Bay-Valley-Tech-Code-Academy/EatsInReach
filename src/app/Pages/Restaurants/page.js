@@ -205,44 +205,29 @@ export default function RestaurantPage() {
             <span className="sr-only">Search</span>
           </button>
         </div>
-
         <h2 className="text-2xl my-4 text-zinc-800 px-16 text-center">
           All Restaurants
         </h2>
-        <div className="grid lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 gap-4 p-16">
+        <div className="grid grid-col-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 px-14">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-              <div className="bg-Yellow-Green p-3 rounded-3xl group">
-                <div
-                  key={restaurant.restaurant_id}
-                  className="bg-white shadow-md rounded-3xl overflow-hidden flex"
-                >
-                  <Link
-                    href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-                    className="flex max-lg:block"
-                  >
-                    <img
-                      src={restaurant.image_url}
-                      alt={`Image of ${restaurant.name}`}
-                      className="w-1/2 h-52 object-cover cursor-pointer max-lg:w-auto"
-                    />
-                    <div className=" lg:w-1/2  group-hover:bg-slate-300 group-hover:translate-y-1">
-                      <h2 className="text-gray-700 text-xl font-semibold mb-2">
-                        {restaurant.name}
-                      </h2>
-                      <p className="text-gray-600 mb-2">
-                        Location: {restaurant.location}
-                      </p>
-                      <p className="text-gray-600 mb-2">
-                        Price Range: {restaurant.price_range}
-                      </p>
-                      <p className="text-gray-600 mb-2">
-                        Food Type: {restaurant.food_type}
-                      </p>
+                <div key={restaurant.restaurant_id}>
+                  <Link href={`/Pages/Restaurants/${restaurant.restaurant_id}`}>
+                    <div className="bg-white flex flex-col md:flex-row shadow-xl rounded-xl overflow-hidden">
+                        <div className="flex-shrink-0 w-full md:w-36 h-40 overflow-hidden">
+                            <img
+                                src={restaurant.image_url}
+                                alt={`Image of ${restaurant.name}`}
+                                className="w-full h-full object-cover"/>
+                        </div>
+                        <div className="flex flex-col gap-1 p-4">
+                            <p className="font-bold text-lg md:text-xl truncate">{restaurant.name}</p>
+                            <p className="text-sm md:text-base truncate">{restaurant.food_type} ({restaurant.price_range})</p>
+                            <p className="text-sm md:text-base text-ellipsis">{restaurant.location}</p>
+                        </div>
                     </div>
                   </Link>
                 </div>
-              </div>
             ))
           ) : (
             <p className="text-center text-lg text-black">
@@ -250,6 +235,7 @@ export default function RestaurantPage() {
             </p>
           )}
         </div>
+
         <div className="px-16 py-8">
           <Link
             href="/"

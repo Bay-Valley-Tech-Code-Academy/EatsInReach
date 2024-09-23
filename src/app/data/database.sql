@@ -113,16 +113,18 @@ CREATE TABLE Menu_Items (
 -- Create the Users table
 CREATE TABLE Users (
     user_id SERIAL PRIMARY KEY,
+    uid VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
+    role VARCHAR(6) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create the Favorites table
 CREATE TABLE Favorites (
-    user_id INTEGER REFERENCES Users(user_id) ON DELETE CASCADE,
+    uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
     restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, restaurant_id)
+    PRIMARY KEY (uid, restaurant_id)
 );
 
 -- Create the Dietary_Restrictions table
@@ -249,14 +251,6 @@ VALUES
     (1, 'Margherita Pizza', 'Fresh mozzarella, tomatoes, basil', 12.99, true, false, false),
     (2, 'Filet Mignon', '8oz, garlic mashed potatoes, asparagus', 29.99, false, false, true),
     (3, 'Vegan Buddha Bowl', 'Quinoa, roasted vegetables, tahini dressing', 14.99, true, true, true);
-
-INSERT INTO Users (username, email)
-VALUES
-    ('foodie123', 'foodie123@email.com'),
-    ('tasteexplorer', 'taste@email.com');
-
-INSERT INTO Favorites (user_id, restaurant_id)
-VALUES (1, 2), (2, 1);
 
 INSERT INTO Dietary_Restrictions (name, description)
 VALUES
