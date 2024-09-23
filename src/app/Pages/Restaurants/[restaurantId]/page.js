@@ -98,7 +98,7 @@ export default function VendorPage({params}) {
                     {/* Image Section */}
                     <div className="relative w-full md:w-1/3 p-2 flex-shrink-0">
                         <img
-                            src={`/images/${restaurant.image_url}` || '/default-image.jpg'} // Provide a default image if URL is missing
+                            src={restaurant.image_url || '/default-image.jpg'} // Provide a default image if URL is missing
                             alt={`${restaurant.name} main dish`}
                             className="w-full h-auto object-cover rounded-lg"
                         />

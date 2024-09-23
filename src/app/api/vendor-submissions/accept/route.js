@@ -57,13 +57,12 @@ export async function POST(request) {
 
         // Automatically set photo_type_id to 4 and use the uploaded image URL
         const imageUrl = picture_submission.image_url;
-        const tempImage = 'smiley_temp.jpg';
         const photoType = 4; // Automatically set photo_type_id to 4
 
         await pool.query(
             `INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text) 
             VALUES ($1, $2, $3, $4)`,
-            [newRestaurantId, photoType, tempImage, picture_submission.alt_text]
+            [newRestaurantId, photoType, imageUrl, picture_submission.alt_text]
         );
 
         // Insert into Restaurant_Food_Types
