@@ -179,17 +179,7 @@ export default function Navbar() {
       {/* Mobile menu (hamburger)  This is where you change color of hamburger menu */}
       {isOpen && (
         <div className="sm:hidden absolute  top-14 -right-2 bg-[#dfaf90] flex flex-col items-center z-10">
-          <Link href="/Pages/Cart" className="w-full">
-            <div className="hover:bg-[#bb9277] w-full flex justify-center p-2">
-              <img
-                src="/images/shoppingcart.png"
-                height="15"
-                width="25"
-                alt="Your Shopping Cart"
-              />
-            </div>
-          </Link>
-
+  
           <Link href="/Pages/Restaurants" className="w-full">
             <div className="hover:bg-[#bb9277] w-full text-center p-2">
               <h2>Restaurants</h2>
