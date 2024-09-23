@@ -1,8 +1,17 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import Navbar from "@/Components/Navbar";
+import { auth } from "../../../../firebase";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../../context/authContext";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../../../../firebase";
 
 export default function VendorSubmission() {
+  const router = useRouter();
+  const { currentUser, loading } = useAuth();
+  const [role, setRole] = useState(null);
+  const [isRoleLoading, setIsRoleLoading] = useState(true);
   const [foodTypes, setFoodTypes] = useState([]);
   const [filteredFoodTypes, setFilteredFoodTypes] = useState([]);
   const [priceRanges, setPriceRanges] = useState([]);
@@ -16,17 +25,59 @@ export default function VendorSubmission() {
     description: "",
     phone_number: "",
     email: "",
-  });
-
-  const [images, setImages] = useState({
-    display: "",
-    menu: "",
-    food: "",
+    image_url: "",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    // Redirect to the landing page if the user is not logged in
+    if (!loading && !currentUser) {
+      router.push("/");
+    }
+    if (currentUser) {
+      const fetchUserData = async () => {
+        const collections = ["users", "vendors", "admins"];
+        let found = false;
+
+        for (const collection of collections) {
+          if (found) break;
+
+          try {
+            const userDoc = await getDoc(
+              doc(firestore, collection, currentUser.uid)
+            );
+
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              if (userData.role !== "vendor") {
+                router.push("/");
+              }
+              found = true;
+              setRole(userData.role);
+            }
+          } catch (error) {
+            console.error(
+              `Error fetching user data from ${collection} collection:`,
+              error
+            );
+          }
+        }
+
+        if (!found) {
+          console.log(
+            "User document does not exist in any of the collections."
+          );
+          setRole(null);
+        }
+        setIsRoleLoading(false);
+      };
+
+      fetchUserData();
+    }
+  }, [currentUser, loading, router]);
 
   // Fetch available food types and price ranges when the component loads
   useEffect(() => {
@@ -81,27 +132,15 @@ export default function VendorSubmission() {
     });
   };
 
-  const handleImageChange = (e, type) => {
-    setImages({
-      ...images,
-      [type]: e.target.value,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const submission = {
-      ...formData,
-      images,
-    };
 
     const response = await fetch("/api/vendor-submissions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(submission),
+      body: JSON.stringify(formData),
     });
 
     if (response.ok) {
@@ -117,6 +156,7 @@ export default function VendorSubmission() {
         description: "",
         phone_number: "",
         email: "",
+        image_url: "",
       });
       setSearchTerm(""); // Clear search term on successful submission
     } else {
@@ -146,10 +186,32 @@ export default function VendorSubmission() {
     setDropdownVisible(!dropdownVisible);
   };
 
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => router.push("/"))
+      .catch((error) => console.error("Sign out error: ", error));
+  };
+
+  // Show a loading indicator or null while checking auth state
+  if (loading || isRoleLoading) {
+    return <div>Loading...</div>; // Replace with a loading spinner if needed
+  }
+
+  if (!currentUser || role !== "vendor") {
+    return <div>Redirecting...</div>;
+  }
+
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
-      <Navbar />
-      <h1 className="text-2xl font-bold mb-6">Submit Your Restaurant</h1>
+      <div className="flex justify-between place-items-center">
+        <h1 className="text-2xl font-bold">Submit Your Restaurant</h1>
+        <div
+          className="hover:bg-[#bb9277] p-2 sm:p-4 cursor-pointer"
+          onClick={handleSignOut}
+        >
+          <h2>Sign Out</h2>
+        </div>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700">Restaurant Name</label>
@@ -210,7 +272,6 @@ export default function VendorSubmission() {
             value={formData.price_range_id}
             onChange={handleChange}
             required
-            className="w-full p-2 border border-gray-300 rounded"
           >
             <option value="">Select a price range</option>
             {priceRanges.map((range) => (
@@ -261,29 +322,12 @@ export default function VendorSubmission() {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Display Image URL</label>
+          <label className="block text-gray-700">Image URL</label>
           <input
             type="text"
-            value={images.display}
-            onChange={(e) => handleImageChange(e, "display")}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Menu Image URL</label>
-          <input
-            type="text"
-            value={images.menu}
-            onChange={(e) => handleImageChange(e, "menu")}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Food Image URL</label>
-          <input
-            type="text"
-            value={images.food}
-            onChange={(e) => handleImageChange(e, "food")}
+            name="image_url"
+            value={formData.image_url}
+            onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
@@ -291,9 +335,7 @@ export default function VendorSubmission() {
           Submit
         </button>
       </form>
-      {submitStatus && (
-        <p className="mt-4 text-center font-semibold">{submitStatus}</p>
-      )}
+      {submitStatus && <p className="mt-4">{submitStatus}</p>}
     </div>
   );
 }

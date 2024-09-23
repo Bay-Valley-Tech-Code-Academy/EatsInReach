@@ -44,6 +44,17 @@ CREATE TABLE Photo_Types (
     type_name VARCHAR(100) NOT NULL
 );
 
+-- Create the Vendor_Items table
+CREATE TABLE Vendor_Items (
+    item_id SERIAL PRIMARY KEY,
+    restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
+    item_name VARCHAR(255) NOT NULL,
+    item_desc VARCHAR(255) NOT NULL,
+    item_price DECIMAL(10, 2) NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    alt_text VARCHAR(255)
+);
+
 -- Create the Restaurant_Pictures table
 CREATE TABLE Restaurant_Pictures (
     picture_id SERIAL PRIMARY KEY,
@@ -247,7 +258,11 @@ VALUES
 
 INSERT INTO Restaurant_Dietary_Options (restaurant_id, restriction_id)
 VALUES (1, 1), (1, 3), (2, 1), (2, 2);
-
+-- Insert dummy data into the Vendor_Items table
+INSERT INTO Vendor_Items (restaurant_id, item_name, item_desc, item_price, image_path, alt_text)
+VALUES
+    (1, 'Spaghetti Carbonara', 'Classic Italian pasta with creamy sauce.', 12.99, 'spaghetti-carbonara.jpg', 'Spaghetti Carbonara at Pasta Palace'),
+    (2, 'Salmon Sashimi', 'Freshly sliced salmon sashimi.', 15.99, 'salmon-sashimi.jpg', 'Salmon Sashimi at Sushi Central');
 
 -- Uncomment to drop the database (use with caution)
--- DROP DATABASE eats_in_reach_db;
+--  DROP DATABASE eats_in_reach_db;
