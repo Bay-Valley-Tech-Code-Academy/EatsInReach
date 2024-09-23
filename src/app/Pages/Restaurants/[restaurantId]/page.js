@@ -15,6 +15,7 @@ export default function VendorPage({params}) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [restaurant, setRestaurant] = useState(null);
     const [isFavorited, setIsFavorited] = useState(false);
+    const [menu, setMenu] = useState(null);
     const { restaurantId } = params;
 
     // Fetch vendor items on component mount
@@ -76,6 +77,23 @@ export default function VendorPage({params}) {
             console.error("Error updating favorite status", error);
         }
     }
+    useEffect(() => {
+        async function fetchMenu() {
+            try{
+                const res = await fetch(`/api/menu`);
+                const data = await res.json();
+                setMenu(data);
+                console.log(menu);
+            }
+            catch(error){
+                console.error("Error fetching menu data:", error);
+            }
+        }
+
+        if(restaurantId){
+            fetchMenu();
+        }
+      }, []);
 
     if (!restaurant) {
         return (
@@ -97,6 +115,7 @@ export default function VendorPage({params}) {
         );
     }
 
+    const justMenuItems = menu ? menu.filter(menuSection => Number(menuSection.restaurant_id) === Number(restaurantId)) : [];
     return (
         <div className="min-h-screen flex flex-col bg-Almond">
             <header className="w-full">
@@ -163,9 +182,6 @@ export default function VendorPage({params}) {
                         {/* Accordion for Menu */}
                         <div className="w-full p-2">
                             <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
-                                {/* <h2 className="txt-2xl font-bold mb-2 text-black">
-                                    Menu
-                                </h2> */}
 
                                 <div className="border border-gray-200 rounded-lg">
                                     <button
@@ -180,19 +196,33 @@ export default function VendorPage({params}) {
 
                                     {menuOpen && (
                                         <div className="p-4 border-t border-gray-200">
-                                            <ul className="text-lg text-black">
-                                                {restaurant.menu ? (
-                                                    restaurant.menu.map((menuItem, index) => (
-                                                        <li key={index} className="mb-2">
-                                                            <span className="font-semibold">{menuItem.name}</span>: {menuItem.price}
-                                                        </li>
-                                                    ))
-                                                ) : (
-                                                    <p>No menu available.</p>
-                                                )}
-                                            </ul>
+                                            {justMenuItems && justMenuItems.length > 0 ? (
+                                            justMenuItems.map((menuSection, index) => (
+                                                <div key={index} className="mb-6">
+                                                {/* Menu Section Title */}
+                                                <h3 className="text-2xl font-bold text-black mb-2">
+                                                    {menuSection.menu_name} {/* Section Name */}
+                                                </h3>
+                                                <p className="text-lg text-gray-600 mb-4">
+                                                    {menuSection.menu_desc} {/* Section Description */}
+                                                </p>
+
+                                                {/* Menu Items */}
+                                                <ul className="space-y-4">
+                                                    {menuSection.items.map((item, itemIndex) => (
+                                                    <li key={itemIndex} className="flex justify-between text-black">
+                                                        <span className="font-semibold">{item.name}</span>
+                                                        <span>${item.price}</span>
+                                                    </li>
+                                                    ))}
+                                                </ul>
+                                                </div>
+                                            ))
+                                            ) : (
+                                            <p>No menu available.</p>
+                                            )}
                                         </div>
-                                    )}
+                                        )}
                                 </div>
                             </div>
                         </div>
