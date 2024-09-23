@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool } from '@/data/db';
 
 export async function GET(req) {
     const { user_id } = req.query;
@@ -20,15 +20,15 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-    const { user_id, restaurant_id } = await req.json();
-
-    const query = `
-        INSERT INTO Favorites(user_id, restaurant_id)
-        VALUES ($1,$2)
-        ON CONFLICT DO NOTHING;
-    `;
-    
     try {
+        const { user_id, restaurant_id } = await req.json();
+
+        const query = `
+            INSERT INTO Favorites(user_id, restaurant_id)
+            VALUES ($1, $2)
+            ON CONFLICT DO NOTHING;
+        `;
+        
         await pool.query(query, [user_id, restaurant_id]);
         return new Response('Favorited', { status: 200 });
     } catch (error) {
@@ -38,14 +38,14 @@ export async function POST(req) {
 }
 
 export async function DELETE(req) {
-    const { user_id, restaurant_id } = await req.json();
-
-    const query = `
-        DELETE FROM Favorites
-        WHERE user_id = $1 AND restaurant_id = $2;
-    `;
-
     try {
+        const { user_id, restaurant_id } = await req.json();
+
+        const query = `
+            DELETE FROM Favorites
+            WHERE user_id = $1 AND restaurant_id = $2;
+        `;
+
         await pool.query(query, [user_id, restaurant_id]);
         return new Response('Unfavorited', { status: 200 });
     } catch (error) {
