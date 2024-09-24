@@ -45,15 +45,17 @@ export default function Landing() {
             </Link>
           </div>
         )}
-        <h3 className="text-2xl text-black bg-Cream mt-10 mb-3 p-1 rounded-4xl hover:underline  rounded-2xl hover:-translate-y-1">
+        <div className="mt-28">
+        <h3 className=" flex justify-center text-2xl text-black bg-Cream  mb-3 p-1 rounded-4xl hover:underline  rounded-2xl hover:-translate-y-1">
               Our Favorites
         </h3>
-
-        <img src="images/down_arrow.png" className="h-10 m-10 mt-44 "></img>
-
+        <Link href="#ourFavorites">
+        <img src="images/down_arrow.png" className="h-10 m-10 hover:-translate-y-1"></img>
+        </Link>
+</div>
       </div>
       <div className=" flex flex-col items-center p-4 bg-Cream ">
-        <div className="bg-Cream grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 rounded-3xl gap-5 mt-4 scrollbar-hidden overflow-y-auto">
+        <div className="bg-Cream grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 rounded-3xl gap-5 mt-4 scrollbar-hidden overflow-y-auto" id="ourFavorites">
           {restaurants.slice(0, 5).map((restaurant, index) => (
             <Link
               href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
