@@ -14,10 +14,16 @@ export async function GET() {
             JOIN Restaurant_Food_Types rft ON r.restaurant_id = rft.restaurant_id
             JOIN Food_Types f ON rft.food_type_id = f.food_type_id
             JOIN Restaurant_Pictures rp ON r.restaurant_id = rp.restaurant_id
-            JOIN Price_Ranges pr ON r.price_range_id::integer = pr.price_range_id  -- Cast to integer
-            WHERE rp.photo_type_id = 2
+            JOIN Price_Ranges pr ON r.price_range_id::integer = pr.price_range_id
+            WHERE rp.photo_type_id = 4
         `);
         client.release();
+
+        const test = await client.query(`
+            SELECT * FROM Restaurant_Food_Types WHERE restaurant_id = 9
+            `)
+
+        console.log('Fetched restaurants:', test.rows); // Log the results
 
         return NextResponse.json(result.rows);
     } catch (error) {

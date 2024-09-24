@@ -8,9 +8,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "../../../firebase";
 
 export default function Navbar() {
-  const { currentUser } = useAuth();
+  const { currentUser, userName, setUserName } = useAuth();
   const [role, setRole] = useState(null);
-  const [userName, setUserName] = useState(null);
 
   const [isOpen, setIsOpen] = useState(false); // State to toggle the hamburger menu
 
@@ -69,7 +68,7 @@ export default function Navbar() {
       <div className="flex mx-4 justify-between items-center">
         <Link href="/">
           <img
-            src="/images/phLogo.png"
+            src="/images/actual_logo.png"
             height="30"
             width="40"
             alt="Yum Yummers"
@@ -110,17 +109,7 @@ export default function Navbar() {
       </div>
 
       {/* Desktop menu */}
-      <div className="hidden sm:flex">
-        <Link href="/Pages/Cart">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-            <img
-              src="/images/shoppingcart.png"
-              height="15"
-              width="25"
-              alt="Your Shopping Cart"
-            />
-          </div>
-        </Link>
+      <div className="hidden sm:flex"> 
 
         <Link href="/Pages/Restaurants">
           <div className="hover:bg-[#bb9277] p-2 sm:p-4">
@@ -129,19 +118,11 @@ export default function Navbar() {
         </Link>
 
         {currentUser && role === "user" && (
-          <>
-            <Link href="/Pages/Favorites">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-                <h2>Favorites</h2>
-              </div>
-            </Link>
-
-            <Link href="/Pages/UserProfile">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-                <h2>User Profile</h2>
-              </div>
-            </Link>
-          </>
+          <Link href="/Pages/Favorites">
+            <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+              <h2>Favorites</h2>
+            </div>
+          </Link>
         )}
         {currentUser && role === "vendor" && (
           <>
@@ -150,7 +131,6 @@ export default function Navbar() {
                 <h2>Submit Restaurant</h2>
               </div>
             </Link>
-
             <Link href="/Pages/VendorPage">
               <div className="hover:bg-[#bb9277] p-2 sm:p-4">
                 <h2>Vendor Page</h2>
@@ -173,6 +153,13 @@ export default function Navbar() {
             </Link>
           </>
         )}
+        {currentUser && (role === "user" || role === "vendor") && (
+          <Link href="/Pages/AccountSettings">
+            <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+              <h2>Account Settings</h2>
+            </div>
+          </Link>
+        )}
         {currentUser ? (
           <div
             className="hover:bg-[#bb9277] p-2 sm:p-4 cursor-pointer"
@@ -192,17 +179,7 @@ export default function Navbar() {
       {/* Mobile menu (hamburger)  This is where you change color of hamburger menu */}
       {isOpen && (
         <div className="sm:hidden absolute  top-14 -right-2 bg-[#dfaf90] flex flex-col items-center z-10">
-          <Link href="/Pages/Cart" className="w-full">
-            <div className="hover:bg-[#bb9277] w-full flex justify-center p-2">
-              <img
-                src="/images/shoppingcart.png"
-                height="15"
-                width="25"
-                alt="Your Shopping Cart"
-              />
-            </div>
-          </Link>
-
+  
           <Link href="/Pages/Restaurants" className="w-full">
             <div className="hover:bg-[#bb9277] w-full text-center p-2">
               <h2>Restaurants</h2>

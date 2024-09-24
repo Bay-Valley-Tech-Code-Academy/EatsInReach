@@ -3,16 +3,20 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/Components/Navbar';
 import Footer from '@/Components/Footer';
+import { PiHeartStraightThin, PiHeartStraightFill } from "react-icons/pi";
+import { useAuth } from '../../../../../context/authContext';
 
 export default function VendorPage({params}) {
     const [vendorItems, setVendorItems] = useState([]);
     const [newItemName, setNewItemName] = useState('');
     const [newItemDesc, setNewItemDesc] = useState('');
     const [newItemPrice, setNewItemPrice] = useState('');
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { currentUser, loading } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const [restaurant, setRestaurant] = useState(null);
+    const [isFavorited, setIsFavorited] = useState(false);
+    const [menu, setMenu] = useState(null);
     const { restaurantId } = params;
 
     // Fetch vendor items on component mount
@@ -35,10 +39,62 @@ export default function VendorPage({params}) {
             }
         }
 
+        async function fetchFavoriteStatus() {
+            try {
+                const response = await fetch(`/api/favorites`);
+                if (response.ok) {
+                    const isFavorited = await response.json();
+                    setIsFavorited(isFavorited);
+                } else {
+                    throw new Error("Failed to fetch favorite status");
+                }
+            } catch (error) {
+                console.error("Error fetching favorite status:", error)
+            }
+        }
+
         if (restaurantId) {
             fetchRestaurant();
         }
     }, [restaurantId]);
+
+    const handleFavoriteToggle = async() => {
+
+        const url = `/api/favorites`;
+        const method = isFavorited ? 'DELETE' : 'POST';
+
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: currentUser.uid, restaurant_id: restaurantId })
+            });
+            if (response.ok) {
+                setIsFavorited(!isFavorited);
+            } else {
+                throw new Error("Failed to update status");
+            } 
+        } catch(error) {
+            console.error("Error updating favorite status", error);
+        }
+    }
+    useEffect(() => {
+        async function fetchMenu() {
+            try{
+                const res = await fetch(`/api/menu`);
+                const data = await res.json();
+                setMenu(data);
+                console.log(menu);
+            }
+            catch(error){
+                console.error("Error fetching menu data:", error);
+            }
+        }
+
+        if(restaurantId){
+            fetchMenu();
+        }
+      }, []);
 
     if (!restaurant) {
         return (
@@ -60,6 +116,7 @@ export default function VendorPage({params}) {
         );
     }
 
+    const justMenuItems = menu ? menu.filter(menuSection => Number(menuSection.restaurant_id) === Number(restaurantId)) : [];
     return (
         <div className="min-h-screen flex flex-col bg-Almond">
             <header className="w-full">
@@ -78,7 +135,7 @@ export default function VendorPage({params}) {
                     {/* Image Section */}
                     <div className="relative w-full md:w-1/3 p-2 flex-shrink-0">
                         <img
-                            src={`/images/${restaurant.image_url}` || '/default-image.jpg'} // Provide a default image if URL is missing
+                            src={restaurant.image_url || '/default-image.jpg'} // Provide a default image if URL is missing
                             alt={`${restaurant.name} main dish`}
                             className="w-full h-auto object-cover rounded-lg"
                         />
@@ -126,9 +183,6 @@ export default function VendorPage({params}) {
                         {/* Accordion for Menu */}
                         <div className="w-full p-2">
                             <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
-                                {/* <h2 className="txt-2xl font-bold mb-2 text-black">
-                                    Menu
-                                </h2> */}
 
                                 <div className="border border-gray-200 rounded-lg">
                                     <button
@@ -143,19 +197,33 @@ export default function VendorPage({params}) {
 
                                     {menuOpen && (
                                         <div className="p-4 border-t border-gray-200">
-                                            <ul className="text-lg text-black">
-                                                {restaurant.menu ? (
-                                                    restaurant.menu.map((menuItem, index) => (
-                                                        <li key={index} className="mb-2">
-                                                            <span className="font-semibold">{menuItem.name}</span>: {menuItem.price}
-                                                        </li>
-                                                    ))
-                                                ) : (
-                                                    <p>No menu available.</p>
-                                                )}
-                                            </ul>
+                                            {justMenuItems && justMenuItems.length > 0 ? (
+                                            justMenuItems.map((menuSection, index) => (
+                                                <div key={index} className="mb-6">
+                                                {/* Menu Section Title */}
+                                                <h3 className="text-2xl font-bold text-black mb-2">
+                                                    {menuSection.menu_name} {/* Section Name */}
+                                                </h3>
+                                                <p className="text-lg text-gray-600 mb-4">
+                                                    {menuSection.menu_desc} {/* Section Description */}
+                                                </p>
+
+                                                {/* Menu Items */}
+                                                <ul className="space-y-4">
+                                                    {menuSection.items.map((item, itemIndex) => (
+                                                    <li key={itemIndex} className="flex justify-between text-black">
+                                                        <span className="font-semibold">{item.name}</span>
+                                                        <span>${item.price}</span>
+                                                    </li>
+                                                    ))}
+                                                </ul>
+                                                </div>
+                                            ))
+                                            ) : (
+                                            <p>No menu available.</p>
+                                            )}
                                         </div>
-                                    )}
+                                        )}
                                 </div>
                             </div>
                         </div>
@@ -164,7 +232,14 @@ export default function VendorPage({params}) {
                 </section>
 
                 {/* Back Button */}
-                <section className="mt-4">
+                <section className="mt-4 flex">
+                    <div onClick={handleFavoriteToggle} className="cursor-pointer text-3xl">
+                        {isFavorited ? (
+                            <PiHeartStraightFill />
+                        ) : (
+                            <PiHeartStraightThin />
+                        )}
+                    </div>
                     <a
                         href="/Pages/Restaurants"
                         className="bg-Kobicha text-rosey-brown rounded-lg hover:bg-Chocolate-cosmos hover:text-white px-6 py-3 text-sm font-semibold shadow-lg transition-transform transform hover:-translate-y-1"

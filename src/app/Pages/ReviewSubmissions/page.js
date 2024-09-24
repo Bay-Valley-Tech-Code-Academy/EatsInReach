@@ -74,13 +74,25 @@ export default function ReviewSubmissions() {
                             <li key={submission.submission_id} className="mb-4 p-4 border border-gray-300 rounded">
                                 <h2 className="text-xl font-bold">{submission.name}</h2>
                                 <p><strong>Location:</strong> {submission.location}</p>
-                                <p><strong>Price Range:</strong> {submission.price_range}</p> {/* Show actual price range */}
-                                <p><strong>Food Type:</strong> {submission.food_type}</p> {/* Show actual food type */}
                                 <p><strong>Hours of Operation:</strong> {submission.hours_of_operation}</p>
                                 <p><strong>Description:</strong> {submission.description}</p>
+                                <p><strong>Website:</strong> {submission.website}</p>
                                 <p><strong>Phone Number:</strong> {submission.phone_number}</p>
                                 <p><strong>Email:</strong> {submission.email}</p>
-                                <p><strong>Image URL:</strong> <a href={submission.image_url} target="_blank" rel="noopener noreferrer">{submission.image_url}</a></p>
+                                <p><strong>Price Range:</strong> {submission.price_range}</p>
+                                <p><strong>Food Type:</strong> {submission.food_type}</p>
+                                
+                                {/* Display the image */}
+                                {submission.image_url && (
+                                    <div className="my-4">
+                                        <img 
+                                            src={submission.image_url} 
+                                            alt={submission.name} 
+                                            className="w-full max-h-64 object-cover" 
+                                        />
+                                    </div>
+                                )}
+
                                 <div className="flex justify-center">
                                     <button onClick={() => handleAction(submission.submission_id, 'accept')} className='rounded-full font-thin bg-[#AAD15F] px-4 py-1 mx-1 my-2 hover:bg-[#627937]'>Accept</button>
                                     <button onClick={() => handleAction(submission.submission_id, 'reject')} className='rounded-full font-thin bg-[#D22701] px-4 py-1 mx-1 my-2 hover:bg-[#963a25]'>Reject</button>
