@@ -2,7 +2,7 @@ import { pool } from '@/data/db'; // Adjust import path based on your project st
 
 export async function POST(request) {
     const { submissionId } = await request.json();
-
+    
     if (!submissionId) {
         return new Response(JSON.stringify({ message: 'Submission ID is required' }), {
             status: 400,
@@ -12,10 +12,10 @@ export async function POST(request) {
 
     try {
         // Fetch the submission data
-        const result = await pool.query('SELECT * FROM Vendor_Submissions WHERE submission_id = $1', [submissionId]);
+        const result = await pool.query('SELECT * FROM Vendor_Submissions WHERE uid = $1', [submissionId]);
         const submission = result.rows[0];
-
-        const picture_results = await pool.query('SELECT * FROM Vendor_Restaurant_Pictures WHERE vendor_id = $1', [submissionId]);
+        
+        const picture_results = await pool.query('SELECT * FROM Vendor_Restaurant_Pictures WHERE uid = $1', [submissionId]);
         const picture_submission = picture_results.rows[0];
 
         if (!submission) {
@@ -40,9 +40,10 @@ export async function POST(request) {
 
         // Insert into Restaurants and get the new restaurant_id
         const insertRestaurantResult = await pool.query(
-            `INSERT INTO Restaurants (name, location, hours_of_operation, description, website, phone_number, email, price_range_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING restaurant_id`,
+            `INSERT INTO Restaurants (uid, name, location, hours_of_operation, description, website, phone_number, email, price_range_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING restaurant_id`,
             [
+                submission.uid,
                 submission.name,
                 submission.location,
                 submission.hours_of_operation,
@@ -54,16 +55,15 @@ export async function POST(request) {
             ]
         );
         const newRestaurantId = insertRestaurantResult.rows[0].restaurant_id;
-
+        console.log(newRestaurantId)
         // Automatically set photo_type_id to 4 and use the uploaded image URL
         const imageUrl = picture_submission.image_url;
-        const tempImage = 'smiley_temp.jpg';
         const photoType = 4; // Automatically set photo_type_id to 4
 
         await pool.query(
             `INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text) 
             VALUES ($1, $2, $3, $4)`,
-            [newRestaurantId, photoType, tempImage, picture_submission.alt_text]
+            [newRestaurantId, photoType, imageUrl, picture_submission.alt_text]
         );
 
         // Insert into Restaurant_Food_Types
@@ -77,8 +77,8 @@ export async function POST(request) {
         );
 
         // Delete from Vendor_Submissions and Vendor_Restaurant_Pictures
-        await pool.query('DELETE FROM Vendor_Restaurant_Pictures WHERE vendor_id = $1', [submissionId]);
-        await pool.query('DELETE FROM Vendor_Submissions WHERE submission_id = $1', [submissionId]);
+        await pool.query('DELETE FROM Vendor_Restaurant_Pictures WHERE uid = $1', [submissionId]);
+        await pool.query('DELETE FROM Vendor_Submissions WHERE uid = $1', [submissionId]);
 
         return new Response(JSON.stringify({ message: 'Submission accepted and added to Restaurants' }), {
             status: 200,

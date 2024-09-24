@@ -1,11 +1,10 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { auth } from "../../../../firebase";
-import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../../../../firebase";
+import { UploadButton } from "../../../../libs/uploadthing";
 import Navbar from "@/Components/Navbar";
 
 export default function VendorSubmission() {
@@ -29,9 +28,10 @@ export default function VendorSubmission() {
     image: '', // Single image input
     alt_text: 'Image description', // Alt text for the image
 });
-
-  const [imageFiles, setImageFiles] = useState([]);
+  const [ imageURL, setImageURL ] = useState("")
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
   const dropdownRef = useRef(null);
+  const sidebar = ["Profile","Tbd"]
 
   useEffect(() => {
     // Redirect to the landing page if the user is not logged in
@@ -80,104 +80,98 @@ export default function VendorSubmission() {
     }
   }, [currentUser, loading, router]);
 
-    useEffect(() => {
-        async function fetchFoodTypes() {
-            try {
-                const response = await fetch('/api/food-types');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch food types');
-                }
-                const data = await response.json();
-                setFoodTypes(data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        async function fetchPriceRanges() {
-            try {
-                const response = await fetch('/api/price-ranges');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch price ranges');
-                }
-                const data = await response.json();
-                setPriceRanges(data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        fetchFoodTypes();
-        fetchPriceRanges();
-    }, []);
-
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setDropdownVisible(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        const imageUploadPromises = imageFiles.map(file => {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        });
-    
+  useEffect(() => {
+    async function fetchFoodTypes() {
         try {
-            const imageUrls = await Promise.all(imageUploadPromises);
-    
-            const response = await fetch('/api/vendor-submissions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    ...formData,
-                    photo_type_id: 4,
-                })
-            });
-    
-            if (response.ok) {
-                setSubmitStatus('Submission successful! Your restaurant will be reviewed soon.');
-                setFormData({
-                    name: '',
-                    location: '',
-                    hours_of_operation: '',
-                    description: '',
-                    website: '',
-                    phone_number: '',
-                    email: '',
-                    price_range_id: '',
-                    food_type_id: '',
-                });
-                setImageFiles([]);
-            } else {
-                setSubmitStatus('There was an error with your submission. Please try again.');
+            const response = await fetch('/api/food-types');
+            if (!response.ok) {
+                throw new Error('Failed to fetch food types');
             }
+            const data = await response.json();
+            setFoodTypes(data);
         } catch (error) {
-            console.error('Error submitting vendor:', error);
+            console.error(error);
+        }
+    }
+
+      async function fetchPriceRanges() {
+          try {
+              const response = await fetch('/api/price-ranges');
+              if (!response.ok) {
+                  throw new Error('Failed to fetch price ranges');
+              }
+              const data = await response.json();
+              setPriceRanges(data);
+          } catch (error) {
+              console.error(error);
+          }
+      }
+
+      fetchFoodTypes();
+      fetchPriceRanges();
+  }, []);
+
+  useEffect(() => {
+      function handleClickOutside(event) {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+              setDropdownVisible(false);
+          }
+      }
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+      };
+  }, []);
+
+  const handleChange = (e) => {
+      setFormData({
+          ...formData,
+          [e.target.name]: e.target.value
+      });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+        const response = await fetch('/api/vendor-submissions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ...formData,
+                uid: currentUser.uid,
+                image: imageURL, // Include the imageURL in the submission
+                photo_type_id: 4,
+            })
+        });
+
+        if (response.ok) {
+            setSubmitStatus('Submission successful! Your restaurant will be reviewed soon.');
+            setFormData({
+                name: '',
+                location: '',
+                hours_of_operation: '',
+                description: '',
+                website: '',
+                phone_number: '',
+                email: '',
+                price_range_id: '',
+                food_type_id: '',
+                image: '',
+                alt_text: '',
+            });
+            setImageURL(''); // Clear image URL after submission
+        } else {
             setSubmitStatus('There was an error with your submission. Please try again.');
         }
-    };
+    } catch (error) {
+        console.error('Error submitting vendor:', error);
+        setSubmitStatus('There was an error with your submission. Please try again.');
+    }
+};
+
 
   return (
     <>
@@ -280,20 +274,22 @@ export default function VendorSubmission() {
             </select>
           </div>
           <div className="mb-4">
-        <label className="block text-gray-700">Image</label>
-        <input
-          type="file"
-          onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
-        />
-        <label className="block text-gray-700">Alt Text</label>
-        <input
-          type="text"
-          name="alt_text"
-          value={formData.alt_text || ''}
-          onChange={(e) => setFormData({ ...formData, alt_text: e.target.value })}
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-      </div>
+              {isImageUploaded ? (
+                  <div className="text-green-500">Image uploaded successfully!</div>
+              ) : (
+                  <UploadButton
+                      endpoint="imageUploader"
+                      onClientUploadComplete={(res) => {
+                          console.log("Files: ", res[0].url);
+                          setImageURL(res[0].url);
+                          setIsImageUploaded(true);
+                      }}
+                      onUploadError={(error) => {
+                          console.log(`ERROR! ${error.message}`);
+                      }}
+                  />
+              )}
+          </div>
           <button type="submit" className="bg-blue-500 text-white p-2 rounded">
             Submit
           </button>
