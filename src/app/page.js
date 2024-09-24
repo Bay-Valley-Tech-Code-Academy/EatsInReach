@@ -37,7 +37,7 @@ export default function Landing() {
           Reach for Flavor, Anytime
         </h2>
         {!currentUser && (
-          <div className="mt-12 sm:mt-16 md:mt-20">
+          <div className="mt-8 sm:mt-16 md:mt-20">
             <Link href="/Pages/Login">
               <button className="text-1xl text-black sm:text-2xl md:text-3xl bg-[#AAD15F] hover:bg-[#8A9C4C] p-3 sm:p-4 md:p-5 rounded-full border border-black">
                 Login
@@ -49,7 +49,7 @@ export default function Landing() {
               Our Favorites
         </h3>
 
-        <img src="images/down_arrow.png" className="h-10 m-10 mt-52"></img>
+        <img src="images/down_arrow.png" className="h-10 m-10 mt-44 "></img>
 
       </div>
       <div className=" flex flex-col items-center p-4 bg-Cream ">
