@@ -55,7 +55,9 @@ export default function Favorites() {
           }
 
           if (!found) {
-            console.error("User document does not exist in any of the collections.");
+            console.error(
+              "User document does not exist in any of the collections."
+            );
             setRole(null);
           }
 
@@ -64,7 +66,9 @@ export default function Favorites() {
           // Fetch favorite restaurants after user role validation
           if (currentUser && currentUser.uid) {
             try {
-              const response = await fetch(`/api/favorites?user_id=${currentUser.uid}`);
+              const response = await fetch(
+                `/api/favorites?user_id=${currentUser.uid}`
+              );
               if (response.ok) {
                 const data = await response.json();
                 setFavorites(data);
@@ -87,7 +91,9 @@ export default function Favorites() {
   // Function to remove a favorite restaurant from the state
   const removeFavorite = (restaurantId) => {
     setFavorites((prevFavorites) =>
-      prevFavorites.filter((restaurant) => restaurant.restaurant_id !== restaurantId)
+      prevFavorites.filter(
+        (restaurant) => restaurant.restaurant_id !== restaurantId
+      )
     );
   };
 

@@ -64,7 +64,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-Buff flex w-full items-center h-screen max-h-14 justify-between ">
+    <header className="bg-Yellow-Green flex w-full items-center h-screen max-h-14 justify-between ">
       <div className="flex mx-4 justify-between items-center">
         <Link href="/">
           <img
