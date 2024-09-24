@@ -119,9 +119,6 @@ export default function VendorPage() {
     return (
         <div>
             <Navbar />
-            <div>Vendor Page</div>
-            <Link href="/">Home</Link>
-
             <div className="flex flex-col items-center justify-center gap-4">
                 <h1>Vendor Page</h1>
 
