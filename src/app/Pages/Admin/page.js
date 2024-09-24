@@ -42,9 +42,9 @@ export default function Landing() {
     ]
 
     return(
-        <div className='bg-Cream min-h-screen flex flex-col justify-between'>
+        <div className='bg-Cream min-h-screen flex flex-col justify-between overflow-x-hidden'>
             <Navbar />
-            <div className='flex flex-col justify-between mx-4 w-full'>
+            <div className='flex flex-col justify-between mx-4 max-sm:mx-0 w-full'>
                 
                 <div className='text-3xl font-bold block mx-auto my-6'>
                     <h1>Welcome Admin</h1>
@@ -66,10 +66,10 @@ export default function Landing() {
 
                 </div>
                 
-                <div className='flex justify-center max-xl:grid grid-cols-[3fr,1fr]'>
+                <div className='flex justify-center max-xl:grid grid-cols-[3fr,1fr] max-md:flex max-md:flex-col-reverse'>
                     <div className='flex justify-center items-center gap-2 overflow-scroll max-xl:flex-col'>
                         {tableData.map((td, index) => (
-                            <div key={index} className='m-4 text-center max-w-xs'>
+                            <div key={index} className='m-4 text-center'>
                                 <table className='items-start shadow border-collapse border border-Buff rounded-lg w-1/4 max-xl:w-full'>
                                     <thead>
                                         <tr>
@@ -104,7 +104,7 @@ export default function Landing() {
 
                     </div>
 
-                    <div className='flex flex-col items-start m-4 p-4 space-y-2 max-xl:mx-0'>
+                    <div className='flex flex-col items-start m-4 p-4 space-y-2 max-xl:mx-0 max-md:flex-row max-sm:justify-center max-sm:space-y-0'>
                         <button className='shadow border bg-[#AAD15F] rounded-full w-auto px-4 py-2 max-xl:text-xs hover:opacity-90'>
                             Promote to Admin
                         </button>
