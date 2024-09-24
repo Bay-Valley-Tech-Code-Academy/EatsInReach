@@ -51,11 +51,11 @@ export default function Landing() {
               
         </h3>
 
-        < img src ="images/downwards_arrow.png" className = "  w-24 h-24"></img>
+        < img src ="images/down_arrow.png" className = "h-10 m-10"></img>
 
       </div>
 
-      <div className=" flex flex-col items-center p-4 bg-White ">
+      <div className=" flex flex-col items-center p-4 bg-Cream ">
         
 
         {/* Displaying restaurants dynamically */}
