@@ -126,7 +126,7 @@ export default function VendorPage({params}) {
             <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-white">
                 <section className="mb-4 p-2">
                     <h1 className="text-3xl font-bold text-center text-black">
-                        Vendor Items
+                        {restaurant.name}
                     </h1>
                 </section>
 

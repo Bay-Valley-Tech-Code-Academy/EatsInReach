@@ -11,7 +11,7 @@ export async function GET() {
 
         const result = await client.query(`
             SELECT
-                vs.submission_id,
+                vs.uid,
                 vs.name,
                 vs.location,
                 vs.hours_of_operation,
@@ -25,7 +25,7 @@ export async function GET() {
             FROM Vendor_Submissions vs
             JOIN Price_Ranges pr ON vs.price_range_id = pr.price_range_id
             JOIN Food_Types ft ON vs.food_type_id = ft.food_type_id
-            LEFT JOIN Vendor_Restaurant_Pictures rp ON vs.submission_id = rp.vendor_id -- Adjust JOIN as needed
+            LEFT JOIN Vendor_Restaurant_Pictures rp ON vs.uid = rp.uid -- Adjust JOIN as needed
         `);
 
         client.release();
@@ -41,7 +41,7 @@ export async function POST(request) {
     try {
         const data = await request.json();
         const {
-            name, location, hours_of_operation, description, website,
+            uid, name, location, hours_of_operation, description, website,
             phone_number, email, price_range_id, food_type_id, image, alt_text
         } = data;
 
@@ -52,13 +52,11 @@ export async function POST(request) {
         // Insert vendor submission
         const result = await client.query(
             `INSERT INTO Vendor_Submissions (
-                name, location, hours_of_operation, description, website,
+                uid, name, location, hours_of_operation, description, website,
                 phone_number, email, price_range_id, food_type_id
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING submission_id`,
-            [name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id]
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+            [uid, name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id]
         );
-
-        const vendorId = result.rows[0].submission_id;
 
         // Insert a single image with photo_type_id set to 4
         const imageUrl = image; // Assuming image is passed as base64 or URL
@@ -66,9 +64,9 @@ export async function POST(request) {
         const photoType = 4; // Automatically set photo_type_id to 4
 
         await client.query(
-            `INSERT INTO Vendor_Restaurant_Pictures (vendor_id, image_url, photo_type_id, alt_text) 
+            `INSERT INTO Vendor_Restaurant_Pictures (uid, image_url, photo_type_id, alt_text) 
             VALUES ($1, $2, $3, $4)`,
-            [vendorId, imageUrl, photoType, alt_text]
+            [uid, imageUrl, photoType, alt_text]
         );
 
         await client.query('COMMIT');
