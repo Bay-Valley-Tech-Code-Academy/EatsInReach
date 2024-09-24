@@ -16,118 +16,84 @@ export default function Favorites() {
   const [isRoleLoading, setIsRoleLoading] = useState(true);
   const [favorites, setFavorites] = useState([]);
 
-  const restaurantData = [
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-  ];
-
   useEffect(() => {
-    // Redirect to the landing page if the user is not logged in
     if (!loading && !currentUser) {
       router.push("/");
-    }
-    if (currentUser) {
-      const fetchUserData = async () => {
-        const collections = ["users", "vendors", "admins"];
-        let found = false;
-
-        for (const collection of collections) {
-          if (found) break;
-
-          try {
-            const userDoc = await getDoc(
-              doc(firestore, collection, currentUser.uid)
-            );
-
-            if (userDoc.exists()) {
-              const userData = userDoc.data();
-              if (userData.role !== 'user') {
-                router.push("/");
-              }
-              found = true;
-              setRole(userData.role);
-            }
-          } catch (error) {
-            console.error(
-              `Error fetching user data from ${collection} collection:`,
-              error
-            );
-          }
-        }
-
-        if (!found) {
-          console.log(
-            "User document does not exist in any of the collections."
-          );
-          setRole(null);
-        }
-        setIsRoleLoading(false);
-      };
-
-      fetchUserData();
+      return;
     }
 
-    const fetchFavorites = async () => {
-        if (currentUser && currentUser.user_id) {
+    const fetchUserRoleAndFavorites = async () => {
+      if (currentUser) {
         try {
-            const response = await fetch(`/api/favorites?user_id=${currentUser.user_id}`);
-            if (response.ok) {
-              const data = await response.json();
-              setFavorites(data);
-            } else {
-              console.error("Failed to fetch favorite restaurants");
-            }
-          } catch (error) {
-            console.error("Error fetching favorite restaurants", error);
-          }
-        }
-      };
-  
-    fetchFavorites();
+          const collections = ["users", "vendors", "admins"];
+          let found = false;
 
+          // Fetch user role
+          for (const collection of collections) {
+            if (found) break;
+
+            try {
+              const userDoc = await getDoc(
+                doc(firestore, collection, currentUser.uid)
+              );
+
+              if (userDoc.exists()) {
+                const userData = userDoc.data();
+                if (userData.role !== "user") {
+                  router.push("/");
+                  return;
+                }
+                found = true;
+                setRole(userData.role);
+              }
+            } catch (error) {
+              console.error(
+                `Error fetching user data from ${collection} collection:`,
+                error
+              );
+            }
+          }
+
+          if (!found) {
+            console.error("User document does not exist in any of the collections.");
+            setRole(null);
+          }
+
+          setIsRoleLoading(false);
+
+          // Fetch favorite restaurants after user role validation
+          if (currentUser && currentUser.uid) {
+            try {
+              const response = await fetch(`/api/favorites?user_id=${currentUser.uid}`);
+              if (response.ok) {
+                const data = await response.json();
+                setFavorites(data);
+              } else {
+                console.error("Failed to fetch favorite restaurants");
+              }
+            } catch (error) {
+              console.error("Error fetching favorite restaurants", error);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user role or favorites", error);
+        }
+      }
+    };
+
+    fetchUserRoleAndFavorites();
   }, [currentUser, loading, router]);
 
-  // Show a loading indicator or null while checking auth state
+  // Function to remove a favorite restaurant from the state
+  const removeFavorite = (restaurantId) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((restaurant) => restaurant.restaurant_id !== restaurantId)
+    );
+  };
+
+  // Show a loading indicator while checking auth state or role
   if (loading || isRoleLoading) {
-    return <div>Loading...</div>; // Replace with a loading spinner if needed
+    return <div>Loading...</div>; // You can replace this with a loading spinner if needed
   }
 
   if (!currentUser || role !== "user") {
@@ -142,16 +108,23 @@ export default function Favorites() {
           Favorites
         </div>
         <div className="flex flex-wrap gap-6 justify-center max-w-screen mx-auto px-4 mt-8">
-          {favorites.map((restaurant, index) => (
-            <FavoritesCard
-              key={restaurant.restaurant_id}
-              restaurantTitle={restaurant.name}
-              restaurantImg={restaurant.image_url}
-            />
-          ))}
+          {favorites.length > 0 ? (
+            favorites.map((restaurant) => (
+              <FavoritesCard
+                key={restaurant.restaurant_id}
+                restaurantId={restaurant.restaurant_id}
+                restaurantTitle={restaurant.name}
+                restaurantImg={restaurant.image_url}
+                userId={currentUser.uid}
+                removeFavorite={removeFavorite} // Pass removeFavorite function
+              />
+            ))
+          ) : (
+            <p>No favorites added yet.</p>
+          )}
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }
