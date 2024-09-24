@@ -18,7 +18,7 @@ export default function VendorSubmission() {
     const [formData, setFormData] = useState({
         name: 'Sample Restaurant',
         location: '123 Main St, Sample City',
-        hours_of_operation: '12:00AM - 12:00AM',
+        hours_of_operation: 'MONDAY-FRIDAY: 12:00AM - 12:00AM',
         description: 'A great place to enjoy delicious food!',
         website: 'sample.com',
         phone_number: '123-456-7890',
@@ -27,14 +27,13 @@ export default function VendorSubmission() {
         food_type_id: '1',
         image: '', // Single image input
         alt_text: 'Image description', // Alt text for the image
-        days_open: 'MONDAY - FRIDAY'
     });
     const [imageURL, setImageURL] = useState("")
     const [isImageUploaded, setIsImageUploaded] = useState(false);
     const dropdownRef = useRef(null);
     const sidebar = ["Profile", "Tbd"]
 
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(true)
     const [monday, setMonday] = useState("12:00");
     const [mondayAmPm, setMondayAmPm] = useState("AM");
     const [mondayClosing, setMondayClosing] = useState("12:00");
@@ -43,26 +42,27 @@ export default function VendorSubmission() {
     const [startOfWeek, setStartOfWeek] = useState("")
     const [endOfWeek, setEndOfWeek] = useState("")
 
-    useEffect(() => {
-        setFormData({
-            ...formData,
-            days_open: `${startOfWeek.toUpperCase()} - ${endOfWeek.toUpperCase()}`,
-        });
-    }, [startOfWeek, endOfWeek]);
+    // useEffect(() => {
+    //     setFormData({
+    //         ...formData,
+    //         days_open: ``,
+    //     });
+    // }, [startOfWeek, endOfWeek]);
 
     useEffect(() => {
         setFormData({
             ...formData,
-            hours_of_operation: `${monday}${mondayAmPm} - ${mondayClosing}${mondayAmPmClosing}`,
+            hours_of_operation: `${startOfWeek.toUpperCase()} - ${endOfWeek.toUpperCase()} : ${monday}${mondayAmPm} - ${mondayClosing}${mondayAmPmClosing}`,
         });
-    }, [monday, mondayAmPm, mondayClosing, mondayAmPmClosing]);
+    }, [monday, mondayAmPm, mondayClosing, mondayAmPmClosing, startOfWeek, endOfWeek]);
 
 
-    const openOrNot = (day) => {
-        if (day == "monday") {
-            setOpen(!open);
-        }
-    };
+    // const openOrNot = (day) => {
+    //     if (day == "monday") {
+    //         setOpen(!open);
+    //     }
+    //     console.log(formData)
+    // };
 
     useEffect(() => {
         // Redirect to the landing page if the user is not logged in
@@ -163,7 +163,7 @@ export default function VendorSubmission() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        console.log(formData)
         try {
             const response = await fetch('/api/vendor-submissions', {
                 method: 'POST',
@@ -260,13 +260,13 @@ export default function VendorSubmission() {
                     <div className="mb-4">
                         <label className="block text-gray-700"> Hours of Operation</label>
 
-                        <label className="inline-flex items-center cursor-pointer">
+                        {/* <label className="inline-flex items-center cursor-pointer">
                             <input type="checkbox" value="" className="sr-only peer"
                                 onChange={() => openOrNot("monday")}
                             ></input>
                             <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                             <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{open ? 'Open' : 'Closed'}</span>
-                        </label>
+                        </label> */}
                         <div>
                             {open && (
                                 <div>
