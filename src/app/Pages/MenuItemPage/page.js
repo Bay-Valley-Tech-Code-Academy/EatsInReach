@@ -120,7 +120,7 @@ export default function MenuItemPage() {
         <div className=''>
             <Navbar />
             <div className="flex flex-col items-center justify-center gap-4 bg-[#FDFBCE] min-h-[100vh] p-6 overflow-x-hidden">
-                <h1>Vendor Page</h1>
+                <h1>Menu Item Page</h1>
 
                 <div className="flex flex-col items-center justify-center gap-2">
                     <input
