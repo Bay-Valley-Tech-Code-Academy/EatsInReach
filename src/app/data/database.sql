@@ -16,9 +16,38 @@ CREATE TABLE Price_Ranges (
     range VARCHAR(50) NOT NULL
 );
 
+-- Create the Users table
+CREATE TABLE Users (
+    user_id SERIAL PRIMARY KEY,
+    uid VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    role VARCHAR(6) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the Vendor_Submissions table
+CREATE TABLE Vendor_Submissions (
+    submission_id SERIAL PRIMARY KEY,
+    uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    hours_of_operation VARCHAR(255),
+    description TEXT,
+    website VARCHAR(255),
+    phone_number VARCHAR(20),
+    email VARCHAR(255),
+    price_range_id INTEGER NOT NULL,
+    food_type_id INTEGER NOT NULL,
+    FOREIGN KEY (price_range_id) REFERENCES Price_Ranges(price_range_id),
+    FOREIGN KEY (food_type_id) REFERENCES Food_Types(food_type_id),
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Create the Restaurants table with phone number and email (modified)
 CREATE TABLE Restaurants (
     restaurant_id SERIAL PRIMARY KEY,
+    uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
     hours_of_operation VARCHAR(255),
@@ -44,23 +73,6 @@ CREATE TABLE Photo_Types (
     type_name VARCHAR(100) NOT NULL
 );
 
--- Create the Vendor_Submissions table
-CREATE TABLE Vendor_Submissions (
-    submission_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    hours_of_operation VARCHAR(255),
-    description TEXT,
-    website VARCHAR(255),
-    phone_number VARCHAR(20),
-    email VARCHAR(255),
-    price_range_id INTEGER NOT NULL,
-    food_type_id INTEGER NOT NULL,
-    FOREIGN KEY (price_range_id) REFERENCES Price_Ranges(price_range_id),
-    FOREIGN KEY (food_type_id) REFERENCES Food_Types(food_type_id),
-    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Create the Vendor_Items table
 CREATE TABLE Vendor_Items (
     item_id SERIAL PRIMARY KEY,
@@ -83,7 +95,7 @@ CREATE TABLE Restaurant_Pictures (
 
 CREATE TABLE Vendor_Restaurant_Pictures (
     id SERIAL PRIMARY KEY,
-    vendor_id INT REFERENCES Vendor_Submissions(submission_id),
+    uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
     photo_type_id INT REFERENCES Photo_Types(photo_type_id),
     image_url TEXT NOT NULL,
     alt_text TEXT,
@@ -108,16 +120,6 @@ CREATE TABLE Menu_Items (
     is_vegetarian BOOLEAN DEFAULT FALSE,
     is_vegan BOOLEAN DEFAULT FALSE,
     is_gluten_free BOOLEAN DEFAULT FALSE
-);
-
--- Create the Users table
-CREATE TABLE Users (
-    user_id SERIAL PRIMARY KEY,
-    uid VARCHAR(255) UNIQUE NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    role VARCHAR(6) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create the Favorites table

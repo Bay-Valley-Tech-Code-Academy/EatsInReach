@@ -12,10 +12,10 @@ export async function POST(request) {
 
     try {
         // Delete the related pictures first
-        await pool.query('DELETE FROM Vendor_Restaurant_Pictures WHERE vendor_id = $1', [submissionId]);
+        await pool.query('DELETE FROM Vendor_Restaurant_Pictures WHERE uid = $1', [submissionId]);
 
         // Now delete the submission
-        await pool.query('DELETE FROM Vendor_Submissions WHERE submission_id = $1', [submissionId]);
+        await pool.query('DELETE FROM Vendor_Submissions WHERE uid = $1', [submissionId]);
 
         return new Response(JSON.stringify({ message: 'Submission rejected successfully' }), {
             status: 200,
