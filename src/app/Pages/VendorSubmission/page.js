@@ -1,7 +1,5 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { auth } from "../../../../firebase";
-import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
 import { doc, getDoc } from "firebase/firestore";
@@ -143,6 +141,7 @@ export default function VendorSubmission() {
             },
             body: JSON.stringify({
                 ...formData,
+                uid: currentUser.uid,
                 image: imageURL, // Include the imageURL in the submission
                 photo_type_id: 4,
             })
