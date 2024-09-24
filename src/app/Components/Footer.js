@@ -14,6 +14,9 @@ export default function Footer() {
       title: "About", href: '/Pages/About'
     },
     {
+      title: "Contact Us", href: '/Pages/Contact'
+    },
+    {
       items: [
         { text: "Instagram", imgSrc: '../../images/logo-instagram.svg', href: "https://www.instagram.com/bayvalleytech/" },
         { text: "Facebook", imgSrc: '../../images/logo-facebook.svg', href: "https://www.facebook.com/BayValleyTech" },
