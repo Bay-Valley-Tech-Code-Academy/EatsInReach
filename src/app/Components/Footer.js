@@ -11,10 +11,10 @@ export default function Footer() {
       title: "Free Code Academy", href: 'https://www.bayvalleytech.com/about'
     },
     {
-      title: "About", href: '/Pages/About'
+      title: "Contact", href: '/Pages/Contact'
     },
     {
-      title: "Contact Us", href: '/Pages/Contact'
+      title: "About", href: '/Pages/About'
     },
     {
       items: [
@@ -36,7 +36,7 @@ export default function Footer() {
           </div>
         ))}
         <div className="ml-auto flex items-center">
-  {sections[3].items.map((item, idx) => (
+  {sections[4].items.map((item, idx) => (
     <a key={idx} href={item.href} className="inline-flex justify-end px-3 py-3 hover:underline">
       <img 
         src={item.imgSrc} 
