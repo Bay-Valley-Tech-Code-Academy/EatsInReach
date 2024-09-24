@@ -31,7 +31,7 @@ export default function Landing() {
     ]
 
     return(
-        <div className='bg-Cream'>
+        <div className='bg-Cream min-h-screen flex flex-col justify-between'>
             <Navbar />
             <div className='flex flex-col justify-between mx-4'>
                 
@@ -42,13 +42,13 @@ export default function Landing() {
                 <div className='flex justify-center gap-2'>
 
                     <Link href="/Pages/ReviewSubmissions">
-                        <button className='shadow border bg-[#4E070C] text-white rounded-full px-4 py-2 hover:transition duration-300'>
+                        <button className='shadow border bg-[#4E070C] text-Cream rounded-full px-4 py-2 hover:opacity-90'>
                         Review Submissions
                         </button>
                     </Link>
 
                     <Link href="/">
-                        <button className='shadow border bg-[#4E070C] text-white rounded-full px-4 py-2 hover:transition duration-300'>
+                        <button className='shadow border bg-[#4E070C] text-Cream rounded-full px-4 py-2 hover:opacity-90'>
                         Home
                         </button>
                     </Link>
@@ -56,30 +56,34 @@ export default function Landing() {
                 </div>
                 
                 
-                <div className='flex items-start gap-2'>
+                <div className='flex items-center justify-center gap-2'>
                     {tableData.map((td, index) => (
-                        <div key={index} className='m-4'>
-                            <table className='shadow border-collapse border rounded-lg m-4 w-1/4'>
+                        <div key={index} className='m-4 text-center max-w-xs'>
+                            <table className='shadow border-collapse border border-Buff rounded-lg m-4 w-1/4'>
                                 <thead>
                                     <tr>
-                                        <th>{td.title}</th>
+                                        <th className='p-2'>{td.title}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td className='border'>ID</td>
-                                        <td className='border'>UserName</td>
-                                        <td className='border'>Email</td>
-                                        <td className='border'> </td>
+                                        <td className='border border-Buff'>ID</td>
+                                        <td className='border border-Buff'>Username</td>
+                                        <td className='border border-Buff'>Email</td>
+                                        <td className='border border-Buff'>Check</td>
                                     </tr>
-                                    <tr>
-                                        <td className='border'>{td.users.id}</td>
-                                        <td className='border'>{td.users.username}</td>
-                                        <td className='border'>{td.users.email}</td>
-                                        <td className='border'>
-                                            <input type='checkbox'/>
-                                        </td>
-                                    </tr>
+
+                                    {td.users.map((user, idx) => (
+                                        <tr key={idx}>
+                                            <td className='border border-Buff'>{user.id}</td>
+                                            <td className='border border-Buff'>{user.username || "-"}</td>
+                                            <td className='border border-Buff'>{user.email}</td>
+                                            <td className='flex justify-center items-center p-2'>
+                                                <input type='checkbox'/>
+                                            </td>
+                                        </tr>
+                                ) )}
+
                                 </tbody>
                             </table>
                         </div>
@@ -88,15 +92,15 @@ export default function Landing() {
                     }
 
                     <div className='flex flex-col space-y-4 m-4'>
-                        <button className='shadow border bg-[#AAD15F] rounded-full px-4 py-2 hover:transition duration-300'>
+                        <button className='shadow border bg-[#AAD15F] rounded-full px-4 py-2 hover:opacity-90'>
                             Promote to Admin
                         </button>
 
-                        <button className='shadow border bg-[#FF670E] rounded-full px-4 py-2 hover:transition duration-300'>
+                        <button className='shadow border bg-[#FF670E] rounded-full px-4 py-2 hover:opacity-90'>
                             Demote from Admin
                         </button>
 
-                        <button className='shadow border bg-[#D22701] rounded-full px-4 py-2 hover:transition duration-300'>
+                        <button className='shadow border bg-[#D22701] rounded-full px-4 py-2 hover:opacity-90'>
                             Delete
                         </button>
                     </div>
