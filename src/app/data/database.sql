@@ -240,6 +240,7 @@ VALUES
     (1, 'MEDITERRANEAN GRILLED CHICKEN', 'Sundried tomatoes, feta, spinach, pesto mayo on homemade focaccia bread', 14.00, false, false, false),
     (1, 'TRI TIP', 'Our house smoked tri tip sauteed mushrooms, caramelized onions, swiss, mayo on french bread', 14.00, false, false, false),
     (2, 'COURTYARD SALAD', 'mixed greens with apples, cranberries, tomatoes, blue cheese crumbles and candied walnuts', 12.00, true, false, false);
+    
 
 INSERT INTO Dietary_Restrictions (name, description)
 VALUES
