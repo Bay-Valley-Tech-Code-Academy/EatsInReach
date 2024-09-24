@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/Components/Navbar';
 import Footer from '@/Components/Footer';
 import { PiHeartStraightThin, PiHeartStraightFill } from "react-icons/pi";
+import { useAuth } from '../../../../../context/authContext';
 
 export default function VendorPage({params}) {
     const [vendorItems, setVendorItems] = useState([]);
     const [newItemName, setNewItemName] = useState('');
     const [newItemDesc, setNewItemDesc] = useState('');
     const [newItemPrice, setNewItemPrice] = useState('');
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { currentUser, loading } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const [restaurant, setRestaurant] = useState(null);
     const [isFavorited, setIsFavorited] = useState(false);
@@ -66,7 +67,7 @@ export default function VendorPage({params}) {
             const response = await fetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ restaurant_id: restaurantId })
+                body: JSON.stringify({ user_id: currentUser.uid, restaurant_id: restaurantId })
             });
             if (response.ok) {
                 setIsFavorited(!isFavorited);

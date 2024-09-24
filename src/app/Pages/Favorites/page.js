@@ -16,49 +16,6 @@ export default function Favorites() {
   const [isRoleLoading, setIsRoleLoading] = useState(true);
   const [favorites, setFavorites] = useState([]);
 
-  const restaurantData = [
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 1",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-    {
-      restaurantTitle: "Restaurant 2",
-      restaurantImg: "/images/restaurantimg1.jpg",
-    },
-  ];
-
   useEffect(() => {
     // Redirect to the landing page if the user is not logged in
     if (!loading && !currentUser) {
@@ -106,11 +63,12 @@ export default function Favorites() {
     }
 
     const fetchFavorites = async () => {
-        if (currentUser && currentUser.user_id) {
+        if (currentUser && currentUser.uid) {
         try {
-            const response = await fetch(`/api/favorites?user_id=${currentUser.user_id}`);
+            const response = await fetch(`/api/favorites?user_id=${currentUser.uid}`);
             if (response.ok) {
               const data = await response.json();
+              console.log(data);
               setFavorites(data);
             } else {
               console.error("Failed to fetch favorite restaurants");
