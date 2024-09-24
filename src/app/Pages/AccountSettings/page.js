@@ -125,7 +125,7 @@ export default function UserProfile() {
     <>
       <Navbar />
       <div className="flex bg-Yellow-Green justify-center items-center h-11">
-        <h1>Account Settings</h1>
+        <h1 className="text-lg font-semibold">Account Settings</h1>
       </div>
       {error && (
         <div className="flex bg-red-500 justify-center items-center h-11">
@@ -138,15 +138,15 @@ export default function UserProfile() {
         </div>
       )}
       <div className="flex max-md:flex-col max-md:items-center md:h-[calc(100vh-100px)] bg-Almond overflow-hidden">
-        <div className="bg-[#FDE4CE] drop-shadow-xl md:h-[calc(100vh-120px)] w-2/6 md:w-1/12 max-md:w-3/4 max-md:ml-1 md:ml-10 mt-3 rounded-lg m-2">
+        <div className="bg-[#FDE4CE] drop-shadow-xl md:h-[calc(100vh-120px)] w-2/6 md:w-1/4 max-md:w-3/4 max-md:ml-1 md:ml-10 mt-3 rounded-lg m-2">
           <ul>
             {["profile", "security"].map((section) => (
               <li
                 key={section}
-                className={`hover:bg-Yellow-Green active:bg-green-700 cursor-pointer ${activeSection === section ? "bg-Yellow-Green" : ""}`}
+                className={`hover:bg-Yellow-Green active:bg-green-700 cursor-pointer transition-colors duration-200 ${activeSection === section ? "bg-Yellow-Green" : ""}`}
                 onClick={() => setActiveSection(section)}
               >
-                <div className="flex flex-wrap justify-center p-2">
+                <div className="flex items-center justify-center p-2">
                   <img
                     src={section === "profile" ? "/images/profile-icon.png" : SecurityIcon}
                     height="25"
@@ -154,32 +154,32 @@ export default function UserProfile() {
                     alt={section === "profile" ? "Profile" : "Cyber security icon"}
                     className="m-1"
                   />
-                  <h1 className="text-center">{section.charAt(0).toUpperCase() + section.slice(1)}</h1>
+                  <h1 className="text-center text-md font-medium">{section.charAt(0).toUpperCase() + section.slice(1)}</h1>
                 </div>
               </li>
             ))}
           </ul>
         </div>
-        <div className="bg-[#b5d773] flex flex-col h-[calc(100vh-130px)] w-4/6 max-md:w-3/4 justify-between items-center md:p-1 md:m-5 md:ml-28 rounded-lg">
-          <div className="flex justify-self-start mt-5 underline">
-            <h1>{activeSection === "profile" ? "Profile Settings" : "Security Settings"}</h1>
+        <div className="bg-[#b5d773] flex flex-col h-[calc(100vh-130px)] w-4/6 max-md:w-3/4 justify-between items-center md:p-5 rounded-lg">
+          <div className="flex justify-center mt-5 underline">
+            <h1 className="text-lg font-semibold">{activeSection === "profile" ? "Profile Settings" : "Security Settings"}</h1>
           </div>
           <div className="bg-Dartmouth-green flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 h-full my-16 rounded-3xl">
             {activeSection === "profile" ? (
               <>
-                <form className="flex max-lg:flex-col max-lg:items-center m-2" onSubmit={handleUsernameChange}>
-                  <h1 className="text-white">Change Username</h1>
+                <form className="flex flex-col max-lg:items-center m-2" onSubmit={handleUsernameChange}>
+                  <h1 className="text-white font-semibold">Change Username</h1>
                   <InputField
                     type="text"
                     placeholder="Enter new username..."
                     value={newUsername}
                     onChange={(e) => setNewUsername(e.target.value)}
                   />
-                  <button className="bg-[#FDE4CE] outline-2 px-2 rounded-md">Change</button>
+                  <button className="bg-[#FDE4CE] outline-2 px-4 py-2 rounded-md mt-2">Change</button>
                 </form>
-                <form className="flex max-lg:flex-col max-lg:items-center m-2" onSubmit={handleEmailChange}>
-                  <h1 className="mr-2 text-white">Change Email</h1>
-                  <div className="flex max-lg:flex-col">
+                <form className="flex flex-col max-lg:items-center m-2" onSubmit={handleEmailChange}>
+                  <h1 className="mr-2 text-white font-semibold">Change Email</h1>
+                  <div className="flex flex-col space-y-2">
                     <InputField
                       type="email"
                       placeholder="Enter new email..."
@@ -192,12 +192,12 @@ export default function UserProfile() {
                       value={currentPasswordEmail}
                       onChange={(e) => setCurrentPasswordEmail(e.target.value)}
                     />
-                    <button className="bg-Almond outline-2 px-2 rounded-md">Change</button>
+                    <button className="bg-Almond outline-2 px-4 py-2 rounded-md">Change</button>
                   </div>
                 </form>
-                <form className="flex max-lg:flex-col max-lg:items-center m-2" onSubmit={handlePasswordChange}>
-                  <h1 className="text-white">Change Password</h1>
-                  <div className="flex max-lg:flex-col">
+                <form className="flex flex-col max-lg:items-center m-2" onSubmit={handlePasswordChange}>
+                  <h1 className="text-white font-semibold">Change Password</h1>
+                  <div className="flex flex-col space-y-2">
                     <InputField
                       type="password"
                       placeholder="Enter new password..."
@@ -210,12 +210,12 @@ export default function UserProfile() {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                     />
-                    <button className="bg-Almond outline-2 px-2 rounded-md">Change</button>
+                    <button className="bg-Almond outline-2 px-4 py-2 rounded-md">Change</button>
                   </div>
                 </form>
               </>
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-4 text-center">
                 <p className="text-white">Security Settings Section</p>
                 <p className="text-white">More security options coming soon!</p>
               </div>
@@ -224,5 +224,5 @@ export default function UserProfile() {
         </div>
       </div>
     </>
-  );
+  );  
 }

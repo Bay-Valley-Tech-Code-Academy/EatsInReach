@@ -78,19 +78,19 @@ export default function RestaurantPage() {
     <div className="min-h-screen bg-[#FDFBCE]">
       <Navbar />
       <div className="rounded-[84px]">
-        <div className="container mx-auto my-16 px-24 pt-3 pb-6 max-sm:px-1 rounded-[164px] max-sm:rounded-[84px] bg-Yellow-Green w-4/6 max-sm:w-5/6">
-          <Slider {...settings} className="container mt-4 max-sm:w-full">
+        <div className="container mx-auto my-16 px-24 pt-3 pb-6 max-sm:px-4 max-sm:py-2 rounded-[100px] max-sm:rounded-[24px] bg-Yellow-Green w-4/6 max-sm:w-11/12">
+          <Slider {...settings} className="container mt-4">
             {restaurants.slice(0, 5).map((restaurant) => (
               <div
                 key={restaurant.restaurant_id}
-                className="rounded-t-[84px] overflow-hidden"
+                className="rounded-[84px] max-sm:rounded-[24px] overflow-hidden"
               >
                 <img
                   src={restaurant.image_url}
                   alt={`Image of ${restaurant.name}`}
-                  className="w-full h-64 object-cover rounded-3x1 "
+                  className="w-full h-64 object-cover rounded-t-[84px] max-sm:rounded-t-[24px]"
                 />
-                <div className="bg-white p-4 rounded-b-full pl-16">
+                <div className="bg-white p-4 rounded-b-[84px] max-sm:rounded-b-[24px] pl-16">
                   <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                   <p>{restaurant.food_type}</p>
                   <p>{restaurant.price_range}</p>
@@ -99,7 +99,6 @@ export default function RestaurantPage() {
             ))}
           </Slider>
         </div>
-
         <div className="flex items-center max-w-sm mx-auto mt-8">
           <label htmlFor="simple-search" className="sr-only">
             Search
@@ -163,11 +162,6 @@ export default function RestaurantPage() {
                         {" "}
                         Order by Name
                       </li>
-                      <li>
-                        Rating NOT IMPLEMENTED NEED TO DO WHEN RATINGS ARE
-                        IMPLEMENTED
-                      </li>
-                      <li>Rating</li>
                     </ul>
                   </div>
                 )}
