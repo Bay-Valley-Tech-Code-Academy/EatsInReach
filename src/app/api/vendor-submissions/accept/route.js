@@ -55,7 +55,6 @@ export async function POST(request) {
             ]
         );
         const newRestaurantId = insertRestaurantResult.rows[0].restaurant_id;
-        console.log(newRestaurantId)
         // Automatically set photo_type_id to 4 and use the uploaded image URL
         const imageUrl = picture_submission.image_url;
         const photoType = 4; // Automatically set photo_type_id to 4
