@@ -262,6 +262,7 @@ VALUES
 
 INSERT INTO Restaurant_Dietary_Options (restaurant_id, restriction_id)
 VALUES (1, 1), (1, 3), (2, 1), (2, 2);
+
 -- Insert dummy data into the Vendor_Items table
 INSERT INTO Vendor_Items (restaurant_id, item_name, item_desc, item_price, image_path, alt_text)
 VALUES
