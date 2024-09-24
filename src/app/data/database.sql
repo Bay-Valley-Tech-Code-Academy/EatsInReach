@@ -233,13 +233,38 @@ VALUES
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES
     (1, 'Specialty Sandwiches', 'Served with Salad, Potato Salad or French fries'),
-    (1, 'Organic Salads', 'Served with choice of Dressing and Freshly Baked Bread & Butter');
+    (1, 'Organic Salads', 'Served with choice of Dressing and Freshly Baked Bread & Butter'),
+    (2, 'MULTIPLAYER PLATES', ''),
+    (2, 'BURGERS', ''),
+    (3, 'Smoothies', ''),
+    (3, 'Smoothie Bowls', ''),
+    (3, 'Broths/Soup', ''),
+    (4, 'Appetiers', ''),
+    (4, 'Sashimi', ''),
+    (5, 'Taco Truck Menu', '');
 
 INSERT INTO Menu_Items (menu_id, name, description, price, is_vegetarian, is_vegan, is_gluten_free)
 VALUES
     (1, 'MEDITERRANEAN GRILLED CHICKEN', 'Sundried tomatoes, feta, spinach, pesto mayo on homemade focaccia bread', 14.00, false, false, false),
     (1, 'TRI TIP', 'Our house smoked tri tip sauteed mushrooms, caramelized onions, swiss, mayo on french bread', 14.00, false, false, false),
-    (2, 'COURTYARD SALAD', 'mixed greens with apples, cranberries, tomatoes, blue cheese crumbles and candied walnuts', 12.00, true, false, false);
+    (2, 'COURTYARD SALAD', 'mixed greens with apples, cranberries, tomatoes, blue cheese crumbles and candied walnuts', 12.00, true, false, false),
+    (3, 'PITA & DIP TRIO', 'WARM PITA SERVED WITH HUMMUS AND TZATZIKI SAUCE. CHOOSE TWO: CREAMY HUMMUS, SPINACH & GARLIC, HABANERO', 16.25, true, false, false),
+    (4, 'HOUSE BURGER', '1/3 POUND PATTY OF ANGUS BEEF, LETTUCE, TOMATO, SWISS CHEESE, RED ONION, DIJON MUSTARD SERVED ON TOASTED SESAME SEED BUN | ADD EXTRA ANGUS BEEF PATTY +$2', 14.00, false, false, false),
+    (4, 'CUBANO SANDWHICH', 'SMOKED PULLED PORK, SLICED HAM, SWISS CHEESE, SLICED DILL PICKLES, DIJON MUSTARD ON CUBAN BREAD', 16.25, false, false, false),
+    (5, 'Kiwi Smoothie', 'Ingredients: almond milk,*banana, kiwi, apple, *spinach, almond butter, *honey.', 6.95, true, true, true),
+    (5, 'Sunrise Orange Smoothie', 'Ingredients: banana, orange, carrot, almond butter, honey, vanilla bean powder, turmeric, orange juice, coconut milk.', 6.95, true, true, true),
+    (6, 'Loaded Superfood Acai Bowl', 'Ingredients: açaí, *banana, *strawberries, *hemp milk.', 12.50, true, true, true),
+    (7, 'Mama De Mi Alma: Vegan Green Chile Pozole', 'Soup: jackfruit, hominy, filtered water, garlic, organic white onion, olive oil, chile verde(tomatillo, serrano, poblano, white onion, garlic, cilantro, organic pumpkin seeds, cumin, sea salt), apple cider vinegar, homemade vegan bouillon, organic oregano,.', 8.95, true, true, true),
+    (8, 'Mixed Tempura', 'Tempura shrimp & vegetable served with tempura sauce', 12.95, false, false, false),
+    (8, 'Grilled Squid', 'Lightly salted grilled squid, served with special sauce', 11.95, false, false, false),
+    (9, 'Maguro (Tuna)', '7 pieces', 20.95, false, false, true),
+    (9, 'Shiro Maguro (Albacore)', '7 pieces', 20.95, false, false, true),
+    (9, 'Sake (Salmon)', '7 pieces', 20.95, false, false, true),
+    (10, 'Burrito', 'Comes with rice, beans, cilantro, onion, sauce and your choice of meat.', 10.95, false, false, false),
+    (10, 'Quesadilla', 'Comes with jack/cheddar cheese, cilantro, onion, sauce and your choice of meat.', 11.25, false, false, false),
+    (10, 'Vegetarian Burrito', 'Comes with rice, beans, cilantro, onion, sauce, lettuce, cheddar/jack cheese, sour cream and tomato.', 9.75, true, false, false),
+    (10, 'Red Taco', 'Comes with birria (beef), cilantro, onion, sauce, cheese and a 6 oz consome.', 4.25, false, false, false);
+
     
 
 INSERT INTO Dietary_Restrictions (name, description)
@@ -249,7 +274,7 @@ VALUES
     ('Gluten-Free', 'No gluten-containing ingredients');
 
 INSERT INTO Restaurant_Dietary_Options (restaurant_id, restriction_id)
-VALUES (1, 1);
+VALUES (1, 1), (2,1), (3,1), (3,2), (3,3), (4, 3), (5, 1);
 
 -- Uncomment to drop the database (use with caution)
 --  DROP DATABASE eats_in_reach_db;
