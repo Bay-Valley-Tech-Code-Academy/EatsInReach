@@ -3,9 +3,9 @@
 
 _Please make sure to follow the instructions in order. You may run into errors if you follow them out of order._
 
-## PREREQUISITES
+# PREREQUISITES
 
-### Windows
+## Windows
 
 1. Install [PostgreSQL 15.8](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). (Uncheck 'Stack builder' and 'pgAdmin' when installing, we don't need those.)
 2. After installation, open your Command Prompt and type `psql`.
@@ -16,7 +16,7 @@ _Please make sure to follow the instructions in order. You may run into errors i
 
 3. In cmd, type `psql -U postgres`. Press enter, then enter your password. If this all works, you're good to go!
 
-### MacOS
+## MacOS
 
 1. Install [PostgreSQL 16.4](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). (Uncheck 'Stack builder' and 'pgAdmin' when installing, we don't need those.)
 2. After installation, open a terminal window and type `psql` to ensure that PostgreSQL is added to your system’s PATH.
@@ -31,9 +31,9 @@ _Please make sure to follow the instructions in order. You may run into errors i
 - - source ~/.zshrc # For zsh users
 - - source ~/.bash_profile # For bash users
 
-3.  Open a new terminal window and type `psql --version`. If you see `psql(PostgreSQL)16.4`, then it worked!
+3. Open a new terminal window and type `psql --version`. If you see `psql(PostgreSQL)16.4`, then it worked!
 
-## SETUP
+# DATABASE SETUP
 
 After cloning the repo:
 
@@ -49,15 +49,13 @@ DB_PASSWORD=[your postgreSQL password here]
 DB_NAME=eats_in_reach_db
 DATABASE_URL=postgres://postgres:[your postgreSQL password here]@localhost:5432/eats_in_reach_db
 ```
-(More stuff needs to be added after this. Check the Discord for the private passkeys.)
-
-Do not include the brackets when adding in the password.
+Do not include the brackets when adding in the password. 
 
 4. In terminal, type `psql -U postgres -f src/app/data/database.sql`. This creates the database for you.
 5. Install the PostgreSQL Explorer by Chris Kolkman on VS Code.
 6. Once you install this, follow the instructions in [this Youtube video](https://youtu.be/ezjoDYs72GA?si=0U7jKxL2xwNuQ5YR&t=680) to create a connection to the database. The instruction ends at 13:20.
 7. Run the program using `npm run dev`.
-8. Go to http://localhost:3000 to view the website.
+8. Go to <http://localhost:3000> to view the website.
 9. Kill the program by pressing `CTRL+C` in the terminal.
 
 # Firebase Setup
@@ -98,5 +96,14 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 ```
 
 ### 4. Update Firebase Rules
+
 1. By default the rules will allow anyone to read/write to the Firebase
 2. Update these rules based on the roles of the users
+
+# Additional Passkey for Images
+
+The service we used for storing images and file hosting is called [UploadThing](https://uploadthing.com/). 
+
+_UploadThing is a file upload solution for full stack applications that offers a balance of ownership, flexibility, and safety._
+
+In your `.env` file you will need to include a token for UploadThing. 
