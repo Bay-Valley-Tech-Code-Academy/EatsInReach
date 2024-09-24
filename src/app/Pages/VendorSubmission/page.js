@@ -203,6 +203,14 @@ export default function VendorSubmission() {
         }
     };
 
+    // Show a loading indicator while checking auth state or role
+    if (loading || isRoleLoading) {
+        return <div>Loading...</div>; // You can replace this with a loading spinner if needed
+    }
+
+    if (!currentUser || role !== "vendor") {
+        return <div>Redirecting...</div>;
+    }
 
     return (
         <>
