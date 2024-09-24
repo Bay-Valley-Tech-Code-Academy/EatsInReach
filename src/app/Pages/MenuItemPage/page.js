@@ -117,9 +117,9 @@ export default function MenuItemPage() {
     const fallbackImage = '/images/food-bg-images.jpg';
 
     return (
-        <div>
+        <div className=''>
             <Navbar />
-            <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex flex-col items-center justify-center gap-4 bg-[#FDFBCE] min-h-[100vh] p-6">
                 <h1>Vendor Page</h1>
 
                 <div className="flex flex-col items-center justify-center gap-2">
@@ -159,76 +159,31 @@ export default function MenuItemPage() {
                         </button>
                     )}
                 </div>
-
-                <div className="grid grid-cols-2 grid-flow-row items-center justify-center gap-4 mt-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
                     {vendorItems.map((item) => (
-                        <div key={item.item_id} className="-mt-2 p-2 mr-2 lg:mt-0 gap-x-6 grid lg:grid-flow-col grid-flow-row auto-cols-max justify-center gap-4 bg-slate-600 rounded-2xl">
-                            <div className="rounded-2xl bg-gray-50 text-center ring-1 ring-inset ring-gray-900/5">
-                                <div className="flex flex-col justify-center">
+                        <div key={item.item_id} className="p-4 bg-Yellow-Green rounded-2xl h-[70vh]">
+                            <div className="rounded-2xl bg-gray-50 p-3 text-center ring-1 ring-inset ring-gray-900/5 flex flex-col justify-between h-full">
+                                <div className="flex flex-col justify-center items-center p-4 flex-grow">
                                     {editingItemId === item.item_id ? (
                                         <>
-                                            <input
-                                                type="text"
-                                                value={newItemName}
-                                                onChange={(e) => setNewItemName(e.target.value)}
-                                                className="border p-1 mb-2 rounded"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={newItemDesc}
-                                                onChange={(e) => setNewItemDesc(e.target.value)}
-                                                className="border p-1 mb-2 rounded"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={newItemPrice}
-                                                onChange={(e) => setNewItemPrice(e.target.value)}
-                                                className="border p-1 mb-2 rounded"
-                                            />
-                                            <button
-                                                onClick={() => {
-                                                    addItem();
-                                                    resetForm();
-                                                }}
-                                                className="bg-green-500 text-white p-2 rounded"
-                                            >
-                                                Save
-                                            </button>
-                                            <button
-                                                onClick={cancelEdit}
-                                                className="bg-red-500 text-white p-2 rounded mt-2"
-                                            >
-                                                Cancel
-                                            </button>
+                                            <input type="text" value={newItemName} onChange={(e) => setNewItemName(e.target.value)} className="border p-1 mb-2 rounded w-full" />
+                                            <input type="text" value={newItemDesc} onChange={(e) => setNewItemDesc(e.target.value)} className="border p-1 mb-2 rounded w-full" />
+                                            <input type="text" value={newItemPrice} onChange={(e) => setNewItemPrice(e.target.value)} className="border p-1 mb-2 rounded w-full" />
+                                            <button onClick={() => { addItem(); resetForm(); }} className="bg-green-500 text-white p-2 rounded w-full">Save</button>
+                                            <button onClick={cancelEdit} className="bg-red-500 text-white p-2 rounded mt-2 w-full">Cancel</button>
                                         </>
                                     ) : (
                                         <>
-                                            <img
-                                                src={item.image_path || fallbackImage}
-                                                alt={item.alt_text || 'Default image'}
-                                                width={500}
-                                                height={200}
-                                                onError={(e) => {
-                                                    e.currentTarget.src = fallbackImage;
-                                                }}
-                                            />
+                                            <img src={item.image_path || fallbackImage} alt={item.alt_text || 'Default image'} className="w-full object-cover" onError={(e) => { e.currentTarget.src = fallbackImage; }} />
                                             <p className="text-black font-bold py-2">{item.item_name}</p>
                                             <p className="text-black py-2">{item.item_desc}</p>
                                             <p className="text-black py-2">${item.item_price}</p>
-                                            <button
-                                                onClick={() => editItem(item)}
-                                                className="bg-yellow-500 text-white p-2 rounded mt-2"
-                                            >
-                                                Edit Item
-                                            </button>
-                                            <button
-                                                onClick={() => removeItem(item.item_id)}
-                                                className="bg-red-500 text-white p-2 rounded mt-2"
-                                            >
-                                                Remove Item
-                                            </button>
                                         </>
                                     )}
+                                </div>
+                                <div className="flex flex-col w-full mt-2">
+                                    <button onClick={() => editItem(item)} className="bg-yellow-500 text-white p-2 rounded w-full flex-grow">Edit Item</button>
+                                    <button onClick={() => removeItem(item.item_id)} className="bg-red-500 text-white p-2 rounded w-full mt-2 flex-grow">Remove Item</button>
                                 </div>
                             </div>
                         </div>
