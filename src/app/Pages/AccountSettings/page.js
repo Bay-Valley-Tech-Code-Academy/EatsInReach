@@ -124,8 +124,8 @@ export default function UserProfile() {
   return (
     <>
       <Navbar />
-      <div className="flex bg-Yellow-Green justify-center items-center h-11">
-        <h1 className="text-lg font-semibold">Account Settings</h1>
+      <div className="flex bg-Dartmouth-green  justify-center items-center h-11">
+        <h1 className="text-lg text-white font-semibold">Account Settings</h1>
       </div>
       {error && (
         <div className="flex bg-red-500 justify-center items-center h-11">
@@ -160,11 +160,11 @@ export default function UserProfile() {
             ))}
           </ul>
         </div>
-        <div className="bg-[#b5d773] flex flex-col h-[calc(100vh-130px)] w-4/6 max-md:w-3/4 justify-between items-center md:p-5 rounded-lg">
+        <div className="bg-[#b5d773] flex flex-col h-[calc(100vh-130px)] w-4/6 max-md:w-3/4 m-5 justify-between items-center rounded-lg">
           <div className="flex justify-center mt-5 underline">
             <h1 className="text-lg font-semibold">{activeSection === "profile" ? "Profile Settings" : "Security Settings"}</h1>
           </div>
-          <div className="bg-Dartmouth-green flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 h-full my-16 rounded-3xl">
+          <div className="bg-Dartmouth-green flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 h-full  rounded-3xl">
             {activeSection === "profile" ? (
               <>
                 <form className="flex flex-col max-lg:items-center m-2" onSubmit={handleUsernameChange}>
