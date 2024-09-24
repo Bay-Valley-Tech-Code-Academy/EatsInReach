@@ -16,11 +16,11 @@ export default function Landing() {
 
   // Example of hardcoded restaurant data (this would typically come from an API)
   const restaurants = [
-    { name: "Pasta Palace", image_url: "pizza-2.jpg", restaurant_id: "1" },
-    { name: "Sushi Central", image_url: "sushi-1.jpg", restaurant_id: "2" },
-    { name: "Burger Bonanza", image_url: "burger-1.jpg", restaurant_id: "3" },
-    { name: "Taco Town", image_url: "taco-1.jpg", restaurant_id: "4" },
-    { name: "Steak House", image_url: "steak-1.jpg", restaurant_id: "5" },
+    { name: "Toni's Courtyard cafe", image_url: "https://utfs.io/f/TnfuvTEmVxjlck1916M2BxEX4gp9VPDHA36Trh8aUvOY7zCs", restaurant_id: "1" },
+    { name: "Joystiq", image_url: "https://utfs.io/f/TnfuvTEmVxjlyPXQfYDHhsbgP0vlOBIMWmEpy47rAJcGFfRk", restaurant_id: "2" },
+    { name: "Kind Neighbor", image_url: "https://utfs.io/f/TnfuvTEmVxjl0l8UBuqEZ9v5FejB6oSg1MqUtTHkAzJibs8Y", restaurant_id: "3" },
+    { name: "Oishi Teri Sushi Bar", image_url: "https://utfs.io/f/TnfuvTEmVxjl2HEoDoGMbIEUYnsuAjNdxG1SViXq6pFgmeKT", restaurant_id: "4" },
+    { name: "El Palmar Taqueria", image_url: "https://utfs.io/f/TnfuvTEmVxjlaF7WYTOW4Mo9jEqKlJRn1gfb8De0PVZGsuc2", restaurant_id: "5" },
   ];
 
   return (
@@ -45,12 +45,18 @@ export default function Landing() {
             </Link>
           </div>
         )}
+
+        <h3 className="text-2xl text-black bg-Cream mt-10 mb-3 p-1 rounded-4xl hover:underline  rounded-2xl hover:-translate-y-1">
+              Our Favorites
+              
+        </h3>
+
+        < img src ="images/downwards_arrow.png" className = "  w-24 h-24"></img>
+
       </div>
 
       <div className=" flex flex-col items-center p-4 bg-White ">
-        <h3 className="text-2xl text-black bg-Cream mt-4 mb-3 p-1 rounded-4xl hover:underline rounded-2xl hover:-translate-y-1">
-          Our Favorites
-        </h3>
+        
 
         {/* Displaying restaurants dynamically */}
         <div className="bg-Cream grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 rounded-3xl gap-5 mt-4 scrollbar-hidden overflow-y-auto">
@@ -62,7 +68,7 @@ export default function Landing() {
             >
               <div className=" h-64 w-48 p-4 rounded-2xl cursor-pointer">
                 <img
-                  src={`/images/${restaurant.image_url}`}
+                  src={`${restaurant.image_url}`}
                   alt={`Image of ${restaurant.name}`}
                   className="w-full h-40 object-cover rounded-xl"
                   loading="lazy"
