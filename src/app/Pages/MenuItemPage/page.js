@@ -146,7 +146,7 @@ export default function MenuItemPage() {
                     />
                     <button
                         onClick={addItem}
-                        className="bg-blue-500 text-white p-2 rounded"
+                        className="bg-blue-500 text-white p-2 rounded drop-shadow-md"
                     >
                         {editingItemId ? 'Update Item' : 'Add Item'}
                     </button>
@@ -161,9 +161,9 @@ export default function MenuItemPage() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
                     {vendorItems.map((item) => (
-                        <div key={item.item_id} className="p-4 bg-Yellow-Green rounded-2xl h-[70vh] flex flex-col">
-                            <div className="rounded-2xl bg-gray-50 p-3 text-center ring-1 ring-inset ring-gray-900/5 flex flex-col justify-between h-full">
-                                <div className="flex flex-col justify-center items-center p-4">
+                        <div key={item.item_id} className="p-4 bg-Yellow-Green drop-shadow-md rounded-2xl h-[30rem] flex flex-col">
+                            <div className="rounded-2xl bg-gray-50 drop-shadow-md p-3 text-center ring-1 ring-inset ring-gray-900/5 flex flex-col justify-between h-full">
+                                <div className="flex flex-col justify-center items-center">
                                     {editingItemId === item.item_id ? (
                                         <>
                                             <input
@@ -186,13 +186,13 @@ export default function MenuItemPage() {
                                             />
                                             <button
                                                 onClick={() => { addItem(); resetForm(); }}
-                                                className="bg-green-500 text-white p-2 rounded w-full"
+                                                className="bg-green-500 text-white p-2 rounded w-full drop-shadow-md"
                                             >
                                                 Save
                                             </button>
                                             <button
                                                 onClick={cancelEdit}
-                                                className="bg-red-500 text-white p-2 rounded mt-2 w-full"
+                                                className="bg-red-500 text-white p-2 rounded mt-2 w-full drop-shadow-md"
                                             >
                                                 Cancel
                                             </button>
@@ -202,7 +202,7 @@ export default function MenuItemPage() {
                                             <img
                                                 src={item.image_path || fallbackImage}
                                                 alt={item.alt_text || 'Default image'}
-                                                className="w-full object-cover"
+                                                className="w-full object-cover rounded-2xl drop-shadow-md"
                                                 onError={(e) => { e.currentTarget.src = fallbackImage; }}
                                             />
                                             <p className="text-black font-bold py-2">{item.item_name}</p>
@@ -218,13 +218,13 @@ export default function MenuItemPage() {
                                 <div className="flex flex-col w-full mt-2">
                                     <button
                                         onClick={() => editItem(item)}
-                                        className="bg-yellow-500 text-white p-2 rounded w-full flex-grow"
+                                        className="bg-yellow-500 text-white p-2 rounded w-full flex-grow drop-shadow-md"
                                     >
                                         Edit Item
                                     </button>
                                     <button
                                         onClick={() => removeItem(item.item_id)}
-                                        className="bg-red-500 text-white p-2 rounded w-full mt-2 flex-grow"
+                                        className="bg-red-500 text-white p-2 rounded w-full mt-2 flex-grow drop-shadow-md"
                                     >
                                         Remove Item
                                     </button>
