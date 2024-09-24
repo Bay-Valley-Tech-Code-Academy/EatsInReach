@@ -60,7 +60,6 @@ export async function POST(request) {
 
         // Insert a single image with photo_type_id set to 4
         const imageUrl = image; // Assuming image is passed as base64 or URL
-        console.log("IMAGE URL: ", imageUrl)
         const photoType = 4; // Automatically set photo_type_id to 4
 
         await client.query(

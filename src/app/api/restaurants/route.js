@@ -19,12 +19,6 @@ export async function GET() {
         `);
         client.release();
 
-        const test = await client.query(`
-            SELECT * FROM Restaurant_Food_Types WHERE restaurant_id = 9
-            `)
-
-        console.log('Fetched restaurants:', test.rows); // Log the results
-
         return NextResponse.json(result.rows);
     } catch (error) {
         console.error('Error fetching restaurants:', error);
