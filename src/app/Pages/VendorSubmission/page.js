@@ -7,6 +7,7 @@ import { firestore } from "../../../../firebase";
 import { UploadButton } from "../../../../libs/uploadthing";
 import Navbar from "@/Components/Navbar";
 import DropdownTime from "@/Components/DropDownTime";
+import Footer from "@/Components/Footer";
 
 export default function VendorSubmission() {
   const router = useRouter();
@@ -226,7 +227,7 @@ export default function VendorSubmission() {
   }
 
   return (
-    <>
+    <div className="bg-Cream">
       <Navbar />
       <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
         <div className="flex justify-between place-items-center">
@@ -415,13 +416,14 @@ export default function VendorSubmission() {
               />
             )}
           </div>
-          <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+          <button type="submit" className="bg-[#125D35] text-white p-2 rounded">
             Submit
           </button>
         </form>
         {submitStatus && <p className="mt-4">{submitStatus}</p>}
       </div>
-    </>
+      <Footer/>
+    </div>
   );
 }
 
