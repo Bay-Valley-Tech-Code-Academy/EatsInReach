@@ -1,5 +1,10 @@
 [Prerequisites](#prerequisites) |
-[Setup](#database-setup)
+[Database Setup](#database-setup) |
+[Firebase Setup](#firebase-setup) |
+[Setup for Images](#setup-for-images) |
+[Setup for Contact Page](#setup-for-contact-page) |
+[Creating Admins](#creating-admins)
+
 
 _Please make sure to follow the instructions in order. You may run into errors if you follow them out of order._
 
@@ -100,13 +105,26 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 1. By default the rules will allow anyone to read/write to the Firebase
 2. Update these rules based on the roles of the users
 
-# Additional Passkey for Images
+# Setup for Images
 
 The service we used for storing images and file hosting is called [UploadThing](https://uploadthing.com/). 
 
 _UploadThing is a file upload solution for full stack applications that offers a balance of ownership, flexibility, and safety._
 
-In your `.env` file you will need to include a token for _UploadThing_. Please refer to the `#merced-web-dev-interns` channel on Discord for private key.
+In your `.env` file you will need to include this token for _UploadThing_. 
+
+```
+UPLOADTHING_TOKEN='eyJhcGlLZXkiOiJza19saXZlXzVlM2U5YzEzYzk5YWViZjlhNTAzYmM3ZDQ4MTljNTc2MDY4NGRjMTAyYjZkNTI3OGEyNGI3NjVmN2YzOWM0OTIiLCJhcHBJZCI6Imc2ajYyaWdvejciLCJyZWdpb25zIjpbInNlYTEiXX0='
+```
+
+# Setup for Contact Page
+
+Add this to the `.env` file to setup the email used for users to contact.
+
+```
+EMAIL_USER=eatsinreach@gmail.com
+EMAIL_PASS=utxm xlhx iiiy olgq
+```
 
 # Creating Admins
 
@@ -116,8 +134,84 @@ In your `.env` file you will need to include a token for _UploadThing_. Please r
 
 Follow the steps outlined in [Firebase Setup](#firebase-setup).
 
-### 2. 
+### 2. Create an Admin Script
+
+1. Create a file named `admin.js` in the base folder.
+
+2. Paste the following code into that file:
+
+```
+// Import the Firebase Admin SDK
+const admin = require('firebase-admin');
+const path = require('path');
+
+// Path to your service account key JSON file
+const serviceAccountPath = './<path of json file>'; // Use relative path if in the same folder
+
+// Initialize Firebase Admin SDK
+admin.initializeApp({
+  credential: admin.credential.cert(require(serviceAccountPath)),
+});
+
+// Firestore instance
+const db = admin.firestore();
+
+// Function to create the first admin
+const createFirstAdmin = async (email, password) => {
+  try {
+    // Create the admin user
+    const userRecord = await admin.auth().createUser({
+      email,
+      password,
+      emailVerified: true, // Optional: set this to true if you want to skip email verification
+    });
+
+    console.log('Successfully created new admin user:', userRecord.uid);
+
+    // Store the admin's information in the 'admins' collection
+    await db.collection('admins').doc(userRecord.uid).set({
+      email: userRecord.email,
+      role: 'admin', // Add the role field and set it to 'admin'
+      // Add any additional admin-related data here
+    });
+
+    console.log('Admin information successfully stored in the "admins" collection.');
+  } catch (error) {
+    console.error('Error creating admin user:', error);
+  }
+};
+
+// Replace these with your admin email and password
+const adminEmail = 'admin@example.com';
+const adminPassword = '123456';
+
+// Create the first admin
+createFirstAdmin(adminEmail, adminPassword);
+```
 
 ## Running Admin Script
 
-### 1. Update `admin.js` script with new admin email
+### 1. Update `admin.js` script
+
+1. Add your service account key JSON file in line 6. 
+
+```
+const serviceAccountPath = './<path of json file>'; // Use relative path if in the same folder
+```
+
+2. Replace `adminEmail` and `adminPassword` with your admin email and password in line 42-43.
+
+```
+const adminEmail = 'admin@example.com';
+const adminPassword = '123456';
+```
+
+### 2. Run `admin.js`
+
+_Ensure you are in the root of your directory not `src/app`._
+
+To run this script type this command in the terminal:
+
+```
+node admin.js
+```
