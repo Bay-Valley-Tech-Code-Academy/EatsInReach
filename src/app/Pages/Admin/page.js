@@ -229,6 +229,17 @@ export default function Admin() {
         setError("Only Admins can be demoted!");
         return;
       }
+      if (user.id === currentUser.uid) {
+        setError("You can't demote yourself!");
+        return;
+      }
+
+      const adminCount = tableData.find(table => table.title === "Admin")?.users.length || 0;
+      console.log(adminCount)
+      if (adminCount <= 4) {
+        setError("Minimum of four admins to demote an admin!");
+        return;
+      }
 
       const confirmation = window.confirm(
         `Are you sure you want to demote ${user.userName} to a user?`
