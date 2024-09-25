@@ -1,5 +1,5 @@
-[Prerequisites](doc:EatsInReach#prerequisites) |
-[Setup](doc:EatsInReach#setup)
+[Prerequisites](#prerequisites) |
+[Setup](#database-setup)
 
 _Please make sure to follow the instructions in order. You may run into errors if you follow them out of order._
 
@@ -106,4 +106,18 @@ The service we used for storing images and file hosting is called [UploadThing](
 
 _UploadThing is a file upload solution for full stack applications that offers a balance of ownership, flexibility, and safety._
 
-In your `.env` file you will need to include a token for UploadThing. 
+In your `.env` file you will need to include a token for _UploadThing_. Please refer to the `#merced-web-dev-interns` channel on Discord for private key.
+
+# Creating Admins
+
+## Prerequisites for Creating Admins
+
+### 1. Firebase must be setup correctly
+
+Follow the steps outlined in [Firebase Setup](#firebase-setup).
+
+### 2. 
+
+## Running Admin Script
+
+### 1. Update `admin.js` script with new admin email
