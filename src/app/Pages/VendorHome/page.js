@@ -19,7 +19,7 @@ const VendorHomePage = () => {
   };
 
   const goToAddMenuItems = () => {
-    router.push("/Pages/VendorPage");
+    router.push("/Pages/MenuItemPage");
   };
 
   useEffect(() => {
