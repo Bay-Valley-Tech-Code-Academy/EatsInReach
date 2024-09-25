@@ -8,9 +8,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, firestore } from "../../../firebase";
 
 export default function Navbar() {
-  const { currentUser } = useAuth();
+  const { currentUser, userName, setUserName } = useAuth();
   const [role, setRole] = useState(null);
-  const [userName, setUserName] = useState(null);
 
   const [isOpen, setIsOpen] = useState(false); // State to toggle the hamburger menu
 
@@ -65,25 +64,26 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-Buff flex w-full items-center h-screen max-h-14 justify-between ">
+    <header className="bg-Yellow-Green flex w-full items-center h-screen max-h-14 justify-between">
       <div className="flex mx-4 justify-between items-center">
         <Link href="/">
           <img
-            src="/images/phLogo.png"
+            src="/images/actual_logo.png"
             height="30"
             width="40"
             alt="Yum Yummers"
             className="hover:cursor-pointer "
           />
         </Link>
-
-        {currentUser && role === "vendor" && (
-          <h2 className="sm:block pl-2">Vendor: </h2>
-        )}
-        {currentUser && role === "admin" && (
-          <h2 className="sm:block pl-2">Admin: </h2>
-        )}
-        {userName && <h2 className="sm:block pl-2">{userName}</h2>}
+        <div className="flex flex-wrap">
+          {currentUser && role === "vendor" && (
+            <h2 className="sm:block pl-2">Vendor: </h2>
+          )}
+          {currentUser && role === "admin" && (
+            <h2 className="sm:block pl-2">Admin: </h2>
+          )}
+          {userName && <h2 className="sm:block pl-2">{userName}</h2>}
+        </div>
       </div>
 
       {/* Hamburger icon */}
@@ -111,49 +111,39 @@ export default function Navbar() {
 
       {/* Desktop menu */}
       <div className="hidden sm:flex">
-        <Link href="/Pages/Cart">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-            <img
-              src="/images/shoppingcart.png"
-              height="15"
-              width="25"
-              alt="Your Shopping Cart"
-            />
+        <Link href="/Pages/Restaurants">
+          <div className="hover:bg-Fern_green p-2 md:p-4">
+            <h2>Restaurants</h2>
           </div>
         </Link>
-
-        <Link href="/Pages/Restaurants">
-          <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-            <h2>Restaurants</h2>
+        <Link href="/Pages/Contact">
+          <div className="hover:bg-Fern_green p-2 sm:p-4">
+            <h2>Contact Us</h2>
           </div>
         </Link>
 
         {currentUser && role === "user" && (
-          <>
-            <Link href="/Pages/Favorites">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-                <h2>Favorites</h2>
-              </div>
-            </Link>
-
-            <Link href="/Pages/UserProfile">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-                <h2>User Profile</h2>
-              </div>
-            </Link>
-          </>
+          <Link href="/Pages/Favorites">
+            <div className="hover:bg-Fern_green p-2 md:p-4">
+              <h2>Favorites</h2>
+            </div>
+          </Link>
         )}
         {currentUser && role === "vendor" && (
           <>
+            <Link href="/Pages/VendorHome">
+              <div className="hover:bg-Fern_green p-2 md:p-4">
+                <h2>Vendor Home</h2>
+              </div>
+            </Link>
             <Link href="/Pages/VendorSubmission">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+              <div className="hover:bg-Fern_green p-2 md:p-4">
                 <h2>Submit Restaurant</h2>
               </div>
             </Link>
-
-            <Link href="/Pages/VendorPage">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-                <h2>Vendor Page</h2>
+            <Link href="/Pages/MenuItemPage">
+              <div className="hover:bg-Fern_green p-2 md:p-4">
+                <h2>Modify Menu</h2>
               </div>
             </Link>
           </>
@@ -161,28 +151,35 @@ export default function Navbar() {
         {currentUser && role === "admin" && (
           <>
             <Link href="/Pages/Admin">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+              <div className="hover:bg-Fern_green p-2 md:p-4">
                 <h2>Admin Page</h2>
               </div>
             </Link>
 
             <Link href="/Pages/ReviewSubmissions">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+              <div className="hover:bg-Fern_green p-2 md:p-4">
                 <h2>Review Submissions</h2>
               </div>
             </Link>
           </>
         )}
+        {currentUser && (
+          <Link href="/Pages/AccountSettings">
+            <div className="hover:bg-Fern_green p-2 md:p-4">
+              <h2>Account Settings</h2>
+            </div>
+          </Link>
+        )}
         {currentUser ? (
           <div
-            className="hover:bg-[#bb9277] p-2 sm:p-4 cursor-pointer"
+            className="hover:bg-Fern_green p-2 md:p-4 cursor-pointer"
             onClick={handleSignOut}
           >
             <h2>Sign Out</h2>
           </div>
         ) : (
           <Link href="/Pages/Login">
-            <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+            <div className="hover:bg-Fern_green p-2 md:p-4">
               <h2>Login</h2>
             </div>
           </Link>
@@ -191,20 +188,9 @@ export default function Navbar() {
 
       {/* Mobile menu (hamburger)  This is where you change color of hamburger menu */}
       {isOpen && (
-        <div className="sm:hidden absolute  top-14 -right-2 bg-[#dfaf90] flex flex-col items-center z-10">
-          <Link href="/Pages/Cart" className="w-full">
-            <div className="hover:bg-[#bb9277] w-full flex justify-center p-2">
-              <img
-                src="/images/shoppingcart.png"
-                height="15"
-                width="25"
-                alt="Your Shopping Cart"
-              />
-            </div>
-          </Link>
-
+        <div className="sm:hidden absolute  top-14 -right-2 bg-Yellow-Green flex flex-col items-center z-10">
           <Link href="/Pages/Restaurants" className="w-full">
-            <div className="hover:bg-[#bb9277] w-full text-center p-2">
+            <div className="hover:bg-Fern_green w-full text-center p-2">
               <h2>Restaurants</h2>
             </div>
           </Link>
@@ -212,13 +198,13 @@ export default function Navbar() {
           {currentUser && role === "user" && (
             <>
               <Link href="/Pages/Favorites">
-                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>Favorites</h2>
                 </div>
               </Link>
 
               <Link href="/Pages/UserProfile">
-                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>User Profile</h2>
                 </div>
               </Link>
@@ -226,15 +212,19 @@ export default function Navbar() {
           )}
           {currentUser && role === "vendor" && (
             <>
+              <Link href="/Pages/VendorHome">
+                <div className="hover:bg-Fern_green p-2 md:p-4">
+                  <h2>Vendor Home</h2>
+                </div>
+              </Link>
               <Link href="/Pages/VendorSubmission">
-                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>Submit Restaurant</h2>
                 </div>
               </Link>
-
-              <Link href="/Pages/VendorPage">
-                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
-                  <h2>Vendor Page</h2>
+              <Link href="/Pages/MenuItemPage">
+                <div className="hover:bg-Fern_green p-2 md:p-4">
+                  <h2>Modify Menu</h2>
                 </div>
               </Link>
             </>
@@ -242,28 +232,35 @@ export default function Navbar() {
           {currentUser && role === "admin" && (
             <>
               <Link href="/Pages/Admin">
-                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>Admin Page</h2>
                 </div>
               </Link>
 
               <Link href="/Pages/ReviewSubmissions">
-                <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+                <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>Review Submissions</h2>
                 </div>
               </Link>
             </>
           )}
+          {currentUser && (
+            <Link href="/Pages/AccountSettings">
+              <div className="hover:bg-Fern_green p-2 md:p-4">
+                <h2>Account Settings</h2>
+              </div>
+            </Link>
+          )}
           {currentUser ? (
             <div
-              className="hover:bg-[#bb9277] p-2 sm:p-4 cursor-pointer"
+              className="hover:bg-Fern_green p-2 md:p-4 cursor-pointer"
               onClick={handleSignOut}
             >
               <h2>Sign Out</h2>
             </div>
           ) : (
             <Link href="/Pages/Login">
-              <div className="hover:bg-[#bb9277] p-2 sm:p-4">
+              <div className="hover:bg-Fern_green p-2 md:p-4">
                 <h2>Login</h2>
               </div>
             </Link>

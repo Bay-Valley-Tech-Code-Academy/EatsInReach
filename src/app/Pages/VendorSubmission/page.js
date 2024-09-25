@@ -1,37 +1,75 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { auth } from "../../../../firebase";
-import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../../../../firebase";
+import { UploadButton } from "../../../../libs/uploadthing";
 import Navbar from "@/Components/Navbar";
+import DropdownTime from "@/Components/DropDownTime";
 
 export default function VendorSubmission() {
   const router = useRouter();
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
-  const [foodTypes, setFoodTypes] = useState([]);
-  const [filteredFoodTypes, setFilteredFoodTypes] = useState([]);
   const [priceRanges, setPriceRanges] = useState([]);
+  const [foodTypes, setFoodTypes] = useState([]);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    location: "",
-    price_range_id: "",
-    food_type_id: "",
-    hours_of_operation: "",
-    description: "",
-    phone_number: "",
-    email: "",
-    image_url: "",
+    name: "Sample Restaurant",
+    location: "123 Main St, Sample City",
+    hours_of_operation: "MONDAY-FRIDAY: 12:00AM - 12:00AM",
+    description: "A great place to enjoy delicious food!",
+    website: "sample.com",
+    phone_number: "123-456-7890",
+    email: "sample@restaurant.com",
+    price_range_id: "2",
+    food_type_id: "1",
+    image: "", // Single image input
+    alt_text: "Image description", // Alt text for the image
   });
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [imageURL, setImageURL] = useState("");
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
   const dropdownRef = useRef(null);
+  const sidebar = ["Profile", "Tbd"];
+
+  const [open, setOpen] = useState(true);
+  const [monday, setMonday] = useState("12:00");
+  const [mondayAmPm, setMondayAmPm] = useState("AM");
+  const [mondayClosing, setMondayClosing] = useState("12:00");
+  const [mondayAmPmClosing, setMondayAmPmClosing] = useState("AM");
+
+  const [startOfWeek, setStartOfWeek] = useState("");
+  const [endOfWeek, setEndOfWeek] = useState("");
+
+  // useEffect(() => {
+  //     setFormData({
+  //         ...formData,
+  //         days_open: ``,
+  //     });
+  // }, [startOfWeek, endOfWeek]);
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      hours_of_operation: `${startOfWeek.toUpperCase()} - ${endOfWeek.toUpperCase()} : ${monday}${mondayAmPm} - ${mondayClosing}${mondayAmPmClosing}`,
+    });
+  }, [
+    monday,
+    mondayAmPm,
+    mondayClosing,
+    mondayAmPmClosing,
+    startOfWeek,
+    endOfWeek,
+  ]);
+
+  // const openOrNot = (day) => {
+  //     if (day == "monday") {
+  //         setOpen(!open);
+  //     }
+  //     console.log(formData)
+  // };
 
   useEffect(() => {
     // Redirect to the landing page if the user is not logged in
@@ -80,7 +118,6 @@ export default function VendorSubmission() {
     }
   }, [currentUser, loading, router]);
 
-  // Fetch available food types and price ranges when the component loads
   useEffect(() => {
     async function fetchFoodTypes() {
       try {
@@ -90,7 +127,6 @@ export default function VendorSubmission() {
         }
         const data = await response.json();
         setFoodTypes(data);
-        setFilteredFoodTypes(data); // Initialize filteredFoodTypes
       } catch (error) {
         console.error(error);
       }
@@ -114,7 +150,6 @@ export default function VendorSubmission() {
   }, []);
 
   useEffect(() => {
-    // Close dropdown when clicking outside of it
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownVisible(false);
@@ -135,67 +170,55 @@ export default function VendorSubmission() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const response = await fetch("/api/vendor-submissions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (response.ok) {
-      setSubmitStatus(
-        "Submission successful! Your restaurant will be reviewed soon."
-      );
-      setFormData({
-        name: "",
-        location: "",
-        price_range_id: "",
-        food_type_id: "",
-        hours_of_operation: "",
-        description: "",
-        phone_number: "",
-        email: "",
-        image_url: "",
+    console.log(formData);
+    try {
+      const response = await fetch("/api/vendor-submissions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          uid: currentUser.uid,
+          image: imageURL, // Include the imageURL in the submission
+          photo_type_id: 4,
+        }),
       });
-      setSearchTerm(""); // Clear search term on successful submission
-    } else {
+
+      if (response.ok) {
+        setSubmitStatus(
+          "Submission successful! Your restaurant will be reviewed soon."
+        );
+        setFormData({
+          name: "",
+          location: "",
+          hours_of_operation: "",
+          description: "",
+          website: "",
+          phone_number: "",
+          email: "",
+          price_range_id: "",
+          food_type_id: "",
+          image: "",
+          alt_text: "",
+        });
+        setImageURL(""); // Clear image URL after submission
+      } else {
+        setSubmitStatus(
+          "There was an error with your submission. Please try again."
+        );
+      }
+    } catch (error) {
+      console.error("Error submitting vendor:", error);
       setSubmitStatus(
         "There was an error with your submission. Please try again."
       );
     }
   };
 
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    setSearchTerm(searchTerm);
-    setFilteredFoodTypes(
-      foodTypes.filter((type) =>
-        type.type_name.toLowerCase().includes(searchTerm)
-      )
-    );
-  };
-
-  const handleSelectFoodType = (type) => {
-    setFormData({ ...formData, food_type_id: type.food_type_id });
-    setSearchTerm(type.type_name); // Set search term to selected food type name
-    setDropdownVisible(false);
-  };
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
-
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => router.push("/"))
-      .catch((error) => console.error("Sign out error: ", error));
-  };
-
-  // Show a loading indicator or null while checking auth state
+  // Show a loading indicator while checking auth state or role
   if (loading || isRoleLoading) {
-    return <div>Loading...</div>; // Replace with a loading spinner if needed
+    return <div>Loading...</div>; // You can replace this with a loading spinner if needed
   }
 
   if (!currentUser || role !== "vendor") {
@@ -215,7 +238,7 @@ export default function VendorSubmission() {
             <input
               type="text"
               name="name"
-              value={formData.name}
+              value={formData.name || ""}
               onChange={handleChange}
               required
               className="w-full p-2 border border-gray-300 rounded"
@@ -226,74 +249,97 @@ export default function VendorSubmission() {
             <input
               type="text"
               name="location"
-              value={formData.location}
+              value={formData.location || ""}
               onChange={handleChange}
               required
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-          <div className="mb-4 relative" ref={dropdownRef}>
-            <label className="block text-gray-700">Food Type:</label>
-            <input
-              type="text"
-              aria-expanded={dropdownVisible}
-              aria-controls="food-type-dropdown"
-              aria-haspopup="true"
-              value={searchTerm}
-              onClick={toggleDropdown}
-              onChange={handleSearchChange}
-              placeholder="Search for a food type"
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-            {dropdownVisible && (
-              <div
-                id="food-type-dropdown"
-                className="absolute z-10 bg-white border border-gray-300 rounded w-full mt-1 max-h-60 overflow-auto"
-              >
-                {filteredFoodTypes.map((type) => (
-                  <div
-                    key={type.food_type_id}
-                    className="p-2 cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSelectFoodType(type)}
-                  >
-                    {type.type_name}
+
+          <div className="mb-4">
+            <label className="block text-gray-700">Dates Open</label>
+            <div className="inline-flex space-x-6 items-center">
+              <input
+                type="text"
+                name="days_open"
+                value={startOfWeek}
+                onChange={(e) => setStartOfWeek(e.target.value)}
+                className="w-1/3 p-2 border border-gray-300 rounded"
+              />
+              <p className="text-center w-1/6"> thru </p>
+              <input
+                type="text"
+                name="days_open"
+                value={endOfWeek}
+                onChange={(e) => setEndOfWeek(e.target.value)}
+                className="w-1/3 p-2 border border-gray-300 rounded"
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700"> Hours of Operation</label>
+
+            {/* <label className="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" className="sr-only peer"
+                                onChange={() => openOrNot("monday")}
+                            ></input>
+                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{open ? 'Open' : 'Closed'}</span>
+                        </label> */}
+            <div>
+              {open && (
+                <div>
+                  <div className="flex">
+                    <label className="block text-gray-700 w-1/2">
+                      Opening Hours
+                    </label>
+                    <label className="block text-gray-700 w-1/2">
+                      Closing Hours
+                    </label>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Price Range:</label>
-            <select
-              name="price_range_id"
-              value={formData.price_range_id}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select a price range</option>
-              {priceRanges.map((range) => (
-                <option key={range.price_range_id} value={range.price_range_id}>
-                  {range.range}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Hours of Operation</label>
-            <input
-              type="text"
-              name="hours_of_operation"
-              value={formData.hours_of_operation}
-              onChange={handleChange}
-              required
-              className="w-full p-2 border border-gray-300 rounded"
-            />
+
+                  <div className=" flex">
+                    <div>
+                      <div className="w-full flex">
+                        <p className="w-1/2 p-2 border border-gray-300 rounded inline-block">
+                          {monday}
+                        </p>
+                        <p className="w-1/2 p-2 border border-gray-300 rounded inline-block">
+                          {mondayAmPm}
+                        </p>
+                      </div>
+
+                      <DropdownTime
+                        setTime={setMonday}
+                        setAmPm={setMondayAmPm}
+                      ></DropdownTime>
+                    </div>
+                    <div>
+                      <div className="w-full flex">
+                        <p className="w-1/2 p-2 border border-gray-300 rounded inline-block">
+                          {mondayClosing}
+                        </p>
+                        <p className="w-1/2 p-2 border border-gray-300 rounded inline-block">
+                          {mondayAmPmClosing}
+                        </p>
+                      </div>
+
+                      <DropdownTime
+                        setTime={setMondayClosing}
+                        setAmPm={setMondayAmPmClosing}
+                      ></DropdownTime>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">Description</label>
             <textarea
               name="description"
-              value={formData.description}
+              value={formData.description || ""}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             ></textarea>
@@ -303,7 +349,7 @@ export default function VendorSubmission() {
             <input
               type="text"
               name="phone_number"
-              value={formData.phone_number}
+              value={formData.phone_number || ""}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             />
@@ -313,20 +359,61 @@ export default function VendorSubmission() {
             <input
               type="email"
               name="email"
-              value={formData.email}
+              value={formData.email || ""}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Image URL</label>
-            <input
-              type="text"
-              name="image_url"
-              value={formData.image_url}
+            <label className="block text-gray-700">Price Range</label>
+            <select
+              name="price_range_id"
+              value={formData.price_range_id || ""}
               onChange={handleChange}
+              required
               className="w-full p-2 border border-gray-300 rounded"
-            />
+            >
+              <option value="">Select Price Range</option>
+              {priceRanges.map((pr) => (
+                <option key={pr.price_range_id} value={pr.price_range_id}>
+                  {pr.range}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Food Type</label>
+            <select
+              name="food_type_id"
+              value={formData.food_type_id || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            >
+              <option value="">Select Food Type</option>
+              {foodTypes.map((ft) => (
+                <option key={ft.food_type_id} value={ft.food_type_id}>
+                  {ft.type_name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            {isImageUploaded ? (
+              <div className="text-green-500">Image uploaded successfully!</div>
+            ) : (
+              <UploadButton
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  console.log("Files: ", res[0].url);
+                  setImageURL(res[0].url);
+                  setIsImageUploaded(true);
+                }}
+                onUploadError={(error) => {
+                  console.log(`ERROR! ${error.message}`);
+                }}
+              />
+            )}
           </div>
           <button type="submit" className="bg-blue-500 text-white p-2 rounded">
             Submit
@@ -337,3 +424,32 @@ export default function VendorSubmission() {
     </>
   );
 }
+
+// const [open, setOpen] = useState(false)
+// const [monday, setMonday] = useState("12:00");
+// const [mondayAmPm, setMondayAmPm] = useState("AM");
+// const [mondayClosing, setMondayClosing] = useState("12:00");
+// const [mondayAmPmClosing, setMondayAmPmClosing] = useState("AM");
+
+// const [startOfWeek, setStartOfWeek] = useState("")
+// const [endOfWeek, setEndOfWeek] = useState("")
+
+// useEffect(() => {
+//     setFormData({
+//         ...formData,
+//         days_open: `${startOfWeek.toUpperCase()} - ${endOfWeek.toUpperCase()}`,
+//     });
+// }, [startOfWeek, endOfWeek]);
+
+// useEffect(() => {
+//     setFormData({
+//         ...formData,
+//         hours_of_operation: `${monday}${mondayAmPm} - ${mondayClosing}${mondayAmPmClosing}`,
+//     });
+// }, [monday, mondayAmPm, mondayClosing, mondayAmPmClosing]);
+
+// const openOrNot = (day) => {
+//     if (day == "monday") {
+//         setOpen(!open);
+//     }
+// };

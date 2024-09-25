@@ -11,10 +11,13 @@ export async function POST(request) {
     }
 
     try {
-        // Delete from Vendor_Submissions
-        await pool.query('DELETE FROM Vendor_Submissions WHERE submission_id = $1', [submissionId]);
+        // Delete the related pictures first
+        await pool.query('DELETE FROM Vendor_Restaurant_Pictures WHERE uid = $1', [submissionId]);
 
-        return new Response(JSON.stringify({ message: 'Submission rejected' }), {
+        // Now delete the submission
+        await pool.query('DELETE FROM Vendor_Submissions WHERE uid = $1', [submissionId]);
+
+        return new Response(JSON.stringify({ message: 'Submission rejected successfully' }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });

@@ -11,44 +11,69 @@ export async function GET() {
 
         const result = await client.query(`
             SELECT
-                vs.submission_id,
+                vs.uid,
                 vs.name,
                 vs.location,
-                pr.range AS price_range,            -- Join Price_Ranges table to get the price range name
-                ft.type_name AS food_type,          -- Join Food_Types table to get the food type name
                 vs.hours_of_operation,
                 vs.description,
+                vs.website,
                 vs.phone_number,
                 vs.email,
-                vs.image_url
+                pr.range AS price_range,
+                ft.type_name AS food_type,
+                rp.image_url -- Add this line to fetch the image URL
             FROM Vendor_Submissions vs
-            JOIN Price_Ranges pr ON vs.price_range_id = pr.price_range_id -- Join to get price range
-            JOIN Food_Types ft ON vs.food_type_id = ft.food_type_id       -- Join to get food type
+            JOIN Price_Ranges pr ON vs.price_range_id = pr.price_range_id
+            JOIN Food_Types ft ON vs.food_type_id = ft.food_type_id
+            LEFT JOIN Vendor_Restaurant_Pictures rp ON vs.uid = rp.uid -- Adjust JOIN as needed
         `);
 
         client.release();
-        return NextResponse.json(result.rows); // Return the fetched data
+        return NextResponse.json(result.rows);
     } catch (error) {
         console.error('Error fetching vendor submissions:', error);
         return NextResponse.json({ error: 'Failed to fetch vendor submissions' }, { status: 500 });
     }
 }
 
+
 export async function POST(request) {
     try {
         const data = await request.json();
-        const { name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email, image_url } = data;
+        const {
+            uid, name, location, hours_of_operation, description, website,
+            phone_number, email, price_range_id, food_type_id, image, alt_text
+        } = data;
 
         const client = await pool.connect();
+
+        await client.query('BEGIN');
+
+        // Insert vendor submission
         const result = await client.query(
-            'INSERT INTO vendor_submissions (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-            [name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email, image_url]
+            `INSERT INTO Vendor_Submissions (
+                uid, name, location, hours_of_operation, description, website,
+                phone_number, email, price_range_id, food_type_id
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+            [uid, name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id]
         );
+
+        // Insert a single image with photo_type_id set to 4
+        const imageUrl = image; // Assuming image is passed as base64 or URL
+        const photoType = 4; // Automatically set photo_type_id to 4
+
+        await client.query(
+            `INSERT INTO Vendor_Restaurant_Pictures (uid, image_url, photo_type_id, alt_text) 
+            VALUES ($1, $2, $3, $4)`,
+            [uid, imageUrl, photoType, alt_text]
+        );
+
+        await client.query('COMMIT');
         client.release();
 
-        return new Response(JSON.stringify(result.rows[0]), { status: 201 }); // 201 Created
+        return NextResponse.json({ message: 'Submission successful!' });
     } catch (error) {
-        console.error('Error submitting vendor:', error);
-        return new Response('Internal Server Error', { status: 500 });
+        console.error('Error handling submission:', error);
+        return NextResponse.json({ message: 'Error handling submission', error: error.message }, { status: 500 });
     }
 }

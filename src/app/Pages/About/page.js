@@ -89,10 +89,10 @@ export default function About() {
             <Navbar/>
             <div className="flex flex-col items-center bg-[#AAD15F] p-12">
                 <h1 className="text-3xl text-center font-bold pb-8">
-                    Get Your Yonder on One Bite at a Time!
+                    Find eats in your reach!
                 </h1>
                 <p className="text-center pb-20 min-w-80 max-w-[500px]">
-                    Welcome to YumYonder! We’re thrilled to connect you with the hidden culinary gems in rural areas. 
+                    Welcome to Eats in Reach! We’re thrilled to connect you with the hidden culinary gems in rural areas. 
                     Our platform bridges the gap between small, local food vendors and a wider audience eager to discover
                     and support unique offerings.
                 </p>

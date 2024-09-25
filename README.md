@@ -49,6 +49,7 @@ DB_PASSWORD=[your postgreSQL password here]
 DB_NAME=eats_in_reach_db
 DATABASE_URL=postgres://postgres:[your postgreSQL password here]@localhost:5432/eats_in_reach_db
 ```
+(More stuff needs to be added after this. Check the Discord for the private passkeys.)
 
 Do not include the brackets when adding in the password.
 
@@ -59,111 +60,43 @@ Do not include the brackets when adding in the password.
 8. Go to http://localhost:3000 to view the website.
 9. Kill the program by pressing `CTRL+C` in the terminal.
 
-## Enhanced Food Recommendation App Database Schema
+# Firebase Setup
 
-## Existing Tables (with potential additions)
+## Prerequisites
 
-### 1. Restaurants
+Before setting up Firebase, ensure you have the following:
 
-- Add `cuisine_id` (Foreign Key to Cuisines table)
-- Add `average_rating` (DECIMAL)
-- Add `total_reviews` (INTEGER)
-- Add `website` (VARCHAR)
-- Add `phone_number` (VARCHAR)
+- A Firebase account: [Sign up here](https://firebase.google.com/).
+- Node.js version 14 or later
 
-### 2. Food_Types
+## Firebase Setup Instructions
 
-(No changes)
+### 1. Create a Firebase Project
 
-### 3. Restaurant_Food_Types
+1. Go to the [Firebase Console](https://console.firebase.google.com/).
+2. Click on **Add Project** and follow the steps to create your project.
+3. After the project is created, navigate to the **Project Overview**.
 
-(No changes)
+### 2. Enable Firestore and Authentication
 
-### 4. Photo_Types
+- **Firestore**: Go to the **Firestore Database** section in the Firebase Console and enable it.
+- **Authentication**: Navigate to the **Authentication** section, then enable **Email/Password** authentication.
 
-(No changes)
+### 3. Add a Web App to Firebase
 
-### 5. Restaurant_Pictures
+1. In the Firebase Console, go to **Project Overview > Add App**.
+2. Choose the **Web** option and register your app with a name.
+3. After registering the app, Firebase will provide you with a config object containing keys like `apiKey`, `authDomain`, etc. This will end up going in the `.env` file as follows:
 
-(No changes)
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-app.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-app.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+```
 
-### 6. Price_Ranges
-
-(No changes)
-
-## New Tables
-
-### 7. Menus
-
-| Column Name   | Data Type | Description                                       |
-| ------------- | --------- | ------------------------------------------------- |
-| menu_id       | SERIAL    | Primary Key                                       |
-| restaurant_id | INTEGER   | Foreign Key referencing Restaurants.restaurant_id |
-| name          | VARCHAR   | Name of the menu (e.g., "Lunch", "Dinner")        |
-| description   | TEXT      | Brief description of the menu                     |
-
-### 8. Menu_Items
-
-| Column Name    | Data Type | Description                           |
-| -------------- | --------- | ------------------------------------- |
-| item_id        | SERIAL    | Primary Key                           |
-| menu_id        | INTEGER   | Foreign Key referencing Menus.menu_id |
-| name           | VARCHAR   | Name of the menu item                 |
-| description    | TEXT      | Description of the item               |
-| price          | DECIMAL   | Price of the item                     |
-| is_vegetarian  | BOOLEAN   | Indicates if the item is vegetarian   |
-| is_vegan       | BOOLEAN   | Indicates if the item is vegan        |
-| is_gluten_free | BOOLEAN   | Indicates if the item is gluten-free  |
-
-### 9. Users
-
-| Column Name   | Data Type | Description                |
-| ------------- | --------- | -------------------------- |
-| user_id       | SERIAL    | Primary Key                |
-| username      | VARCHAR   | User's chosen username     |
-| email         | VARCHAR   | User's email address       |
-| password_hash | VARCHAR   | Hashed password            |
-| created_at    | TIMESTAMP | Account creation timestamp |
-
-### 10. Favorites
-
-| Column Name   | Data Type                | Description                                       |
-| ------------- | ------------------------ | ------------------------------------------------- |
-| user_id       | INTEGER                  | Foreign Key referencing Users.user_id             |
-| restaurant_id | INTEGER                  | Foreign Key referencing Restaurants.restaurant_id |
-| PRIMARY KEY   | (user_id, restaurant_id) | Composite Primary Key                             |
-
-### 11. Cuisines
-
-| Column Name | Data Type | Description                      |
-| ----------- | --------- | -------------------------------- |
-| cuisine_id  | SERIAL    | Primary Key                      |
-| name        | VARCHAR   | Name of the cuisine              |
-| description | TEXT      | Brief description of the cuisine |
-
-### 12. Dietary_Restrictions
-
-| Column Name    | Data Type | Description                     |
-| -------------- | --------- | ------------------------------- |
-| restriction_id | SERIAL    | Primary Key                     |
-| name           | VARCHAR   | Name of the dietary restriction |
-| description    | TEXT      | Description of the restriction  |
-
-### 13. Restaurant_Dietary_Options
-
-| Column Name    | Data Type                       | Description                                                 |
-| -------------- | ------------------------------- | ----------------------------------------------------------- |
-| restaurant_id  | INTEGER                         | Foreign Key referencing Restaurants.restaurant_id           |
-| restriction_id | INTEGER                         | Foreign Key referencing Dietary_Restrictions.restriction_id |
-| PRIMARY KEY    | (restaurant_id, restriction_id) | Composite Primary Key                                       |
-
-## Additional Relationships
-
-- Restaurants has a many-to-one relationship with Cuisines
-- Restaurants has a one-to-many relationship with Menus
-- Menus has a one-to-many relationship with Menu_Items
-- Users has a many-to-many relationship with Restaurants through Favorites
-- Restaurants has a many-to-many relationship with Dietary_Restrictions through Restaurant_Dietary_Options
-
-[Prerequisites](doc:EatsInReach#prerequisites) |
-[Setup](doc:EatsInReach#setup)
+### 4. Update Firebase Rules
+1. By default the rules will allow anyone to read/write to the Firebase
+2. Update these rules based on the roles of the users
