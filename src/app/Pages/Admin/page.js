@@ -4,6 +4,7 @@ import Navbar from "@/Components/Navbar";
 import Link from "next/link";
 import Footer from "@/Components/Footer";
 import { useEffect, useState } from "react";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import {
   collection,
   setDoc,
@@ -15,6 +16,9 @@ import {
 import { firestore } from "../../../../firebase";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
+
+const functions = getFunctions();
+const deleteUserAccount = httpsCallable(functions, "deleteUserAccount");
 
 export default function Admin() {
   const router = useRouter();
@@ -234,8 +238,9 @@ export default function Admin() {
         return;
       }
 
-      const adminCount = tableData.find(table => table.title === "Admin")?.users.length || 0;
-      console.log(adminCount)
+      const adminCount =
+        tableData.find((table) => table.title === "Admin")?.users.length || 0;
+      console.log(adminCount);
       if (adminCount <= 4) {
         setError("Minimum of four admins to demote an admin!");
         return;
@@ -265,37 +270,79 @@ export default function Admin() {
 
   const handleDelete = async (user) => {
     try {
+      // Validate if the user object exists and has an ID
       if (!user || !user.id) {
         setError("No user was selected for deletion!");
         return;
       }
+
+      // Prevent deletion of admins
       if (user.role === "admin") {
         setError("Admins can't be deleted");
         return;
       }
 
+      // Confirm the deletion
       const confirmation = window.confirm(
-        `Are you sure you want to delete ${user.userName} account?`
+        `Are you sure you want to delete ${user.userName}'s account?`
       );
-
       if (!confirmation) return;
 
-      let userDocRef;
-      if (user.role === "vendor") {
-        userDocRef = doc(firestore, "vendors", user.id);
-      } else {
-        userDocRef = doc(firestore, "users", user.id);
-      }
+      // Call the API to delete the user from Firebase
+      const deleteUserRes = await fetch("/api/deleteUser", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          role: user.role,
+        }),
+      });
 
-      // Delete the document
-      await deleteDoc(userDocRef);
-      setSelectedUserData({});
-      setSelectedUser({});
-      setError(null);
-      await fetchData();
-      console.log(`${user.userName} has been deleted.`);
+      // Parse the response from Firebase
+      const deleteUserData = await deleteUserRes.json();
+
+      if (deleteUserRes.ok) {
+        // Call the API to delete the user from PostgreSQL
+        const deleteFromPostgresRes = await fetch(
+          "/api/deleteUserFromPostgres",
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: user.id,
+            }),
+          }
+        );
+
+        const deleteFromPostgresData = await deleteFromPostgresRes.json();
+
+        if (deleteFromPostgresRes.ok) {
+          // Reset state on successful deletion
+          setSelectedUserData({});
+          setSelectedUser({});
+          setError(null);
+          await fetchData(); // Refresh the data
+          console.log(
+            `${user.userName} has been deleted from both Firebase and PostgreSQL.`
+          );
+        } else {
+          // Set the error from the response
+          setError(
+            deleteFromPostgresData.error ||
+              "Error deleting user from PostgreSQL"
+          );
+        }
+      } else {
+        // Set the error from the Firebase response
+        setError(deleteUserData.error || "Error deleting user from Firebase");
+      }
     } catch (error) {
       console.error("Error deleting user:", error);
+      setError("Failed to delete user");
     }
   };
 
