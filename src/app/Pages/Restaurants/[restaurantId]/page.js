@@ -274,14 +274,19 @@ export default function RestaurantPageId({ params }) {
                             {/* Menu Items */}
                             <ul className="space-y-4">
                               {menuSection.items.map((item, itemIndex) => (
-                                <li
-                                  key={itemIndex}
-                                  className="flex justify-between text-black"
-                                >
-                                  <span className="font-semibold">
-                                    {item.name}
-                                  </span>
-                                  <span>${item.price}</span>
+                                <li key={itemIndex} className="flex flex-col text-black">
+                                  {/* Item Name and Price */}
+                                  <div className="flex justify-between">
+                                    <span className="font-semibold">{item.name}</span>
+                                    <span>${item.price}</span>
+                                  </div>
+
+                                  {/* Item Description */}
+                                  {item.description && (
+                                    <p className="text-sm text-gray-500 mt-1">
+                                      {item.description}
+                                    </p>
+                                  )}
                                 </li>
                               ))}
                             </ul>
