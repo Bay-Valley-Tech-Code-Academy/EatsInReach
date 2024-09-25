@@ -275,21 +275,21 @@ export default function Admin() {
         setError("No user was selected for deletion!");
         return;
       }
-  
+
       // Prevent deletion of admins
       if (user.role === "admin") {
         setError("Admins can't be deleted");
         return;
       }
-  
+
       // Confirm the deletion
       const confirmation = window.confirm(
         `Are you sure you want to delete ${user.userName}'s account?`
       );
       if (!confirmation) return;
-  
-      // Call the API to delete the user
-      const res = await fetch("/api/deleteUser", {
+
+      // Call the API to delete the user from Firebase
+      const deleteUserRes = await fetch("/api/deleteUser", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -299,28 +299,52 @@ export default function Admin() {
           role: user.role,
         }),
       });
-  
-      // Parse the response
-      const data = await res.json();
-  
-      if (res.ok) {
-        // Reset state on successful deletion
-        setSelectedUserData({});
-        setSelectedUser({});
-        setError(null);
-        await fetchData();  // Refresh the data
-        console.log(`${user.userName} has been deleted.`);
+
+      // Parse the response from Firebase
+      const deleteUserData = await deleteUserRes.json();
+
+      if (deleteUserRes.ok) {
+        // Call the API to delete the user from PostgreSQL
+        const deleteFromPostgresRes = await fetch(
+          "/api/deleteUserFromPostgres",
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: user.id,
+            }),
+          }
+        );
+
+        const deleteFromPostgresData = await deleteFromPostgresRes.json();
+
+        if (deleteFromPostgresRes.ok) {
+          // Reset state on successful deletion
+          setSelectedUserData({});
+          setSelectedUser({});
+          setError(null);
+          await fetchData(); // Refresh the data
+          console.log(
+            `${user.userName} has been deleted from both Firebase and PostgreSQL.`
+          );
+        } else {
+          // Set the error from the response
+          setError(
+            deleteFromPostgresData.error ||
+              "Error deleting user from PostgreSQL"
+          );
+        }
       } else {
-        // Set the error from the response
-        setError(data.error || "Error deleting user");
+        // Set the error from the Firebase response
+        setError(deleteUserData.error || "Error deleting user from Firebase");
       }
     } catch (error) {
       console.error("Error deleting user:", error);
       setError("Failed to delete user");
     }
   };
-  
-  
 
   // Show a loading indicator while checking auth state or role
   if (loading || isRoleLoading) {
