@@ -1,20 +1,82 @@
 "use client";
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import NavBar from '../../Components/Navbar';
-import Footer from '../../Components/Footer';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../../context/authContext";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../../../../firebase";
+import NavBar from "../../Components/Navbar";
+import Footer from "../../Components/Footer";
 
 const VendorHomePage = () => {
   const router = useRouter();
+  const { currentUser, loading } = useAuth();
+  const [role, setRole] = useState(null);
+  const [isRoleLoading, setIsRoleLoading] = useState(true);
 
   const goToVendorSubmission = () => {
-    router.push('/Pages/VendorSubmission');
+    router.push("/Pages/VendorSubmission");
   };
 
   const goToAddMenuItems = () => {
-    router.push('/Pages/VendorPage');
+    router.push("/Pages/MenuItemPage");
   };
+
+  useEffect(() => {
+    // Redirect to the landing page if the user is not logged in
+    if (!loading && !currentUser) {
+      router.push("/");
+    }
+    if (currentUser) {
+      const fetchUserData = async () => {
+        const collections = ["users", "vendors", "admins"];
+        let found = false;
+
+        for (const collection of collections) {
+          if (found) break;
+
+          try {
+            const userDoc = await getDoc(
+              doc(firestore, collection, currentUser.uid)
+            );
+
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              if (userData.role !== "vendor") {
+                router.push("/");
+              }
+              found = true;
+              setRole(userData.role);
+            }
+          } catch (error) {
+            console.error(
+              `Error fetching user data from ${collection} collection:`,
+              error
+            );
+          }
+        }
+
+        if (!found) {
+          console.log(
+            "User document does not exist in any of the collections."
+          );
+          setRole(null);
+        }
+        setIsRoleLoading(false);
+      };
+
+      fetchUserData();
+    }
+  }, [currentUser, loading, router]);
+
+  // Show a loading indicator while checking auth state or role
+  if (loading || isRoleLoading) {
+    return <div>Loading...</div>; // You can replace this with a loading spinner if needed
+  }
+
+  if (!currentUser || role !== "vendor") {
+    return <div>Redirecting...</div>;
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-r from-orange-100 to-yellow-100">

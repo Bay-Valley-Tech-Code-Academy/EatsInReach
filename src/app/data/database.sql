@@ -73,17 +73,6 @@ CREATE TABLE Photo_Types (
     type_name VARCHAR(100) NOT NULL
 );
 
--- Create the Vendor_Items table
-CREATE TABLE Vendor_Items (
-    item_id SERIAL PRIMARY KEY,
-    restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
-    item_name VARCHAR(255) NOT NULL,
-    item_desc VARCHAR(255) NOT NULL,
-    item_price DECIMAL(10, 2) NOT NULL,
-    image_path VARCHAR(255) NOT NULL,
-    alt_text VARCHAR(255)
-);
-
 -- Create the Restaurant_Pictures table
 CREATE TABLE Restaurant_Pictures (
     picture_id SERIAL PRIMARY KEY,
@@ -251,16 +240,14 @@ VALUES
 
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES
-    (1, 'Appetizer', 'Light starter meals'),
-    (5, 'Dinner', 'Evening fine dining experience'),
-    (2, 'All Day', 'Our full menu, available all day');
+    (1, 'Specialty Sandwiches', 'Served with Salad, Potato Salad or French fries'),
+    (1, 'Organic Salads', 'Served with choice of Dressing and Freshly Baked Bread & Butter');
 
 INSERT INTO Menu_Items (menu_id, name, description, price, is_vegetarian, is_vegan, is_gluten_free)
 VALUES
-    (1, 'Caesar Salad', 'Crisp romaine, croutons, parmesan', 8.99, true, false, false),
-    (1, 'Margherita Pizza', 'Fresh mozzarella, tomatoes, basil', 12.99, true, false, false),
-    (2, 'Filet Mignon', '8oz, garlic mashed potatoes, asparagus', 29.99, false, false, true),
-    (3, 'Vegan Buddha Bowl', 'Quinoa, roasted vegetables, tahini dressing', 14.99, true, true, true);
+    (1, 'MEDITERRANEAN GRILLED CHICKEN', 'Sundried tomatoes, feta, spinach, pesto mayo on homemade focaccia bread', 14.00, false, false, false),
+    (1, 'TRI TIP', 'Our house smoked tri tip sauteed mushrooms, caramelized onions, swiss, mayo on french bread', 14.00, false, false, false),
+    (2, 'COURTYARD SALAD', 'mixed greens with apples, cranberries, tomatoes, blue cheese crumbles and candied walnuts', 12.00, true, false, false);
 
 INSERT INTO Dietary_Restrictions (name, description)
 VALUES
@@ -269,13 +256,7 @@ VALUES
     ('Gluten-Free', 'No gluten-containing ingredients');
 
 INSERT INTO Restaurant_Dietary_Options (restaurant_id, restriction_id)
-VALUES (1, 1), (1, 3), (2, 1), (2, 2);
-
--- Insert dummy data into the Vendor_Items table
-INSERT INTO Vendor_Items (restaurant_id, item_name, item_desc, item_price, image_path, alt_text)
-VALUES
-    (1, 'Spaghetti Carbonara', 'Classic Italian pasta with creamy sauce.', 12.99, 'spaghetti-carbonara.jpg', 'Spaghetti Carbonara at Pasta Palace'),
-    (2, 'Salmon Sashimi', 'Freshly sliced salmon sashimi.', 15.99, 'salmon-sashimi.jpg', 'Salmon Sashimi at Sushi Central');
+VALUES (1, 1);
 
 -- Uncomment to drop the database (use with caution)
 --  DROP DATABASE eats_in_reach_db;

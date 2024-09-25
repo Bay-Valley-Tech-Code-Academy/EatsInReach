@@ -36,7 +36,7 @@ export default function Login() {
           // User is already logged in, redirect them based on their role
           const userRole = await getUserRole(currentUser.uid);
           if (userRole === "vendor") {
-            router.push("/Pages/VendorSubmission");
+            router.push("/Pages/VendorHome");
           } else if (userRole === "user") {
             router.push("/Pages/Restaurants");
           } else if (userRole === "admin") {
