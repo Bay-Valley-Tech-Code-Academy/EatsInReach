@@ -33,13 +33,14 @@ export default function FavoritesCard({ restaurantId, userId, restaurantImg, res
   return (
     <div>
       <div className="w-auto flex flex-col justify-center items-center">
-        <Image
-          src={restaurantImg}
-          alt={restaurantTitle}
-          width={300}
-          height={100}
-          className="rounded-md"
-        />
+      <Image
+              src={restaurantImg}
+              alt={restaurantTitle}
+              width={300}
+              height={200} // Adjust this height as needed for consistent aspect ratio
+              className="w-[300px] h-[200px] object-cover rounded-md" // Fixed width and height
+            />
+
         <div className="flex gap-2 w-full p-1">
           <p className="text-left text-lg">{restaurantTitle}</p>
           <div
