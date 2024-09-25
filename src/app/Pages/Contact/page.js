@@ -37,11 +37,16 @@ export default function Contact() {
     };
 
     return(
-        <div>
+        <div className="bg-Yellow-Green min-h-screen">
             <Navbar />
-            <div className="flex items-center justify-center">
-                <div className="bg-gray-100 mt-20 p-20 rounded-xl w-1/2">
-                    <h3 className="text-center font-semibold text-xl">Contact Us</h3>
+            <div className="flex items-center justify-center gap-6">
+                <div>
+                    <p>Contact Us</p>
+                    <p>Fill out the form and our term will get back to you as soon as possible.</p>
+                    <p>EatsInReach@gmail.com</p>
+                </div>
+                <div className="bg-gray-100 mt-20 p-10 rounded-xl w-1/2">
+                    <h3 className="text-center font-semibold text-xl">Get in Touch</h3>
                     {submitForm ? ( 
                         <p>Message sent successfully.</p>
                     ) : (
@@ -78,7 +83,7 @@ export default function Contact() {
                                     required
                                 ></textarea>
                             </div>
-                            <button type="submit" className="bg-green-600 p-1 align-center">Send Message</button>
+                            <button type="submit" className="bg-green-600 p-1 align-center w-full">Send Message</button>
                             {error && <p>{error}</p>}
                         </form>
                     )}
