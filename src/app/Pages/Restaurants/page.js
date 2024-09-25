@@ -1,5 +1,3 @@
-// src/app/Pages/Restaurants/page.js
-
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -52,26 +50,22 @@ export default function RestaurantPage() {
   useEffect(() => {
     let sortedRestaurants = [...restaurants];
     if (sortBy === "Price_asc") {
-      (
-        sortedRestaurants.sort(
-          (a, b) => a.price_range.length - b.price_range.length
-        )
+      sortedRestaurants.sort(
+        (a, b) => a.price_range.length - b.price_range.length
       );
     }
     if (sortBy === "Price_desc") {
-      (
-        sortedRestaurants.sort(
-          (a, b) => b.price_range.length - a.price_range.length
-        )
+      sortedRestaurants.sort(
+        (a, b) => b.price_range.length - a.price_range.length
       );
     }
     if (sortBy === "Food_Type") {
-      (sortedRestaurants.sort((a, b) => a.food_type.localeCompare(b.food_type)));  //a.food_type.localeCompare(b.food_type))
+      sortedRestaurants.sort((a, b) => a.food_type.localeCompare(b.food_type)); //a.food_type.localeCompare(b.food_type))
     }
     if (sortBy === "Name") {
-      (sortedRestaurants.sort((a, b) => a.name.localeCompare(b.name)));  //a.food_type.localeCompare(b.food_type))
+      sortedRestaurants.sort((a, b) => a.name.localeCompare(b.name)); //a.food_type.localeCompare(b.food_type))
     }
-    setFilteredRestaurants(sortedRestaurants)
+    setFilteredRestaurants(sortedRestaurants);
   }, [sortBy]);
 
   return (
@@ -205,23 +199,30 @@ export default function RestaurantPage() {
         <div className="grid grid-col-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 px-14">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-                <div key={restaurant.restaurant_id}>
-                  <Link href={`/Pages/Restaurants/${restaurant.restaurant_id}`}>
-                    <div className="bg-white flex flex-col md:flex-row shadow-xl rounded-xl overflow-hidden">
-                        <div className="flex-shrink-0 w-full md:w-36 h-40 overflow-hidden">
-                            <img
-                                src={restaurant.image_url}
-                                alt={`Image of ${restaurant.name}`}
-                                className="w-full h-full object-cover"/>
-                        </div>
-                        <div className="flex flex-col gap-1 p-4">
-                            <p className="font-bold text-lg md:text-xl truncate">{restaurant.name}</p>
-                            <p className="text-sm md:text-base truncate">{restaurant.food_type} ({restaurant.price_range})</p>
-                            <p className="text-sm md:text-base text-ellipsis">{restaurant.location}</p>
-                        </div>
+              <div key={restaurant.restaurant_id}>
+                <Link href={`/Pages/Restaurants/${restaurant.restaurant_id}`}>
+                  <div className="bg-white flex flex-col md:flex-row shadow-xl rounded-xl overflow-hidden">
+                    <div className="flex-shrink-0 w-full md:w-36 h-40 overflow-hidden">
+                      <img
+                        src={restaurant.image_url}
+                        alt={`Image of ${restaurant.name}`}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                  </Link>
-                </div>
+                    <div className="flex flex-col gap-1 p-4">
+                      <p className="font-bold text-lg md:text-xl truncate">
+                        {restaurant.name}
+                      </p>
+                      <p className="text-sm md:text-base truncate">
+                        {restaurant.food_type} ({restaurant.price_range})
+                      </p>
+                      <p className="text-sm md:text-base text-ellipsis">
+                        {restaurant.location}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
             ))
           ) : (
             <p className="text-center text-lg text-black">

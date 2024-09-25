@@ -134,6 +134,14 @@ CREATE TABLE Restaurant_Dietary_Options (
     PRIMARY KEY (restaurant_id, restriction_id)
 );
 
+-- Create a new table for vendor submission images
+CREATE TABLE Vendor_Submission_Images (
+    image_id SERIAL PRIMARY KEY,
+    submission_id INTEGER REFERENCES Vendor_Submissions(submission_id) ON DELETE CASCADE,
+    photo_type_id INTEGER REFERENCES Photo_Types(photo_type_id),
+    image_url TEXT NOT NULL
+);
+
 -- Insert predefined price ranges
 INSERT INTO Price_Ranges (range)
 VALUES
