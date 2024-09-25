@@ -55,9 +55,7 @@ export default function ReviewSubmissions() {
       }
 
       setSubmissions(
-        submissions.filter(
-          (submission) => submission.submission_id !== submissionId
-        )
+        submissions.filter((submission) => submission.uid !== submissionId)
       );
     } catch (error) {
       console.error(`Failed to ${actionType} submission:`, error);
@@ -78,21 +76,13 @@ export default function ReviewSubmissions() {
           <ul>
             {submissions.map((submission) => (
               <li
-                key={submission.submission_id}
+                key={submission.uid}
                 className="mb-4 p-4 border border-gray-300 rounded"
               >
                 <h2 className="text-xl font-bold">{submission.name}</h2>
                 <p>
                   <strong>Location:</strong> {submission.location}
                 </p>
-                <p>
-                  <strong>Price Range:</strong> {submission.price_range}
-                </p>{" "}
-                {/* Show actual price range */}
-                <p>
-                  <strong>Food Type:</strong> {submission.food_type}
-                </p>{" "}
-                {/* Show actual food type */}
                 <p>
                   <strong>Hours of Operation:</strong>{" "}
                   {submission.hours_of_operation}
@@ -101,37 +91,41 @@ export default function ReviewSubmissions() {
                   <strong>Description:</strong> {submission.description}
                 </p>
                 <p>
+                  <strong>Website:</strong> {submission.website}
+                </p>
+                <p>
                   <strong>Phone Number:</strong> {submission.phone_number}
                 </p>
                 <p>
                   <strong>Email:</strong> {submission.email}
                 </p>
-                <div>
-                  <strong>Images:</strong>
-                  <ul>
-                    {Object.entries(submission.images).map(([type, url]) => (
-                      <li key={type}>
-                        <strong>{type}:</strong>{" "}
-                        <a href={url} target="_blank" rel="noopener noreferrer">
-                          {url}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <p>
+                  <strong>Price Range:</strong> {submission.price_range}
+                </p>
+                <p>
+                  <strong>Food Type:</strong> {submission.food_type}
+                </p>
+
+                {/* Display the image */}
+                {submission.image_url && (
+                  <div className="my-4">
+                    <img
+                      src={submission.image_url}
+                      alt={submission.name}
+                      className="w-full max-h-64 object-cover"
+                    />
+                  </div>
+                )}
+
                 <div className="flex justify-center">
                   <button
-                    onClick={() =>
-                      handleAction(submission.submission_id, "accept")
-                    }
+                    onClick={() => handleAction(submission.uid, "accept")}
                     className="rounded-full font-thin bg-[#AAD15F] px-4 py-1 mx-1 my-2 hover:bg-[#627937]"
                   >
                     Accept
                   </button>
                   <button
-                    onClick={() =>
-                      handleAction(submission.submission_id, "reject")
-                    }
+                    onClick={() => handleAction(submission.uid, "reject")}
                     className="rounded-full font-thin bg-[#D22701] px-4 py-1 mx-1 my-2 hover:bg-[#963a25]"
                   >
                     Reject

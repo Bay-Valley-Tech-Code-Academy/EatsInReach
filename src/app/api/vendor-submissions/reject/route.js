@@ -15,34 +15,25 @@ export async function POST(request) {
   }
 
   try {
-    // Start a transaction
-    await pool.query("BEGIN");
+    // Delete the related pictures first
+    await pool.query("DELETE FROM Vendor_Restaurant_Pictures WHERE uid = $1", [
+      submissionId,
+    ]);
 
-    // Delete images from Vendor_Submission_Images
-    await pool.query(
-      "DELETE FROM Vendor_Submission_Images WHERE submission_id = $1",
-      [submissionId]
+    // Now delete the submission
+    await pool.query("DELETE FROM Vendor_Submissions WHERE uid = $1", [
+      submissionId,
+    ]);
+
+    return new Response(
+      JSON.stringify({ message: "Submission rejected successfully" }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
     );
-
-    // Delete from Vendor_Submissions
-    await pool.query(
-      "DELETE FROM Vendor_Submissions WHERE submission_id = $1",
-      [submissionId]
-    );
-
-    // Commit the transaction
-    await pool.query("COMMIT");
-
-    return new Response(JSON.stringify({ message: "Submission rejected" }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
   } catch (error) {
     console.error("Error handling reject request:", error);
-
-    // Rollback the transaction in case of error
-    await pool.query("ROLLBACK");
-
     return new Response(
       JSON.stringify({ message: "Failed to reject submission" }),
       {

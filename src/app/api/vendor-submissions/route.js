@@ -11,27 +11,25 @@ export async function GET() {
 
     const result = await client.query(`
             SELECT
-                vs.submission_id,
+                vs.uid,
                 vs.name,
                 vs.location,
-                pr.range AS price_range,            -- Join Price_Ranges table to get the price range name
-                ft.type_name AS food_type,          -- Join Food_Types table to get the food type name
                 vs.hours_of_operation,
                 vs.description,
+                vs.website,
                 vs.phone_number,
                 vs.email,
-                json_object_agg(pt.type_name, vsi.image_url) AS images
+                pr.range AS price_range,
+                ft.type_name AS food_type,
+                rp.image_url -- Add this line to fetch the image URL
             FROM Vendor_Submissions vs
-            JOIN Price_Ranges pr ON vs.price_range_id = pr.price_range_id -- Join to get price range
-            JOIN Food_Types ft ON vs.food_type_id = ft.food_type_id       -- Join to get food type
-            LEFT JOIN Vendor_Submission_Images vsi ON vs.submission_id = vsi.submission_id
-            LEFT JOIN Photo_Types pt ON vsi.photo_type_id = pt.photo_type_id
-            GROUP BY vs.submission_id, pr.range, ft.type_name
+            JOIN Price_Ranges pr ON vs.price_range_id = pr.price_range_id
+            JOIN Food_Types ft ON vs.food_type_id = ft.food_type_id
+            LEFT JOIN Vendor_Restaurant_Pictures rp ON vs.uid = rp.uid -- Adjust JOIN as needed
         `);
 
-    console.log("Query executed successfully");
     client.release();
-    return NextResponse.json(result.rows); // Return the fetched data
+    return NextResponse.json(result.rows);
   } catch (error) {
     console.error("Error fetching vendor submissions:", error);
     return NextResponse.json(
@@ -45,65 +43,62 @@ export async function POST(request) {
   try {
     const data = await request.json();
     const {
+      uid,
       name,
       location,
-      price_range_id,
-      food_type_id,
       hours_of_operation,
       description,
+      website,
       phone_number,
       email,
-      images,
+      price_range_id,
+      food_type_id,
+      image,
+      alt_text,
     } = data;
 
     const client = await pool.connect();
 
-    // Start a transaction
     await client.query("BEGIN");
 
-    // Insert into vendor_submissions
-    const submissionResult = await client.query(
-      "INSERT INTO vendor_submissions (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING submission_id",
+    // Insert vendor submission
+    const result = await client.query(
+      `INSERT INTO Vendor_Submissions (
+                uid, name, location, hours_of_operation, description, website,
+                phone_number, email, price_range_id, food_type_id
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
+        uid,
         name,
         location,
-        price_range_id,
-        food_type_id,
         hours_of_operation,
         description,
+        website,
         phone_number,
         email,
+        price_range_id,
+        food_type_id,
       ]
     );
 
-    const submissionId = submissionResult.rows[0].submission_id;
+    // Insert a single image with photo_type_id set to 4
+    const imageUrl = image; // Assuming image is passed as base64 or URL
+    const photoType = 4; // Automatically set photo_type_id to 4
 
-    // Insert images
-    if (images) {
-      const photoTypes = { display: 4, menu: 1, food: 2 };
-      for (const [type, url] of Object.entries(images)) {
-        if (url) {
-          await client.query(
-            "INSERT INTO Vendor_Submission_Images (submission_id, photo_type_id, image_url) VALUES ($1, $2, $3)",
-            [submissionId, photoTypes[type], url]
-          );
-        }
-      }
-    }
+    await client.query(
+      `INSERT INTO Vendor_Restaurant_Pictures (uid, image_url, photo_type_id, alt_text) 
+            VALUES ($1, $2, $3, $4)`,
+      [uid, imageUrl, photoType, alt_text]
+    );
 
-    // Commit the transaction
     await client.query("COMMIT");
-
     client.release();
 
-    return new NextResponse(
-      JSON.stringify({ message: "Submission successful" }),
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "Submission successful!" });
   } catch (error) {
-    console.error("Error submitting vendor:", error);
-    return new NextResponse(
-      JSON.stringify({ error: "Internal Server Error" }),
+    console.error("Error handling submission:", error);
+    return NextResponse.json(
+      { message: "Error handling submission", error: error.message },
       { status: 500 }
     );
   }

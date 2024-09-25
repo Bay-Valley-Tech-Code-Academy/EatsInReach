@@ -1,34 +1,85 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../../context/authContext";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../../../../firebase";
+import { UploadButton } from "../../../../libs/uploadthing";
 import Navbar from "@/Components/Navbar";
 
 export default function VendorSubmission() {
-  const [foodTypes, setFoodTypes] = useState([]);
-  const [filteredFoodTypes, setFilteredFoodTypes] = useState([]);
+  const router = useRouter();
+  const { currentUser, loading } = useAuth();
+  const [role, setRole] = useState(null);
+  const [isRoleLoading, setIsRoleLoading] = useState(true);
   const [priceRanges, setPriceRanges] = useState([]);
+  const [foodTypes, setFoodTypes] = useState([]);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
-    location: "",
-    price_range_id: "",
-    food_type_id: "",
-    hours_of_operation: "",
-    description: "",
-    phone_number: "",
-    email: "",
+    name: "Sample Restaurant",
+    location: "123 Main St, Sample City",
+    hours_of_operation: "Mon-Fri, 9am-9pm",
+    description: "A great place to enjoy delicious food!",
+    website: "sample.com",
+    phone_number: "123-456-7890",
+    email: "sample@restaurant.com",
+    price_range_id: "2",
+    food_type_id: "1",
+    image: "", // Single image input
+    alt_text: "Image description", // Alt text for the image
   });
-
-  const [images, setImages] = useState({
-    display: "",
-    menu: "",
-    food: "",
-  });
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [imageURL, setImageURL] = useState("");
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
   const dropdownRef = useRef(null);
+  const sidebar = ["Profile", "Tbd"];
 
-  // Fetch available food types and price ranges when the component loads
+  useEffect(() => {
+    // Redirect to the landing page if the user is not logged in
+    if (!loading && !currentUser) {
+      router.push("/");
+    }
+    if (currentUser) {
+      const fetchUserData = async () => {
+        const collections = ["users", "vendors", "admins"];
+        let found = false;
+
+        for (const collection of collections) {
+          if (found) break;
+
+          try {
+            const userDoc = await getDoc(
+              doc(firestore, collection, currentUser.uid)
+            );
+
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              if (userData.role !== "vendor") {
+                router.push("/");
+              }
+              found = true;
+              setRole(userData.role);
+            }
+          } catch (error) {
+            console.error(
+              `Error fetching user data from ${collection} collection:`,
+              error
+            );
+          }
+        }
+
+        if (!found) {
+          console.log(
+            "User document does not exist in any of the collections."
+          );
+          setRole(null);
+        }
+        setIsRoleLoading(false);
+      };
+
+      fetchUserData();
+    }
+  }, [currentUser, loading, router]);
+
   useEffect(() => {
     async function fetchFoodTypes() {
       try {
@@ -38,7 +89,6 @@ export default function VendorSubmission() {
         }
         const data = await response.json();
         setFoodTypes(data);
-        setFilteredFoodTypes(data); // Initialize filteredFoodTypes
       } catch (error) {
         console.error(error);
       }
@@ -62,7 +112,6 @@ export default function VendorSubmission() {
   }, []);
 
   useEffect(() => {
-    // Close dropdown when clicking outside of it
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownVisible(false);
@@ -81,219 +130,181 @@ export default function VendorSubmission() {
     });
   };
 
-  const handleImageChange = (e, type) => {
-    setImages({
-      ...images,
-      [type]: e.target.value,
-    });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const submission = {
-      ...formData,
-      images,
-    };
-
-    const response = await fetch("/api/vendor-submissions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(submission),
-    });
-
-    if (response.ok) {
-      setSubmitStatus(
-        "Submission successful! Your restaurant will be reviewed soon."
-      );
-      setFormData({
-        name: "",
-        location: "",
-        price_range_id: "",
-        food_type_id: "",
-        hours_of_operation: "",
-        description: "",
-        phone_number: "",
-        email: "",
+    try {
+      const response = await fetch("/api/vendor-submissions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          uid: currentUser.uid,
+          image: imageURL, // Include the imageURL in the submission
+          photo_type_id: 4,
+        }),
       });
-      setSearchTerm(""); // Clear search term on successful submission
-    } else {
+
+      if (response.ok) {
+        setSubmitStatus(
+          "Submission successful! Your restaurant will be reviewed soon."
+        );
+        setFormData({
+          name: "",
+          location: "",
+          hours_of_operation: "",
+          description: "",
+          website: "",
+          phone_number: "",
+          email: "",
+          price_range_id: "",
+          food_type_id: "",
+          image: "",
+          alt_text: "",
+        });
+        setImageURL(""); // Clear image URL after submission
+      } else {
+        setSubmitStatus(
+          "There was an error with your submission. Please try again."
+        );
+      }
+    } catch (error) {
+      console.error("Error submitting vendor:", error);
       setSubmitStatus(
         "There was an error with your submission. Please try again."
       );
     }
   };
 
-  const handleSearchChange = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    setSearchTerm(searchTerm);
-    setFilteredFoodTypes(
-      foodTypes.filter((type) =>
-        type.type_name.toLowerCase().includes(searchTerm)
-      )
-    );
-  };
-
-  const handleSelectFoodType = (type) => {
-    setFormData({ ...formData, food_type_id: type.food_type_id });
-    setSearchTerm(type.type_name); // Set search term to selected food type name
-    setDropdownVisible(false);
-  };
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
-
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+    <>
       <Navbar />
-      <h1 className="text-2xl font-bold mb-6">Submit Your Restaurant</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Restaurant Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
+      <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+        <div className="flex justify-between place-items-center">
+          <h1 className="text-2xl font-bold">Submit Your Restaurant</h1>
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Location</label>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4 relative" ref={dropdownRef}>
-          <label className="block text-gray-700">Food Type:</label>
-          <input
-            type="text"
-            aria-expanded={dropdownVisible}
-            aria-controls="food-type-dropdown"
-            aria-haspopup="true"
-            value={searchTerm}
-            onClick={toggleDropdown}
-            onChange={handleSearchChange}
-            placeholder="Search for a food type"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          {dropdownVisible && (
-            <div
-              id="food-type-dropdown"
-              className="absolute z-10 bg-white border border-gray-300 rounded w-full mt-1 max-h-60 overflow-auto"
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700">Restaurant Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Location</label>
+            <input
+              type="text"
+              name="location"
+              value={formData.location || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Hours of Operation</label>
+            <input
+              type="text"
+              name="hours_of_operation"
+              value={formData.hours_of_operation || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Description</label>
+            <textarea
+              name="description"
+              value={formData.description || ""}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            ></textarea>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Phone Number</label>
+            <input
+              type="text"
+              name="phone_number"
+              value={formData.phone_number || ""}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Email Address</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email || ""}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Price Range</label>
+            <select
+              name="price_range_id"
+              value={formData.price_range_id || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
             >
-              {filteredFoodTypes.map((type) => (
-                <div
-                  key={type.food_type_id}
-                  className="p-2 cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSelectFoodType(type)}
-                >
-                  {type.type_name}
-                </div>
+              <option value="">Select Price Range</option>
+              {priceRanges.map((pr) => (
+                <option key={pr.price_range_id} value={pr.price_range_id}>
+                  {pr.range}
+                </option>
               ))}
-            </div>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Price Range:</label>
-          <select
-            name="price_range_id"
-            value={formData.price_range_id}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          >
-            <option value="">Select a price range</option>
-            {priceRanges.map((range) => (
-              <option key={range.price_range_id} value={range.price_range_id}>
-                {range.range}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Hours of Operation</label>
-          <input
-            type="text"
-            name="hours_of_operation"
-            value={formData.hours_of_operation}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Phone Number</label>
-          <input
-            type="text"
-            name="phone_number"
-            value={formData.phone_number}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Email Address</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Display Image URL</label>
-          <input
-            type="text"
-            value={images.display}
-            onChange={(e) => handleImageChange(e, "display")}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Menu Image URL</label>
-          <input
-            type="text"
-            value={images.menu}
-            onChange={(e) => handleImageChange(e, "menu")}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Food Image URL</label>
-          <input
-            type="text"
-            value={images.food}
-            onChange={(e) => handleImageChange(e, "food")}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Submit
-        </button>
-      </form>
-      {submitStatus && (
-        <p className="mt-4 text-center font-semibold">{submitStatus}</p>
-      )}
-    </div>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Food Type</label>
+            <select
+              name="food_type_id"
+              value={formData.food_type_id || ""}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            >
+              <option value="">Select Food Type</option>
+              {foodTypes.map((ft) => (
+                <option key={ft.food_type_id} value={ft.food_type_id}>
+                  {ft.type_name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            {isImageUploaded ? (
+              <div className="text-green-500">Image uploaded successfully!</div>
+            ) : (
+              <UploadButton
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  console.log("Files: ", res[0].url);
+                  setImageURL(res[0].url);
+                  setIsImageUploaded(true);
+                }}
+                onUploadError={(error) => {
+                  console.log(`ERROR! ${error.message}`);
+                }}
+              />
+            )}
+          </div>
+          <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+            Submit
+          </button>
+        </form>
+        {submitStatus && <p className="mt-4">{submitStatus}</p>}
+      </div>
+    </>
   );
 }

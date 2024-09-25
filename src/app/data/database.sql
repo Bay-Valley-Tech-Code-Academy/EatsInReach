@@ -16,19 +16,48 @@ CREATE TABLE Price_Ranges (
     range VARCHAR(50) NOT NULL
 );
 
+-- Create the Users table
+CREATE TABLE Users (
+    user_id SERIAL PRIMARY KEY,
+    uid VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    role VARCHAR(6) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the Vendor_Submissions table
+CREATE TABLE Vendor_Submissions (
+    submission_id SERIAL PRIMARY KEY,
+    uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    hours_of_operation VARCHAR(255),
+    description TEXT,
+    website VARCHAR(255),
+    phone_number VARCHAR(20),
+    email VARCHAR(255),
+    price_range_id INTEGER NOT NULL,
+    food_type_id INTEGER NOT NULL,
+    FOREIGN KEY (price_range_id) REFERENCES Price_Ranges(price_range_id),
+    FOREIGN KEY (food_type_id) REFERENCES Food_Types(food_type_id),
+    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Create the Restaurants table with phone number and email (modified)
 CREATE TABLE Restaurants (
     restaurant_id SERIAL PRIMARY KEY,
+    uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
-    price_range_id VARCHAR(50),
     hours_of_operation VARCHAR(255),
     description TEXT,
-    food_type_id INTEGER REFERENCES Food_Types(food_type_id),
     website VARCHAR(255),
     phone_number VARCHAR(20),
-    email VARCHAR(255)
+    email VARCHAR(255),
+    price_range_id INTEGER NOT NULL,
+    food_type_id INTEGER REFERENCES Food_Types(food_type_id),
+    is_open BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Create the Restaurant_Food_Types junction table
@@ -44,6 +73,17 @@ CREATE TABLE Photo_Types (
     type_name VARCHAR(100) NOT NULL
 );
 
+-- Create the Vendor_Items table
+CREATE TABLE Vendor_Items (
+    item_id SERIAL PRIMARY KEY,
+    restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
+    item_name VARCHAR(255) NOT NULL,
+    item_desc VARCHAR(255) NOT NULL,
+    item_price DECIMAL(10, 2) NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    alt_text VARCHAR(255)
+);
+
 -- Create the Restaurant_Pictures table
 CREATE TABLE Restaurant_Pictures (
     picture_id SERIAL PRIMARY KEY,
@@ -53,21 +93,13 @@ CREATE TABLE Restaurant_Pictures (
     alt_text VARCHAR(255)
 );
 
--- Create the Vendor_Submissions table
-CREATE TABLE Vendor_Submissions (
-    submission_id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    location TEXT NOT NULL,
-    price_range_id INTEGER NOT NULL,
-    food_type_id INTEGER NOT NULL,
-    hours_of_operation TEXT NOT NULL,
-    description TEXT,
-    phone_number VARCHAR(15),
-    email VARCHAR(255),
-    image_url TEXT,
-    submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (price_range_id) REFERENCES Price_Ranges(price_range_id),
-    FOREIGN KEY (food_type_id) REFERENCES Food_Types(food_type_id)
+CREATE TABLE Vendor_Restaurant_Pictures (
+    id SERIAL PRIMARY KEY,
+    uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
+    photo_type_id INT REFERENCES Photo_Types(photo_type_id),
+    image_url TEXT NOT NULL,
+    alt_text TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create the Menus table
@@ -90,19 +122,11 @@ CREATE TABLE Menu_Items (
     is_gluten_free BOOLEAN DEFAULT FALSE
 );
 
--- Create the Users table
-CREATE TABLE Users (
-    user_id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Create the Favorites table
 CREATE TABLE Favorites (
-    user_id INTEGER REFERENCES Users(user_id) ON DELETE CASCADE,
+    uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
     restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, restaurant_id)
+    PRIMARY KEY (uid, restaurant_id)
 );
 
 -- Create the Dietary_Restrictions table
@@ -140,8 +164,8 @@ INSERT INTO Photo_Types (type_name)
 VALUES
     ('Menu'),
     ('Food'),
-    ('Display'),
-    ('Restaurant');
+    ('Restaurant'),
+    ('Display');
 
 -- Insert dummy data into the Food_Types table
 INSERT INTO Food_Types (type_name) VALUES
@@ -181,47 +205,54 @@ INSERT INTO Food_Types (type_name) VALUES
     ('Vietnamese');
 
 
--- Insert dummy data into the Restaurants table
-INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, description, food_type_id, website, phone_number, email)
-VALUES
-    ('Pasta Palace', '123 Main St, Merced, CA', 2, '11:00 AM - 10:00 PM', 'A cozy Italian restaurant specializing in homemade pasta.', 1, 'www.pastapalace.com','209-555-1111', 'contact@pastapalace.com'),
-    ('Sushi Central', '456 Elm St, Merced, CA', 3, '12:00 PM - 11:00 PM', 'Fresh sushi and sashimi with a modern twist.', 2, 'www.sushicentral.com', '209-555-2222', 'info@sushicentral.com'),
-    ('Burger Bonanza', '789 Oak St, Merced, CA', 1, '10:00 AM - 8:00 PM', 'The best burgers in town with secret sauces.', 2, 'www.sushicentral.com', '209-555-1234', 'info@burgerbonanza.com'),
-    ('Taco Town', '987 Maple Ave, Merced, CA', 2, '9:00 AM - 9:00 PM', 'Authentic Mexican tacos made fresh daily.', 2, 'www.sushicentral.com', '209-555-9876', 'contact@tacotown.com'),
-    ('Steak House', '321 Pine St, Merced, CA', 4, '5:00 PM - 11:00 PM', 'Fine dining steakhouse with premium cuts.', 2, 'www.sushicentral.com', '209-555-6543', 'reservations@steakhouse.com');
 
--- Insert dummy data into the Restaurant_Food_Types table
+INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, is_open, description, food_type_id, website, phone_number, email)
+VALUES
+    ('Tonis Courtyard Cafe', '516 W 18th St, Merced, CA', 2, '7:30 AM - 3:00 PM', TRUE, 'Featuring an extensive menu of casual Italian-inspired American eats & an idyllic courtyard patio.', 1, 'http://www.toniscourtyardcafe.com/','209-384-2580', 'contact@example.com'),
+    ('Joystiq', '325 W Main St, Merced, CA', 3, '3:00 PM - 12:00 AM', TRUE, 'Experience great vibes and nostalgia at one of the best bars in town, featuring old arcade games, fantastic drinks, and lively music.', 1,  'http://www.joystiqmerced.com/', '209-455-3300', 'joystiqmerced@gmail.com'),
+    ('Kind Neighbor', '1635 M St, Merced, CA', 2, '7:30 AM - 6:00 PM', TRUE, 'Enjoy one of the best smoothies ever, like our refreshing strawberry smoothie with almond milk, for a delicious treat worth the wait.', 1, 'http://www.kindneighborjuicebar.com/', '209-617-6538', 'kindneighborinfo@gmail.com'),
+    ('Oishi Teri Sushi Bar', '235 W Main St, Merced, CA', 4, '11:00 AM - 8:00 PM', TRUE, 'Enduring, spacious eatery preparing traditional Thai staples & some Vietnamese options in calm digs.', 17, 'http://www.oishisushibar.com', '209-653-5859', 'contact@example.com'),
+    ('El Palmar Taqueria', '1127 Martin Luther King Jr Way, Merced, CA', 1, '10:00 AM - 9:00 PM', TRUE, 'Enjoy some of the best Mexican food in a relaxed atmosphere with reasonable prices', 21, 'http://www.elpalmartaqueria.com/', '209-726-8855', 'contact@example.com');
+
+
 INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id)
 VALUES
-    (1, 16),  -- Pasta Palace serves Italian food
-    (2, 17),  -- Sushi Central serves Japanese food
-    (3, 1),  -- Burger Bonanza serves American food
-    (4, 21),  -- Taco Town serves Mexican food
-    (5, 30);  -- Steak House serves Steakhouse food
+    (1, 1),  -- Courtyard Cafe serves American
+    (2, 1),  -- Joystiq serves American
+    (3, 1),  -- Kind Neighbor serves American food
+    (4, 17),  -- Oishi Teri serves Japanese
+    (5, 21);  -- El Palmar serves Mexican
 
 -- Insert dummy data into the Restaurant_Pictures table
 INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text)
 VALUES
-    (1, 1, 'pizza-menu.jpg', 'Menu at Pasta Palace'),
-    (1, 2, 'pizza-2.jpg', 'Signature pasta dish at Pasta Palace'),
-    (2, 1, 'sushi-menu.jpg', 'Menu at Sushi Central'),
-    (2, 2, 'sushi-1.jpg', 'Fresh sashimi platter at Sushi Central'),
-    (3, 1, 'burger-menu.jpg', 'Menu at Burger Bonanza'),
-    (3, 2, 'burger-1.jpg', 'Signature burger at Burger Bonanza'),
-    (4, 1, 'taco-menu.jpg', 'Menu at Taco Town'),
-    (4, 2, 'taco-1.jpg', 'Fresh tacos at Taco Town'),
-    (5, 1, 'steak-menu.jpg', 'Menu at Steak House'),
-    (5, 2, 'steak-1.jpg', 'Premium steak dish at Steak House');
+    (1, 4, 'https://utfs.io/f/TnfuvTEmVxjlck1916M2BxEX4gp9VPDHA36Trh8aUvOY7zCs', 'Toni Courtyard Cafe'), -- Restaurant Building
+    (1, 2, 'https://utfs.io/f/TnfuvTEmVxjlInrtm52apk34Q7E8uxyASnJPMFIRsGU5bjcq', 'Bacon Hamburger'), -- Food
+    (1, 3, 'https://utfs.io/f/TnfuvTEmVxjlhtRKBb6qKOM2H9kBCzda7buYc4g3DmJ5xLXv', 'Strawberry French Toast'), -- Menu Item
+    (1, 3, 'https://utfs.io/f/TnfuvTEmVxjl1FtkoY0vkWRAzO9Y2jL5eDi8md1VI370QxnT', 'Avocado Toast'), -- Menu Item
+    (2, 4, 'https://utfs.io/f/TnfuvTEmVxjlyPXQfYDHhsbgP0vlOBIMWmEpy47rAJcGFfRk', 'Joystiq'), -- Restaurant Building
+    (2, 2, 'https://utfs.io/f/TnfuvTEmVxjlCPescbntgdci7ymOo2TqsBznkIPx4w5tE0uJ', 'Burger'), -- Food
+    (2, 3, 'https://utfs.io/f/TnfuvTEmVxjlbYYhoBakm8yxDQ2zjXVK9tcIu0lpLiE6Y7qB', 'Salad'), -- Menu Item
+    (2, 3, 'https://utfs.io/f/TnfuvTEmVxjlZz4bNykTB7r6NOijlVQRg2cA03qxX5aUYTfz', 'Mozzarella Sticks'), -- Menu Item
+    (3, 4, 'https://utfs.io/f/TnfuvTEmVxjl0l8UBuqEZ9v5FejB6oSg1MqUtTHkAzJibs8Y', 'Kind Neighbor'), -- Restaurant Building
+    (3, 2, 'https://utfs.io/f/TnfuvTEmVxjlgiXd7tBy3G7qojHwPSJmlOY4LDbXQ08Ud16a', 'Acai Bowl'), -- Food
+    (3, 3, 'https://utfs.io/f/TnfuvTEmVxjl9OryBwlIeQupKIDmfM8nCXlidcw3vHVbNSBT', 'Avocado Toast'), -- Menu Item
+    (3, 3, 'https://utfs.io/f/TnfuvTEmVxjlpTaT7M25KW7g1TMRV9vGABShrJzekdE0DCmI', 'Overnight Oats'), -- Menu Item
+    (4, 4, 'https://utfs.io/f/TnfuvTEmVxjl2HEoDoGMbIEUYnsuAjNdxG1SViXq6pFgmeKT', 'Oishi Teri Sushi Bar'), -- Restaurant Building
+    (4, 2, 'https://utfs.io/f/TnfuvTEmVxjlaY4TjEOW4Mo9jEqKlJRn1gfb8De0PVZGsuc2', 'Sashimi'), -- Food
+    (4, 3, 'https://utfs.io/f/TnfuvTEmVxjla9FHYJOW4Mo9jEqKlJRn1gfb8De0PVZGsuc2', 'Sushi Heart'), -- Menu Item
+    (4, 3, 'https://utfs.io/f/TnfuvTEmVxjlgC6DftBy3G7qojHwPSJmlOY4LDbXQ08Ud16a', 'Shrimp Head Sushi'), -- Menu Item
+    (5, 4, 'https://utfs.io/f/TnfuvTEmVxjlaF7WYTOW4Mo9jEqKlJRn1gfb8De0PVZGsuc2', 'El Palmar Taqueria'), -- Restaurant Building
+    (5, 2, 'https://utfs.io/f/TnfuvTEmVxjlOGKBa2nRnS8w5sUrlh73XzKe2jafgVbqPyJt', 'Wet Burrito'), -- Food
+    (5, 3, 'https://utfs.io/f/TnfuvTEmVxjl31i0Lm4UbSKvmQr8spuFqhCjN2knDeW5Lyl3', 'Nachos'), -- Menu Item
+    (5, 3, 'https://utfs.io/f/TnfuvTEmVxjlUafMQdy9CMir73AItu2pD6oZfkPF0zy1cUOH', 'Torta'); -- Menu Item
 
--- Insert dummy data into the Vendor_Submissions table
-INSERT INTO Vendor_Submissions (name, location, price_range_id, food_type_id, hours_of_operation, description, phone_number, email)
-VALUES
-    ('Tasty Thai', 'Meow St, Merced, CA', 1, 31, '10:00 AM - 8:00 PM', 'The thai is good.', '209-209-2009', 'info@tastythai.com');
+
 
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES
-    (1, 'Lunch', 'Weekday lunch specials'),
-    (1, 'Dinner', 'Evening fine dining experience'),
+    (1, 'Appetizer', 'Light starter meals'),
+    (5, 'Dinner', 'Evening fine dining experience'),
     (2, 'All Day', 'Our full menu, available all day');
 
 INSERT INTO Menu_Items (menu_id, name, description, price, is_vegetarian, is_vegan, is_gluten_free)
@@ -230,14 +261,6 @@ VALUES
     (1, 'Margherita Pizza', 'Fresh mozzarella, tomatoes, basil', 12.99, true, false, false),
     (2, 'Filet Mignon', '8oz, garlic mashed potatoes, asparagus', 29.99, false, false, true),
     (3, 'Vegan Buddha Bowl', 'Quinoa, roasted vegetables, tahini dressing', 14.99, true, true, true);
-
-INSERT INTO Users (username, email)
-VALUES
-    ('foodie123', 'foodie123@email.com'),
-    ('tasteexplorer', 'taste@email.com');
-
-INSERT INTO Favorites (user_id, restaurant_id)
-VALUES (1, 2), (2, 1);
 
 INSERT INTO Dietary_Restrictions (name, description)
 VALUES
@@ -248,6 +271,11 @@ VALUES
 INSERT INTO Restaurant_Dietary_Options (restaurant_id, restriction_id)
 VALUES (1, 1), (1, 3), (2, 1), (2, 2);
 
+-- Insert dummy data into the Vendor_Items table
+INSERT INTO Vendor_Items (restaurant_id, item_name, item_desc, item_price, image_path, alt_text)
+VALUES
+    (1, 'Spaghetti Carbonara', 'Classic Italian pasta with creamy sauce.', 12.99, 'spaghetti-carbonara.jpg', 'Spaghetti Carbonara at Pasta Palace'),
+    (2, 'Salmon Sashimi', 'Freshly sliced salmon sashimi.', 15.99, 'salmon-sashimi.jpg', 'Salmon Sashimi at Sushi Central');
 
 -- Uncomment to drop the database (use with caution)
--- DROP DATABASE eats_in_reach_db;
+--  DROP DATABASE eats_in_reach_db;

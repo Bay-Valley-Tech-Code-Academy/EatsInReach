@@ -13,68 +13,91 @@ export async function POST(request) {
       }
     );
   }
+  const { submissionId } = await request.json();
+
+  if (!submissionId) {
+    return new Response(
+      JSON.stringify({ message: "Submission ID is required" }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 
   try {
-    // Start a transaction
-    await pool.query("BEGIN");
-
     // Fetch the submission data
     const result = await pool.query(
-      "SELECT * FROM Vendor_Submissions WHERE submission_id = $1",
+      "SELECT * FROM Vendor_Submissions WHERE uid = $1",
       [submissionId]
     );
     const submission = result.rows[0];
 
+    const picture_results = await pool.query(
+      "SELECT * FROM Vendor_Restaurant_Pictures WHERE uid = $1",
+      [submissionId]
+    );
+    const picture_submission = picture_results.rows[0];
+
     if (!submission) {
-      await pool.query("ROLLBACK");
       return new Response(JSON.stringify({ message: "Submission not found" }), {
         status: 404,
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    // Insert into Restaurants and get the new restaurant_id
-    const insertRestaurantResult = await pool.query(
-      "INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, description, phone_number, email) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING restaurant_id",
-      [
-        submission.name,
-        submission.location,
+    // Check if price_range_id and food_type_id are valid
+    const [priceRangeResult, foodTypeResult] = await Promise.all([
+      pool.query("SELECT 1 FROM Price_Ranges WHERE price_range_id = $1", [
         submission.price_range_id,
-        submission.hours_of_operation,
-        submission.description,
-        submission.phone_number,
-        submission.email,
-      ]
-    );
+      ]),
+      pool.query("SELECT 1 FROM Food_Types WHERE food_type_id = $1", [
+        submission.food_type_id,
+      ]),
+    ]);
 
-    const restaurantId = insertRestaurantResult.rows[0].restaurant_id;
-
-    // Insert into Restaurant_Food_Types
-    await pool.query(
-      "INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id) VALUES ($1, $2)",
-      [restaurantId, submission.food_type_id]
-    );
-
-    // Fetch images associated with the submission
-    const imagesResult = await pool.query(
-      "SELECT * FROM Vendor_Submission_Images WHERE submission_id = $1",
-      [submissionId]
-    );
-
-    const images = imagesResult.rows;
-
-    // Transfer images to Restaurant_Pictures
-    for (const image of images) {
-      await pool.query(
-        "INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url) VALUES ($1, $2, $3)",
-        [restaurantId, image.photo_type_id, image.image_url]
+    if (priceRangeResult.rowCount === 0 || foodTypeResult.rowCount === 0) {
+      return new Response(
+        JSON.stringify({ message: "Invalid price range or food type ID" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
       );
     }
 
-    // Delete images from Vendor_Submission_Images
+    // Insert into Restaurants and get the new restaurant_id
+    const insertRestaurantResult = await pool.query(
+      `INSERT INTO Restaurants (uid, name, location, hours_of_operation, description, website, phone_number, email, price_range_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING restaurant_id`,
+      [
+        submission.uid,
+        submission.name,
+        submission.location,
+        submission.hours_of_operation,
+        submission.description,
+        submission.website,
+        submission.phone_number,
+        submission.email,
+        submission.price_range_id,
+      ]
+    );
+    const newRestaurantId = insertRestaurantResult.rows[0].restaurant_id;
+    // Automatically set photo_type_id to 4 and use the uploaded image URL
+    const imageUrl = picture_submission.image_url;
+    const photoType = 4; // Automatically set photo_type_id to 4
+
     await pool.query(
-      "DELETE FROM Vendor_Submission_Images WHERE submission_id = $1",
-      [submissionId]
+      `INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text) 
+            VALUES ($1, $2, $3, $4)`,
+      [newRestaurantId, photoType, imageUrl, picture_submission.alt_text]
+    );
+
+    // Insert into Restaurant_Food_Types
+    await pool.query(
+      `INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id) 
+            VALUES ($1, $2)`,
+      [newRestaurantId, submission.food_type_id]
     );
 
     // Delete from Vendor_Submissions

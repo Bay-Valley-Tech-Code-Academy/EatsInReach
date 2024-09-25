@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import { withUt } from "uploadthing/tw";
+ 
+export default withUt({
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -23,11 +24,13 @@ module.exports = {
       'penn-red':'#990000',
       'Dartmouth-green':'#065E0C',
       'rosey-brown':'#CC9A86',
-      'Kobicha':'#673d26'
-
-
+      'Kobicha':'#673d26',
+      'Cream':'#FDFBCE',
+      'Fern_green':'#5A804D',
+      'Lime':'#CCF551',
+      'Buff':'#dfaf90'
       },
     },
   },
   plugins: [],
-};
+});
