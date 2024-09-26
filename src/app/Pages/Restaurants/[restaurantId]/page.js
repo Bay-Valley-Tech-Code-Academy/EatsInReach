@@ -178,11 +178,11 @@ export default function RestaurantPageId({ params }) {
     : [];
 
   return (
-    <div className="min-h-screen flex flex-col bg-Almond">
+    <div className="min-h-screen flex flex-col bg-[#FDFBCE]">
       <header className="w-full">
         <Navbar />
       </header>
-      <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-white">
+      <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-[]">
         <section className="mb-4 p-2">
           <h1 className="text-3xl font-bold text-center text-black">
             {restaurant.name}
@@ -269,56 +269,47 @@ export default function RestaurantPageId({ params }) {
               <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
                 <div className="border border-gray-200 rounded-lg">
                   <button
-                    onClick={toggleMenuAccordion} // Toggle the accordion
-                    className="flex justify-between w-full px-4 py-2 text-left text-2xl font-bold mb-2 text-black bg-gray-100 rounded-lg focus:outline-none"
+                    onClick={toggleMenuAccordion} 
+                    className="flex justify-between w-full px-4 py-2 text-left text-2xl font-bold mb-2 text-black bg-gray-100 rounded-lg focus:outline-none transition duration-500 ease-in"
                   >
                     {menuOpen ? "Hide Menu" : "Show Menu"}
                     <span
-                      className={`transform transition-transform duration-300 ${menuOpen ? "rotate-180" : ""
-                        }`}
+                      className={`transform transition-transform duration-300 ${menuOpen ? "rotate-180" : ""}`}
                     >
                       ▼
                     </span>
                   </button>
-                  {menuOpen && (
-                    <div className="p-4 border-t border-gray-200">
-                      {justMenuItems && justMenuItems.length > 0 ? (
-                        justMenuItems.map((menuSection, index) => (
-                          <div key={index} className="mb-6">
-                            {/* Menu Section Title */}
-                            <h3 className="text-2xl font-bold text-black mb-2">
-                              {menuSection.menu_name} {/* Section Name */}
-                            </h3>
-                            <p className="text-lg text-gray-600 mb-4">
-                              {menuSection.menu_desc}
-                              {/* Section Description */}
-                            </p>
-                            {/* Menu Items */}
-                            <ul className="space-y-4">
-                              {menuSection.items.map((item, itemIndex) => (
-                                <li key={itemIndex} className="flex flex-col text-black">
-                                  {/* Item Name and Price */}
-                                  <div className="flex justify-between">
-                                    <span className="font-semibold">{item.name}</span>
-                                    <span>${item.price}</span>
-                                  </div>
-
-                                  {/* Item Description */}
-                                  {item.description && (
-                                    <p className="text-sm text-gray-500 mt-1">
-                                      {item.description}
-                                    </p>
-                                  )}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))
-                      ) : (
-                        <p>No menu available.</p>
-                      )}
-                    </div>
-                  )}
+                  <div className={`overflow-hidden transition-max-height duration-500 ease-in-out  ${menuOpen ? "max-h-[1000px] p-6" : "max-h-0 p-0"}   border-t border-gray-200`}>
+                    {justMenuItems && justMenuItems.length > 0 ? (
+                      justMenuItems.map((menuSection, index) => (
+                        <div key={index} className="mb-6 ">
+                          <h3 className="text-2xl font-bold text-black mb-2">
+                            {menuSection.menu_name} {/* Section Name */}
+                          </h3>
+                          <p className="text-lg text-gray-600 mb-4">
+                            {menuSection.menu_desc}
+                          </p>
+                          <ul className="space-y-4">
+                            {menuSection.items.map((item, itemIndex) => (
+                              <li key={itemIndex} className="flex flex-col text-black">
+                                <div className="flex justify-between">
+                                  <span className="font-semibold">{item.name}</span>
+                                  <span>${item.price}</span>
+                                </div>
+                                {item.description && (
+                                  <p className="text-sm text-gray-500 mt-1">
+                                    {item.description}
+                                  </p>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No menu available.</p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
