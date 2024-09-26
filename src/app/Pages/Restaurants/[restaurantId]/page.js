@@ -191,10 +191,31 @@ export default function RestaurantPageId({ params }) {
           {/* Image Section */}
           <div className="relative w-full md:w-1/3 p-2 flex-shrink-0">
             <img
+              style={{
+                outline: "none",
+                border: "none",
+                userSelect: "none"
+              }
+              }
               src={restaurant.image_url || "/default-image.jpg"} // Provide a default image if URL is missing
               alt={`${restaurant.name} main dish`}
               className="w-full h-auto object-cover rounded-lg"
             />
+            {currentUser && role === "user" && (
+              <div
+                onClick={handleFavoriteToggle}
+                className="cursor-pointer flex items-center justify-center space-x-2 mt-4"
+              >
+                <p className="text-xl font-semibold text-gray-800 transition-colors duration-300 hover:text-red-600">
+                  {isFavorited ? "Favorited!" : "Favorite Me!"}
+                </p>
+                {isFavorited ? (
+                  <PiHeartStraightFill className="text-red-600 transition-transform duration-300 transform hover:scale-110" />
+                ) : (
+                  <PiHeartStraightThin className="text-gray-800 transition-transform duration-300 transform hover:scale-110 hover:text-red-600" />
+                )}
+              </div>
+            )}
           </div>
           {/* Restaurant Details */}
           <div className="w-full md:w-2/3 flex flex-col gap-6">
@@ -304,18 +325,6 @@ export default function RestaurantPageId({ params }) {
           >
             Back to Restaurants
           </a>
-          {currentUser && role === "user" && (
-            <div
-              onClick={handleFavoriteToggle}
-              className="cursor-pointer text-3xl flex items-center ml-32"
-            >
-              {isFavorited ? (
-                <PiHeartStraightFill className="text-red-600" /> // Change to red when favorited
-              ) : (
-                <PiHeartStraightThin className="text-black" /> // Keep black when not favorited
-              )}
-            </div>
-          )}
         </section>
       </main>
       {/* Footer */}
