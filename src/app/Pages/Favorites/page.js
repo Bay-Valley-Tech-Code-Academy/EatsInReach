@@ -37,6 +37,8 @@ export default function Favorites() {
                 doc(firestore, collection, currentUser.uid)
               );
 
+              
+
               if (userDoc.exists()) {
                 const userData = userDoc.data();
                 if (userData.role !== "user") {
@@ -107,27 +109,29 @@ export default function Favorites() {
   }
 
   return (
-    <div>
-      <Navbar />
-      <div className="flex flex-col justify-center items-center">
-        <div className="text-4xl font-semibold text-center w-full px-16 mt-12">
-          Favorites
-        </div>
-        <div className="flex flex-wrap gap-6 justify-center max-w-screen mx-auto px-4 mt-8">
-          {favorites.length > 0 ? (
-            favorites.map((restaurant) => (
-              <FavoritesCard
-                key={restaurant.restaurant_id}
-                restaurantId={restaurant.restaurant_id}
-                restaurantTitle={restaurant.name}
-                restaurantImg={restaurant.image_url}
-                userId={currentUser.uid}
-                removeFavorite={removeFavorite} // Pass removeFavorite function
-              />
-            ))
-          ) : (
-            <p>No favorites added yet.</p>
-          )}
+    <div className="min-h-screen flex flex-col justify-between">
+      <div>
+        <Navbar />
+        <div className="flex flex-col justify-center items-center">
+          <div className="text-4xl font-semibold text-center w-full px-16 mt-12">
+            Favorites
+          </div>
+          <div className="flex flex-wrap gap-6 justify-center max-w-screen mx-auto px-4 mt-8">
+            {favorites.length > 0 ? (
+              favorites.map((restaurant) => (
+                <FavoritesCard
+                  key={restaurant.restaurant_id}
+                  restaurantId={restaurant.restaurant_id}
+                  restaurantTitle={restaurant.name}
+                  restaurantImg={restaurant.image_url}
+                  userId={currentUser.uid}
+                  removeFavorite={removeFavorite} // Pass removeFavorite function
+                />
+              ))
+            ) : (
+              <p>No favorites added yet.</p>
+            )}
+          </div>
         </div>
       </div>
       <Footer />

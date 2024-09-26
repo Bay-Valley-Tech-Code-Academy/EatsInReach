@@ -1,11 +1,16 @@
-[Prerequisites](doc:EatsInReach#prerequisites) |
-[Setup](doc:EatsInReach#setup)
+[Prerequisites](#prerequisites) |
+[Database Setup](#database-setup) |
+[Firebase Setup](#firebase-setup) |
+[Setup for Images](#setup-for-images) |
+[Setup for Contact Page](#setup-for-contact-page) |
+[Creating Admins](#creating-admins)
+
 
 _Please make sure to follow the instructions in order. You may run into errors if you follow them out of order._
 
-## PREREQUISITES
+# PREREQUISITES
 
-### Windows
+## Windows
 
 1. Install [PostgreSQL 15.8](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). (Uncheck 'Stack builder' and 'pgAdmin' when installing, we don't need those.)
 2. After installation, open your Command Prompt and type `psql`.
@@ -16,7 +21,7 @@ _Please make sure to follow the instructions in order. You may run into errors i
 
 3. In cmd, type `psql -U postgres`. Press enter, then enter your password. If this all works, you're good to go!
 
-### MacOS
+## MacOS
 
 1. Install [PostgreSQL 16.4](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). (Uncheck 'Stack builder' and 'pgAdmin' when installing, we don't need those.)
 2. After installation, open a terminal window and type `psql` to ensure that PostgreSQL is added to your system’s PATH.
@@ -31,9 +36,9 @@ _Please make sure to follow the instructions in order. You may run into errors i
 - - source ~/.zshrc # For zsh users
 - - source ~/.bash_profile # For bash users
 
-3.  Open a new terminal window and type `psql --version`. If you see `psql(PostgreSQL)16.4`, then it worked!
+3. Open a new terminal window and type `psql --version`. If you see `psql(PostgreSQL)16.4`, then it worked!
 
-## SETUP
+# DATABASE SETUP
 
 After cloning the repo:
 
@@ -49,15 +54,13 @@ DB_PASSWORD=[your postgreSQL password here]
 DB_NAME=eats_in_reach_db
 DATABASE_URL=postgres://postgres:[your postgreSQL password here]@localhost:5432/eats_in_reach_db
 ```
-(More stuff needs to be added after this. Check the Discord for the private passkeys.)
-
-Do not include the brackets when adding in the password.
+Do not include the brackets when adding in the password. 
 
 4. In terminal, type `psql -U postgres -f src/app/data/database.sql`. This creates the database for you.
 5. Install the PostgreSQL Explorer by Chris Kolkman on VS Code.
 6. Once you install this, follow the instructions in [this Youtube video](https://youtu.be/ezjoDYs72GA?si=0U7jKxL2xwNuQ5YR&t=680) to create a connection to the database. The instruction ends at 13:20.
 7. Run the program using `npm run dev`.
-8. Go to http://localhost:3000 to view the website.
+8. Go to <http://localhost:3000> to view the website.
 9. Kill the program by pressing `CTRL+C` in the terminal.
 
 # Firebase Setup
@@ -98,5 +101,117 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 ```
 
 ### 4. Update Firebase Rules
+
 1. By default the rules will allow anyone to read/write to the Firebase
 2. Update these rules based on the roles of the users
+
+# Setup for Images
+
+The service we used for storing images and file hosting is called [UploadThing](https://uploadthing.com/). 
+
+_UploadThing is a file upload solution for full stack applications that offers a balance of ownership, flexibility, and safety._
+
+In your `.env` file you will need to include this token for _UploadThing_. 
+
+```
+UPLOADTHING_TOKEN='eyJhcGlLZXkiOiJza19saXZlXzVlM2U5YzEzYzk5YWViZjlhNTAzYmM3ZDQ4MTljNTc2MDY4NGRjMTAyYjZkNTI3OGEyNGI3NjVmN2YzOWM0OTIiLCJhcHBJZCI6Imc2ajYyaWdvejciLCJyZWdpb25zIjpbInNlYTEiXX0='
+```
+
+# Setup for Contact Page
+
+Add this to the `.env` file to setup the email used for users to contact.
+
+```
+EMAIL_USER=eatsinreach@gmail.com
+EMAIL_PASS=utxm xlhx iiiy olgq
+```
+
+# Creating Admins
+
+## Prerequisites for Creating Admins
+
+### 1. Firebase must be setup correctly
+
+Follow the steps outlined in [Firebase Setup](#firebase-setup).
+
+### 2. Create an Admin Script
+
+1. Create a file named `admin.js` in the base folder.
+
+2. Paste the following code into that file:
+
+```
+// Import the Firebase Admin SDK
+const admin = require('firebase-admin');
+const path = require('path');
+
+// Path to your service account key JSON file
+const serviceAccountPath = './<path of json file>'; // Use relative path if in the same folder
+
+// Initialize Firebase Admin SDK
+admin.initializeApp({
+  credential: admin.credential.cert(require(serviceAccountPath)),
+});
+
+// Firestore instance
+const db = admin.firestore();
+
+// Function to create the first admin
+const createFirstAdmin = async (email, password) => {
+  try {
+    // Create the admin user
+    const userRecord = await admin.auth().createUser({
+      email,
+      password,
+      emailVerified: true, // Optional: set this to true if you want to skip email verification
+    });
+
+    console.log('Successfully created new admin user:', userRecord.uid);
+
+    // Store the admin's information in the 'admins' collection
+    await db.collection('admins').doc(userRecord.uid).set({
+      email: userRecord.email,
+      role: 'admin', // Add the role field and set it to 'admin'
+      // Add any additional admin-related data here
+    });
+
+    console.log('Admin information successfully stored in the "admins" collection.');
+  } catch (error) {
+    console.error('Error creating admin user:', error);
+  }
+};
+
+// Replace these with your admin email and password
+const adminEmail = 'admin@example.com';
+const adminPassword = '123456';
+
+// Create the first admin
+createFirstAdmin(adminEmail, adminPassword);
+```
+
+## Running Admin Script
+
+### 1. Update `admin.js` script
+
+1. Add your service account key JSON file in line 6. 
+
+```
+const serviceAccountPath = './<path of json file>'; // Use relative path if in the same folder
+```
+
+2. Replace `adminEmail` and `adminPassword` with your admin email and password in line 42-43.
+
+```
+const adminEmail = 'admin@example.com';
+const adminPassword = '123456';
+```
+
+### 2. Run `admin.js`
+
+_Ensure you are in the root of your directory not `src/app`._
+
+To run this script type this command in the terminal:
+
+```
+node admin.js
+```
