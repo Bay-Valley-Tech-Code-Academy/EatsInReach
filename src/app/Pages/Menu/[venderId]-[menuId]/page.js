@@ -86,6 +86,7 @@ export default function MenuItemPage() {
 }, [currentUser]);
 
 
+
   const resetForm = () => {
     setNewItemName("");
     setNewItemDesc("");
