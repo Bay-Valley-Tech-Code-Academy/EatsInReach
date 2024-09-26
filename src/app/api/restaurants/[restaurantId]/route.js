@@ -14,8 +14,7 @@ export async function GET(req, { params }) {
         const result = await client.query(`
             SELECT r.restaurant_id, r.name, r.location AS address, r.price_range_id, r.phone_number, r.email, f.type_name AS food_type, r.hours_of_operation, r.description, rp.image_url
             FROM Restaurants r
-            JOIN Restaurant_Food_Types rft ON r.restaurant_id = rft.restaurant_id
-            JOIN Food_Types f ON rft.food_type_id = f.food_type_id
+            JOIN Food_Types f ON r.food_type_id = f.food_type_id
             LEFT JOIN Restaurant_Pictures rp ON r.restaurant_id = rp.restaurant_id
             WHERE r.restaurant_id = $1
         `, [restaurantId]);

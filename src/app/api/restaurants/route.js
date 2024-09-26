@@ -11,8 +11,7 @@ export async function GET() {
     const result = await client.query(`
     SELECT r.restaurant_id, r.name, r.location, pr.range AS price_range, f.type_name AS food_type, rp.image_url
     FROM Restaurants r
-    JOIN Restaurant_Food_Types rft ON r.restaurant_id = rft.restaurant_id
-    JOIN Food_Types f ON rft.food_type_id = f.food_type_id
+    JOIN Food_Types f ON r.food_type_id = f.food_type_id
     JOIN Restaurant_Pictures rp ON r.restaurant_id = rp.restaurant_id
     JOIN Price_Ranges pr ON r.price_range_id::integer = pr.price_range_id
     WHERE rp.photo_type_id = 4

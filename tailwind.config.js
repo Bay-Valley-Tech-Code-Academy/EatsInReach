@@ -8,6 +8,10 @@ export default withUt({
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '320px',
+        'xl': '1280px',
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

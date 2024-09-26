@@ -1,14 +1,13 @@
-import { pool } from '@/data/db';
+import { Client } from 'pg';
 
-export async function GET(req) {
-    const uid = req.headers.get('uid'); // Assuming you pass the uid in the request headers
-    if (!uid) {
-        return new Response(JSON.stringify({ error: 'User not authenticated' }), { status: 401 });
-    }
+export async function GET() {
+    const client = new Client({
+        connectionString: process.env.DATABASE_URL,
+    });
 
-    const client = await pool.connect();
-    
     try {
+        await client.connect();
+        
         const query = `
             SELECT
                 mi.item_id,
@@ -19,11 +18,11 @@ export async function GET(req) {
                 m.restaurant_id
             FROM Menu_Items mi
             JOIN Menus m ON mi.menu_id = m.menu_id
-            JOIN Restaurants r ON m.restaurant_id = r.restaurant_id
-            WHERE r.uid = $1
         `;
 
-        const result = await client.query(query, [uid]);
+        console.log("Executing query:", query); // Log the query
+
+        const result = await client.query(query);
         return new Response(JSON.stringify(result.rows), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
@@ -35,6 +34,6 @@ export async function GET(req) {
             headers: { 'Content-Type': 'application/json' },
         });
     } finally {
-        client.release();
+        await client.end();
     }
 }
