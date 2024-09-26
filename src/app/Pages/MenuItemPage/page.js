@@ -62,22 +62,29 @@ export default function MenuItemPage() {
 
   useEffect(() => {
     async function fetchMenuItems() {
-      try {
-        const res = await fetch("/api/menu-items");
-        if (res.ok) {
-          const data = await res.json();
-          console.log("Fetched menu items:", data); // Log fetched data
-          setMenuItems(data);
-        } else {
-          console.error("Failed to fetch menu items");
+        try {
+            const res = await fetch("/api/menu-items", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "uid": currentUser.uid // Pass the user's uid
+                },
+            });
+            if (res.ok) {
+                const data = await res.json();
+                console.log("Fetched menu items:", data);
+                setMenuItems(data);
+            } else {
+                console.error("Failed to fetch menu items");
+            }
+        } catch (error) {
+            console.error("Error fetching menu items:", error);
         }
-      } catch (error) {
-        console.error("Error fetching menu items:", error);
-      }
     }
 
     fetchMenuItems();
-  }, []);
+}, [currentUser]);
+
 
   const resetForm = () => {
     setNewItemName("");
@@ -101,7 +108,7 @@ export default function MenuItemPage() {
         setError("Price must be a valid number.");
         return;
       }
-
+  
       const itemData = {
         item_name: newItemName,
         item_description: newItemDesc,
@@ -109,21 +116,22 @@ export default function MenuItemPage() {
         image_path: "/images/food-bg-images.jpg",
         alt_text: "",
       };
-
+  
       const endpoint = editingItemId ? `/api/menu-items/update` : `/api/menu-items/submit`;
       if (editingItemId) {
         itemData.id = editingItemId;
       }
-
+  
       try {
         const res = await fetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "uid": currentUser.uid, // Include the uid in headers
           },
           body: JSON.stringify(itemData),
         });
-
+  
         if (res.ok) {
           const updatedItem = await res.json();
           setMenuItems((prevItems) =>
@@ -143,6 +151,7 @@ export default function MenuItemPage() {
       setError("All fields are required");
     }
   };
+  
 
   const removeItem = async (itemId) => {
     try {

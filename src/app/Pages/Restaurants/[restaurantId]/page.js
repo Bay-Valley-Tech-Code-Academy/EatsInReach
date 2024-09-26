@@ -15,22 +15,17 @@ export default function RestaurantPageId({ params }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [restaurant, setRestaurant] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
-  const [menu, setMenu] = useState(null);
+  const [menu, setMenu] = useState([]); // Set initial state to an empty array
   const { restaurantId } = params;
 
   // Fetch vendor items on component mount
   useEffect(() => {
-    console.log("Fetching restaurant with ID:", restaurantId);
-
     async function fetchRestaurant() {
       try {
         const response = await fetch(`/api/restaurants/${restaurantId}`);
-        console.log("API Response:", response);
-
         if (!response.ok) {
           throw new Error("Failed to fetch restaurant");
         }
-
         const data = await response.json();
         setRestaurant(data);
       } catch (error) {
@@ -131,22 +126,29 @@ export default function RestaurantPageId({ params }) {
       console.error("Error updating favorite status", error);
     }
   };
+
   useEffect(() => {
     async function fetchMenu() {
-      try {
-        const res = await fetch(`/api/menu`);
-        const data = await res.json();
-        setMenu(data);
-        console.log(menu);
-      } catch (error) {
-        console.error("Error fetching menu data:", error);
-      }
+        try {
+            const res = await fetch(`/api/menu`);
+            const data = await res.json();
+
+            // Filter menu items based on restaurant ID
+            const filteredMenu = data.filter(menuSection => 
+                Number(menuSection.restaurant_id) === Number(restaurantId)
+            );
+
+            setMenu(filteredMenu); // Update state with filtered menu items
+        } catch (error) {
+            console.error("Error fetching menu data:", error);
+        }
     }
 
     if (restaurantId) {
-      fetchMenu();
+        fetchMenu();
     }
-  }, []);
+}, [restaurantId]); // Added restaurantId to the dependency array
+
 
   if (!restaurant) {
     return (
@@ -168,7 +170,7 @@ export default function RestaurantPageId({ params }) {
     );
   }
 
-  const justMenuItems = menu
+  const justMenuItems = Array.isArray(menu)
     ? menu.filter(
       (menuSection) =>
         Number(menuSection.restaurant_id) === Number(restaurantId)
@@ -191,10 +193,31 @@ export default function RestaurantPageId({ params }) {
           {/* Image Section */}
           <div className="relative w-full md:w-1/3 p-2 flex-shrink-0">
             <img
+              style={{
+                outline: "none",
+                border: "none",
+                userSelect: "none"
+              }
+              }
               src={restaurant.image_url || "/default-image.jpg"} // Provide a default image if URL is missing
               alt={`${restaurant.name} main dish`}
               className="w-full h-auto object-cover rounded-lg"
             />
+            {currentUser && role === "user" && (
+              <div
+                onClick={handleFavoriteToggle}
+                className="cursor-pointer flex items-center justify-center space-x-2 mt-4"
+              >
+                <p className="text-xl font-semibold text-gray-800 transition-colors duration-300 hover:text-red-600">
+                  {isFavorited ? "Favorited!" : "Favorite Me!"}
+                </p>
+                {isFavorited ? (
+                  <PiHeartStraightFill className="text-red-600 transition-transform duration-300 transform hover:scale-110" />
+                ) : (
+                  <PiHeartStraightThin className="text-gray-800 transition-transform duration-300 transform hover:scale-110 hover:text-red-600" />
+                )}
+              </div>
+            )}
           </div>
           {/* Restaurant Details */}
           <div className="w-full md:w-2/3 flex flex-col gap-6">
@@ -309,18 +332,6 @@ export default function RestaurantPageId({ params }) {
           >
             Back to Restaurants
           </a>
-          {currentUser && role === "user" && (
-            <div
-              onClick={handleFavoriteToggle}
-              className="cursor-pointer text-3xl flex items-center ml-32"
-            >
-              {isFavorited ? (
-                <PiHeartStraightFill className="text-red-600" /> // Change to red when favorited
-              ) : (
-                <PiHeartStraightThin className="text-black" /> // Keep black when not favorited
-              )}
-            </div>
-          )}
         </section>
       </main>
       {/* Footer */}

@@ -105,6 +105,14 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 1. By default the rules will allow anyone to read/write to the Firebase
 2. Update these rules based on the roles of the users
 
+### 5. Service account key JSON file
+1. Under the project overview in firebase click the gear icon
+2. Click project settings
+3. Click the services account tab
+4. Click the button generate new private key
+5. Temporarily add the downloaded json file to the root of your directory for the Create Admins section
+6. Once that is done add the JSON file in your `.env` file as `FIREBASE_SERVICE_ACCOUNT_KEY = '<Copy of JSON file>'`
+
 # Setup for Images
 
 The service we used for storing images and file hosting is called [UploadThing](https://uploadthing.com/). 
@@ -193,7 +201,7 @@ createFirstAdmin(adminEmail, adminPassword);
 
 ### 1. Update `admin.js` script
 
-1. Add your service account key JSON file in line 6. 
+1. Add your service account key JSON file in line 6.
 
 ```
 const serviceAccountPath = './<path of json file>'; // Use relative path if in the same folder
@@ -206,7 +214,7 @@ const adminEmail = 'admin@example.com';
 const adminPassword = '123456';
 ```
 
-### 2. Run `admin.js`
+### 2. Run in terminal `admin.js`
 
 _Ensure you are in the root of your directory not `src/app`._
 
@@ -215,3 +223,5 @@ To run this script type this command in the terminal:
 ```
 node admin.js
 ```
+
+### 3. Delete the JSON file after adding it to your `.env` file

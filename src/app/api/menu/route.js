@@ -13,18 +13,19 @@ export async function GET() {
             SELECT
                 mi.item_id,
                 mi.menu_id,
-                mi.item_name,
-                mi.item_description AS item_desc,
-                mi.item_price,
-                mi.is_vegetarian, 
-                mi.is_vegan, 
+                mi.item_name AS name, -- Assuming the column is item_name
+                mi.item_description AS description,
+                mi.item_price AS price,
+                mi.is_vegetarian,
+                mi.is_vegan,
                 mi.is_gluten_free,
-                m.name AS time,
+                m.name AS time, -- Assuming the column is menu_name
                 m.description AS menu_desc,
                 m.restaurant_id
             FROM Menu_Items mi
             JOIN Menus m ON mi.menu_id = m.menu_id
         `);
+        
 
         client.release();
 

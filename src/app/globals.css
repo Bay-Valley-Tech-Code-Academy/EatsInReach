@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 .landing-page {
-  height: calc(100vh - 50px); /* Adjust based on your layout needs */
+  height: calc(100vh - 50px);
+  /* Adjust based on your layout needs */
 
   background-image: url(/images/landing-page.jpg);
   background-size: cover;
@@ -19,7 +20,8 @@
   background-image: url(/images/login-page.jpg);
 }
 
-.landing-page, .login-page {
+.landing-page,
+.login-page {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -28,7 +30,8 @@
   overflow: hidden;
 }
 
-.landing-page::before, .login-page::before {
+.landing-page::before,
+.login-page::before {
   content: "";
   position: absolute;
   top: 0;
@@ -38,7 +41,8 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-color: #f0f0f0; /* Fallback background color */
+  background-color: #f0f0f0;
+  /* Fallback background color */
   filter: blur(7px);
   z-index: -1;
 }
