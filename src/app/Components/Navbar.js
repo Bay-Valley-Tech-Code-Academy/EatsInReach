@@ -100,17 +100,19 @@ export default function Navbar() {
             className="hover:cursor-pointer "
           />
         </Link>
-        <div className="flex flex-wrap">
-          {currentUser && role === "vendor" && (
-            <h2 className="sm:block pl-2">Vendor: </h2>
+        <div className="flex flex-col justify-start pl-2">
+          {userName && <h2 className="sm:block">{userName}</h2>}
+          {currentUser && (role === "vendor" || role === "admin") && (
+            <div className="flex items-baseline -mt-1">
+              <span 
+                className={`w-2.5 h-2.5 rounded-full mr-1 ${role === 'admin' ? 'bg-red-500' : 'bg-orange-500'}`}
+              ></span>
+              <h2 className="sm:block">{ role }</h2>
+            </div>
           )}
-          {currentUser && role === "admin" && (
-            <h2 className="sm:block pl-2">Admin: </h2>
-          )}
-          {userName && <h2 className="sm:block pl-2">{userName}</h2>}
         </div>
       </div>
-
+      
       {/* Hamburger icon */}
       <div className="sm:hidden mr-4  ">
         <button
