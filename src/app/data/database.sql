@@ -103,9 +103,11 @@ CREATE TABLE Menus (
 CREATE TABLE Menu_Items (
     item_id SERIAL PRIMARY KEY,
     menu_id INTEGER REFERENCES Menus(menu_id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    price DECIMAL(10,2) NOT NULL,
+    item_name VARCHAR(255) NOT NULL,
+    item_description TEXT,
+    image_path VARCHAR(255),
+    alt_text VARCHAR(255), -- Newly added column
+    item_price DECIMAL(10,2) NOT NULL,
     is_vegetarian BOOLEAN DEFAULT FALSE,
     is_vegan BOOLEAN DEFAULT FALSE,
     is_gluten_free BOOLEAN DEFAULT FALSE
@@ -193,6 +195,8 @@ INSERT INTO Food_Types (type_name) VALUES
     ('Ukrainian'),
     ('Vietnamese');
 
+INSERT INTO Users (uid, username, email, role)
+VALUES ('Gxenk50qj7hj9xP3m0YQZiOTRnx2', 'vendor', 'vendor@gmail.com', 'vendor');
 
 
 INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, is_open, description, food_type_id, website, phone_number, email)
@@ -200,9 +204,11 @@ VALUES
     ('Tonis Courtyard Cafe', '516 W 18th St, Merced, CA', 2, '7:30 AM - 3:00 PM', TRUE, 'Featuring an extensive menu of casual Italian-inspired American eats & an idyllic courtyard patio.', 1, 'http://www.toniscourtyardcafe.com/','209-384-2580', 'contact@example.com'),
     ('Joystiq', '325 W Main St, Merced, CA', 3, '3:00 PM - 12:00 AM', TRUE, 'Experience great vibes and nostalgia at one of the best bars in town, featuring old arcade games, fantastic drinks, and lively music.', 1,  'http://www.joystiqmerced.com/', '209-455-3300', 'joystiqmerced@gmail.com'),
     ('Kind Neighbor', '1635 M St, Merced, CA', 2, '7:30 AM - 6:00 PM', TRUE, 'Enjoy one of the best smoothies ever, like our refreshing strawberry smoothie with almond milk, for a delicious treat worth the wait.', 1, 'http://www.kindneighborjuicebar.com/', '209-617-6538', 'kindneighborinfo@gmail.com'),
-    ('Oishi Teri Sushi Bar', '235 W Main St, Merced, CA', 4, '11:00 AM - 8:00 PM', TRUE, 'Enduring, spacious eatery preparing traditional Thai staples & some Vietnamese options in calm digs.', 17, 'http://www.oishisushibar.com', '209-653-5859', 'contact@example.com'),
-    ('El Palmar Taqueria', '1127 Martin Luther King Jr Way, Merced, CA', 1, '10:00 AM - 9:00 PM', TRUE, 'Enjoy some of the best Mexican food in a relaxed atmosphere with reasonable prices', 21, 'http://www.elpalmartaqueria.com/', '209-726-8855', 'contact@example.com');
+    ('Oishi Teri Sushi Bar', '235 W Main St, Merced, CA', 4, '11:00 AM - 8:00 PM', TRUE, 'Enduring, spacious eatery preparing traditional Thai staples & some Vietnamese options in calm digs.', 17, 'http://www.oishisushibar.com', '209-653-5859', 'contact@example.com');
 
+INSERT INTO Restaurants (name, uid, location, price_range_id, hours_of_operation, is_open, description, food_type_id, website, phone_number, email)
+VALUES
+    ('El Palmar Taqueria', 'Gxenk50qj7hj9xP3m0YQZiOTRnx2','1127 Martin Luther King Jr Way, Merced, CA', 1, '10:00 AM - 9:00 PM', TRUE, 'Enjoy some of the best Mexican food in a relaxed atmosphere with reasonable prices', 21, 'http://www.elpalmartaqueria.com/', '209-726-8855', 'contact@example.com');
 
 INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id)
 VALUES
@@ -241,13 +247,38 @@ VALUES
 INSERT INTO Menus (restaurant_id, name, description)
 VALUES
     (1, 'Specialty Sandwiches', 'Served with Salad, Potato Salad or French fries'),
-    (1, 'Organic Salads', 'Served with choice of Dressing and Freshly Baked Bread & Butter');
+    (1, 'Organic Salads', 'Served with choice of Dressing and Freshly Baked Bread & Butter'),
+    (2, 'MULTIPLAYER PLATES', ''),
+    (2, 'BURGERS', ''),
+    (3, 'Smoothies', ''),
+    (3, 'Smoothie Bowls', ''),
+    (3, 'Broths/Soup', ''),
+    (4, 'Appetiers', ''),
+    (4, 'Sashimi', ''),
+    (5, 'Taco Truck Menu', '');
 
-INSERT INTO Menu_Items (menu_id, name, description, price, is_vegetarian, is_vegan, is_gluten_free)
+INSERT INTO Menu_Items (menu_id, item_name, item_description, item_price, image_path, alt_text, is_vegetarian, is_vegan, is_gluten_free)
 VALUES
-    (1, 'MEDITERRANEAN GRILLED CHICKEN', 'Sundried tomatoes, feta, spinach, pesto mayo on homemade focaccia bread', 14.00, false, false, false),
-    (1, 'TRI TIP', 'Our house smoked tri tip sauteed mushrooms, caramelized onions, swiss, mayo on french bread', 14.00, false, false, false),
-    (2, 'COURTYARD SALAD', 'mixed greens with apples, cranberries, tomatoes, blue cheese crumbles and candied walnuts', 12.00, true, false, false);
+    (1, 'MEDITERRANEAN GRILLED CHICKEN', 'Sundried tomatoes, feta, spinach, pesto mayo on homemade focaccia bread', 14.00, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (1, 'TRI TIP', 'Our house smoked tri tip sauteed mushrooms, caramelized onions, swiss, mayo on french bread', 14.00, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (2, 'COURTYARD SALAD', 'Mixed greens with apples, cranberries, tomatoes, blue cheese crumbles, and candied walnuts', 12.00, '/images/food-bg-images.jpg', NULL, true, false, false),
+    (3, 'PITA & DIP TRIO', 'Warm pita served with hummus and tzatziki sauce. Choose two: creamy hummus, spinach & garlic, habanero', 16.25, '/images/food-bg-images.jpg', NULL, true, false, false),
+    (4, 'HOUSE BURGER', '1/3 pound patty of Angus beef, lettuce, tomato, Swiss cheese, red onion, Dijon mustard served on toasted sesame seed bun | Add extra Angus beef patty +$2', 14.00, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (4, 'CUBANO SANDWICH', 'Smoked pulled pork, sliced ham, Swiss cheese, sliced dill pickles, Dijon mustard on Cuban bread', 16.25, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (5, 'Kiwi Smoothie', 'Ingredients: almond milk, banana, kiwi, apple, spinach, almond butter, honey.', 6.95, '/images/food-bg-images.jpg', NULL, true, true, true),
+    (5, 'Sunrise Orange Smoothie', 'Ingredients: banana, orange, carrot, almond butter, honey, vanilla bean powder, turmeric, orange juice, coconut milk.', 6.95, '/images/food-bg-images.jpg', NULL, true, true, true),
+    (6, 'Loaded Superfood Acai Bowl', 'Ingredients: açaí, banana, strawberries, hemp milk.', 12.50, '/images/food-bg-images.jpg', NULL, true, true, true),
+    (7, 'Mama De Mi Alma: Vegan Green Chile Pozole', 'Soup: jackfruit, hominy, filtered water, garlic, organic white onion, olive oil, chile verde (tomatillo, serrano, poblano, white onion, garlic, cilantro, organic pumpkin seeds, cumin, sea salt), apple cider vinegar, homemade vegan bouillon, organic oregano.', 8.95, '/images/food-bg-images.jpg', NULL, true, true, true),
+    (8, 'Mixed Tempura', 'Tempura shrimp & vegetable served with tempura sauce', 12.95, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (8, 'Grilled Squid', 'Lightly salted grilled squid, served with special sauce', 11.95, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (9, 'Maguro (Tuna)', '7 pieces', 20.95, '/images/food-bg-images.jpg', NULL, false, false, true),
+    (9, 'Shiro Maguro (Albacore)', '7 pieces', 20.95, '/images/food-bg-images.jpg', NULL, false, false, true),
+    (9, 'Sake (Salmon)', '7 pieces', 20.95, '/images/food-bg-images.jpg', NULL, false, false, true),
+    (10, 'Burrito', 'Comes with rice, beans, cilantro, onion, sauce and your choice of meat.', 10.95, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (10, 'Quesadilla', 'Comes with jack/cheddar cheese, cilantro, onion, sauce and your choice of meat.', 11.25, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (10, 'Vegetarian Burrito', 'Comes with rice, beans, cilantro, onion, sauce, lettuce, cheddar/jack cheese, sour cream, and tomato.', 9.75, '/images/food-bg-images.jpg', NULL, true, false, false),
+    (10, 'Red Taco', 'Comes with birria (beef), cilantro, onion, sauce, cheese and a 6 oz consome.', 4.25, '/images/food-bg-images.jpg', NULL, false, false, false);
+   
 
 INSERT INTO Dietary_Restrictions (name, description)
 VALUES
@@ -256,7 +287,7 @@ VALUES
     ('Gluten-Free', 'No gluten-containing ingredients');
 
 INSERT INTO Restaurant_Dietary_Options (restaurant_id, restriction_id)
-VALUES (1, 1);
+VALUES (1, 1), (2,1), (3,1), (3,2), (3,3), (4, 3), (5, 1);
 
 -- Uncomment to drop the database (use with caution)
 --  DROP DATABASE eats_in_reach_db;

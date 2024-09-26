@@ -4,7 +4,6 @@ import Navbar from "@/Components/Navbar";
 import Link from "next/link";
 import Footer from "@/Components/Footer";
 import { useEffect, useState } from "react";
-import { getFunctions, httpsCallable } from "firebase/functions";
 import {
   collection,
   setDoc,
@@ -16,9 +15,6 @@ import {
 import { firestore } from "../../../../firebase";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
-
-const functions = getFunctions();
-const deleteUserAccount = httpsCallable(functions, "deleteUserAccount");
 
 export default function Admin() {
   const router = useRouter();
@@ -213,10 +209,27 @@ export default function Admin() {
       await setDoc(adminDocRef, { ...user, role: "admin" });
 
       await deleteDoc(userDocRef);
+
+      // Postgres part
+      const response = await fetch("/api/updateUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: user.id, role: "admin" }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        setError(result.message || "Failed to update user role in Postgres");
+        return;
+      }
+
       setSelectedUserData({});
       setSelectedUser({});
       setError(null);
       await fetchData();
+
       console.log(`${user.userName} has been promoted to admin.`);
     } catch (error) {
       console.error("Error promoting user:", error);
@@ -240,7 +253,7 @@ export default function Admin() {
 
       const adminCount =
         tableData.find((table) => table.title === "Admin")?.users.length || 0;
-      console.log(adminCount);
+
       if (adminCount <= 4) {
         setError("Minimum of four admins to demote an admin!");
         return;
@@ -258,6 +271,22 @@ export default function Admin() {
       await setDoc(userDocRef, { ...user, role: "user" });
 
       await deleteDoc(adminDocRef);
+
+      // Postgres part
+      const response = await fetch("/api/updateUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: user.id, role: "user" }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        setError(result.message || "Failed to update user role in Postgres");
+        return;
+      }
+
       setSelectedUserData({});
       setSelectedUser({});
       setError(null);
