@@ -37,7 +37,7 @@ export default function Landing() {
           Reach for Flavor, Anytime
         </h2>
         {!currentUser && (
-          <div className="mt-8 sm:mt-16 md:mt-20">
+          <div className="mt-8 sm:mt-16 md:mt-20 drop-shadow-lg">
             <Link href="/Pages/Login">
               <button className="text-1xl text-black sm:text-2xl md:text-3xl bg-[#AAD15F] hover:bg-[#8A9C4C] p-3 sm:p-4 md:p-5 rounded-full border border-black">
                 Login
@@ -45,35 +45,46 @@ export default function Landing() {
             </Link>
           </div>
         )}
-        <h3 className="text-2xl text-black bg-Cream mt-10 mb-3 p-1 rounded-4xl hover:underline  rounded-2xl hover:-translate-y-1">
-              Our Favorites
+        <h3 className="text-2xl text-black bg-Cream mt-10 mb-3 p-5 rounded-4xl rounded-2xl hover:-translate-y-1 cursor-pointer drop-shadow-md"
+          onClick={() => {
+            document.querySelector("#faves").scrollIntoView({
+              behavior: "smooth",
+            });
+          }}
+        >
+          Our Favorites
         </h3>
 
         <img src="images/down_arrow.png" className="h-10 m-10 mt-44 "></img>
 
       </div>
-      <div className=" flex flex-col items-center p-4 bg-Cream ">
-        <div className="bg-Cream grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 rounded-3xl gap-5 mt-4 scrollbar-hidden overflow-y-auto">
-          {restaurants.slice(0, 5).map((restaurant, index) => (
-            <Link
-              href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-              className="flg:w-1/2  group-hover:bg-slate-300 group-hover:translate-y-1"
-              key={restaurant.restaurant_id}
-            >
-              <div className=" h-64 w-48 p-4 rounded-2xl cursor-pointer">
-                <img
-                  src={`${restaurant.image_url}`}
-                  alt={`Image of ${restaurant.name}`}
-                  className="w-full h-40 object-cover rounded-xl"
-                  loading="lazy"
-                />
-                <p className="w-full text-center bg-Yellow-Green mt-2 p-1 rounded-3xl hover:bg-Lime">
-                  {restaurant.name}
-                </p>
-              </div>
-            </Link>
-          ))}
+      <div className=" flex flex-col items-center p-4 bg-Cream" id='faves'>
+        <div className="w-[50vw]">
+          <h3 className={`text-[3rem] text-black flex self-start pl-4  ${italiana.className}`}>Our Favorites</h3>
+            <div className="bg-Cream grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 rounded-3xl gap-5 mt-4 scrollbar-hidden flex-wrap">
+            {restaurants.slice(0, 5).map((restaurant, index) => (
+              <Link
+                href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
+                className="flg:w-1/2  group-hover:bg-slate-300 group-hover:translate-y-1"
+                key={restaurant.restaurant_id}
+              >
+                <div className=" h-64 w-48 p-4 rounded-2xl cursor-pointer drop-shadow-md">
+                  <img
+                    src={`${restaurant.image_url}`}
+                    alt={`Image of ${restaurant.name}`}
+                    className="w-full h-40 object-cover rounded-xl"
+                    loading="lazy"
+                  />
+                  <p className="w-full text-center bg-Yellow-Green mt-2 p-1.5 rounded-3xl hover:bg-Lime">
+                    {restaurant.name}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
+        
+        
       </div>
       <Footer />
     </div>
