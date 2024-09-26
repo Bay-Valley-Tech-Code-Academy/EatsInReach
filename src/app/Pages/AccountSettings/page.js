@@ -11,10 +11,14 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
 } from "firebase/auth";
-
+import { Italiana } from "next/font/google"; 
 // Constants
 const SecurityIcon = "/images/security.png"; // Update the path to the security icon
 const SUCCESS_TIMEOUT = 3000;
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 
 const InputField = ({ type, placeholder, value, onChange, required }) => (
   <input
@@ -137,8 +141,8 @@ export default function UserProfile() {
           <p className="text-black">{successful}</p>
         </div>
       )}
-      <div className="flex max-md:flex-col max-md:items-center md:h-[calc(100vh-100px)] bg-Almond overflow-hidden">
-        <div className="bg-[#FDE4CE] drop-shadow-xl md:h-[calc(100vh-120px)] w-2/6 md:w-1/4 max-md:w-3/4 max-md:ml-1 md:ml-10 mt-3 rounded-lg m-2">
+      <div className="flex max-md:flex-col max-md:items-center md:h-[calc(100vh-100px)] bg-[#FDFBCE] overflow-hidden">
+        <div className="bg-[#FDFBCE] drop-shadow-xl md:h-[calc(100vh-120px)] w-2/6 md:w-1/4 max-md:w-3/4 max-md:ml-1 md:ml-10 mt-3 rounded-lg m-2">
           <ul>
             {["profile", "security"].map((section) => (
               <li
@@ -160,25 +164,25 @@ export default function UserProfile() {
             ))}
           </ul>
         </div>
-        <div className="bg-[#b5d773] flex flex-col h-[calc(100vh-130px)] w-4/6 max-md:w-3/4 m-5 justify-between items-center rounded-lg">
-          <div className="flex justify-center mt-5 underline">
-            <h1 className="text-lg font-semibold">{activeSection === "profile" ? "Profile Settings" : "Security Settings"}</h1>
+        <div className=" bg-Yellow-Green  flex flex-col h-[calc(100vh-130px)] w-4/6 max-md:w-3/4 m-5 justify-center items-center rounded-lg">
+          <div className="flex justify-start mt-5 ">
+            <h1 className={`text-[3rem] font-semibold ${italiana.className}`}>{activeSection === "profile" ? "Profile Settings" : "Security Settings"}</h1>
           </div>
-          <div className="bg-Dartmouth-green flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 h-full  rounded-3xl">
+          <div className=" bg-[#FDFBCE] flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 h-[70%] drop-shadow-md rounded-3xl">
             {activeSection === "profile" ? (
               <>
                 <form className="flex flex-col max-lg:items-center m-2" onSubmit={handleUsernameChange}>
-                  <h1 className="text-white font-semibold">Change Username</h1>
+                  <h1 className=" font-semibold">Change Username</h1>
                   <InputField
                     type="text"
                     placeholder="Enter new username..."
                     value={newUsername}
                     onChange={(e) => setNewUsername(e.target.value)}
                   />
-                  <button className="bg-[#FDE4CE] outline-2 px-4 py-2 rounded-md mt-2">Change</button>
+                  <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md mt-2 drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">Change</button>
                 </form>
                 <form className="flex flex-col max-lg:items-center m-2" onSubmit={handleEmailChange}>
-                  <h1 className="mr-2 text-white font-semibold">Change Email</h1>
+                  <h1 className="mr-2 font-semibold">Change Email</h1>
                   <div className="flex flex-col space-y-2">
                     <InputField
                       type="email"
@@ -192,11 +196,11 @@ export default function UserProfile() {
                       value={currentPasswordEmail}
                       onChange={(e) => setCurrentPasswordEmail(e.target.value)}
                     />
-                    <button className="bg-Almond outline-2 px-4 py-2 rounded-md">Change</button>
+                    <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">Change</button>
                   </div>
                 </form>
                 <form className="flex flex-col max-lg:items-center m-2" onSubmit={handlePasswordChange}>
-                  <h1 className="text-white font-semibold">Change Password</h1>
+                  <h1 className=" font-semibold">Change Password</h1>
                   <div className="flex flex-col space-y-2">
                     <InputField
                       type="password"
@@ -210,14 +214,14 @@ export default function UserProfile() {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                     />
-                    <button className="bg-Almond outline-2 px-4 py-2 rounded-md">Change</button>
+                    <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green hover:text-white duration-300">Change</button>
                   </div>
                 </form>
               </>
             ) : (
               <div className="space-y-4 text-center">
-                <p className="text-white">Security Settings Section</p>
-                <p className="text-white">More security options coming soon!</p>
+                <p className="">Security Settings Section</p>
+                <p className="">More security options coming soon!</p>
               </div>
             )}
           </div>
