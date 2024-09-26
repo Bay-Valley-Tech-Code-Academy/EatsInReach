@@ -57,8 +57,8 @@ export async function POST(request) {
 
     // Insert into Restaurants and get the new restaurant_id
     const insertRestaurantResult = await pool.query(
-      `INSERT INTO Restaurants (uid, name, location, hours_of_operation, description, website, phone_number, email, price_range_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING restaurant_id`,
+      `INSERT INTO Restaurants (uid, name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING restaurant_id`,
       [
         submission.uid,
         submission.name,
@@ -69,6 +69,7 @@ export async function POST(request) {
         submission.phone_number,
         submission.email,
         submission.price_range_id,
+        submission.food_type_id,
       ]
     );
     const newRestaurantId = insertRestaurantResult.rows[0].restaurant_id;
@@ -89,11 +90,17 @@ export async function POST(request) {
       [newRestaurantId, submission.food_type_id]
     );
 
-    // Delete from Vendor_Submissions
+    // Insert into Menus
     await pool.query(
-      "DELETE FROM Vendor_Submissions WHERE uid = $1",
-      [submissionId]
+      `INSERT INTO Menus (restaurant_id, name)
+            VALUES ($1, $2)`,
+      [newRestaurantId, "menu"]
     );
+
+    // Delete from Vendor_Submissions
+    await pool.query("DELETE FROM Vendor_Submissions WHERE uid = $1", [
+      submissionId,
+    ]);
 
     // Commit the transaction
     await pool.query("COMMIT");

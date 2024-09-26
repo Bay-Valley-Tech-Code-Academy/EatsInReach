@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { pool } from '@/data/db';
 
 export async function POST(req) {
@@ -15,7 +16,7 @@ export async function POST(req) {
     `;
     
     const restaurantResult = await pool.query(restaurantQuery, [uid]);
-    
+    console.log(restaurantResult.rows[0])
     if (restaurantResult.rows.length === 0) {
       return new Response(JSON.stringify({ error: 'No restaurant found for the user' }), { status: 404 });
     }

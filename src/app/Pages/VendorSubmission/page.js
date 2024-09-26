@@ -351,7 +351,7 @@ export default function VendorSubmission() {
           <div className="mb-4">
             <label className="block text-gray-700">Website</label>
             <input
-              type="email"
+              type="text"
               name="website"
               value={formData.website || ""}
               onChange={handleChange}

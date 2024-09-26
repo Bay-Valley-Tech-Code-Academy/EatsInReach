@@ -83,17 +83,16 @@ export default function Navbar() {
     checkVendorRestaurant();
   }, [currentUser]);
 
-  // This useEffect checks if the vendor has a pending restaurant
   useEffect(() => {
-    const checkVendorPendingRestaurant = async () => {
-      if (!currentUser) return;
+    if (!currentUser) return;
 
+    const checkVendorPendingRestaurant = async () => {
       try {
-        // Send a request to your API route to check if the vendor has a restaurant
         const response = await fetch(
           `/api/checkPendingRestaurant?uid=${currentUser.uid}`
         );
         const result = await response.json();
+        console.log(result);
 
         if (result.hasRestaurant) {
           setPendingRestaurant(true);
@@ -106,7 +105,7 @@ export default function Navbar() {
     };
 
     checkVendorPendingRestaurant();
-  }, [currentUser]);
+  }, [currentUser]); // Ensure dependency is correct
 
   const handleSignOut = () => {
     signOut(auth)
@@ -182,22 +181,21 @@ export default function Navbar() {
                 <h2>Vendor Home</h2>
               </div>
             </Link>
-            {approvedRestaurant && (
+            {approvedRestaurant ? (
               <Link href="/Pages/MenuItemPage">
                 <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>Modify Menu</h2>
                 </div>
               </Link>
-            )
-            }
-            {!pendingRestaurant && (
+            ) : (
+              !pendingRestaurant && (
                 <Link href="/Pages/VendorSubmission">
                   <div className="hover:bg-Fern_green p-2 md:p-4">
                     <h2>Submit Restaurant</h2>
                   </div>
                 </Link>
               )
-            }
+            )}
           </>
         )}
         {currentUser && role === "admin" && (

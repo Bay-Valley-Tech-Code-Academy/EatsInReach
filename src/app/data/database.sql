@@ -32,7 +32,7 @@ CREATE TABLE Vendor_Submissions (
     uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
-    hours_of_operation VARCHAR(255),
+    hours_of_operation JSONB,
     description TEXT,
     website VARCHAR(255),
     phone_number VARCHAR(20),
@@ -50,7 +50,7 @@ CREATE TABLE Restaurants (
     uid VARCHAR(255) REFERENCES Users(uid) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
-    hours_of_operation VARCHAR(255),
+    hours_of_operation JSONB,
     description TEXT,
     website VARCHAR(255),
     phone_number VARCHAR(20),
@@ -199,16 +199,41 @@ INSERT INTO Users (uid, username, email, role)
 VALUES ('Gxenk50qj7hj9xP3m0YQZiOTRnx2', 'vendor', 'vendor@gmail.com', 'vendor');
 
 
-INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, is_open, description, food_type_id, website, phone_number, email)
+INSERT INTO Restaurants (name, location, price_range_id, hours_of_operation, is_open, description, website, phone_number, email, food_type_id)
 VALUES
-    ('Tonis Courtyard Cafe', '516 W 18th St, Merced, CA', 2, '7:30 AM - 3:00 PM', TRUE, 'Featuring an extensive menu of casual Italian-inspired American eats & an idyllic courtyard patio.', 1, 'http://www.toniscourtyardcafe.com/','209-384-2580', 'contact@example.com'),
-    ('Joystiq', '325 W Main St, Merced, CA', 3, '3:00 PM - 12:00 AM', TRUE, 'Experience great vibes and nostalgia at one of the best bars in town, featuring old arcade games, fantastic drinks, and lively music.', 1,  'http://www.joystiqmerced.com/', '209-455-3300', 'joystiqmerced@gmail.com'),
-    ('Kind Neighbor', '1635 M St, Merced, CA', 2, '7:30 AM - 6:00 PM', TRUE, 'Enjoy one of the best smoothies ever, like our refreshing strawberry smoothie with almond milk, for a delicious treat worth the wait.', 1, 'http://www.kindneighborjuicebar.com/', '209-617-6538', 'kindneighborinfo@gmail.com'),
-    ('Oishi Teri Sushi Bar', '235 W Main St, Merced, CA', 4, '11:00 AM - 8:00 PM', TRUE, 'Enduring, spacious eatery preparing traditional Thai staples & some Vietnamese options in calm digs.', 17, 'http://www.oishisushibar.com', '209-653-5859', 'contact@example.com');
+    ('Tonis Courtyard Cafe', '516 W 18th St, Merced, CA', 2, 
+     '{"monday": "7:30 AM - 3:00 PM", "tuesday": "7:30 AM - 3:00 PM", "wednesday": "7:30 AM - 3:00 PM", "thursday": "7:30 AM - 3:00 PM", "friday": "7:30 AM - 3:00 PM", "saturday": "Closed", "sunday": "Closed"}', 
+     TRUE, 
+     'Featuring an extensive menu of casual Italian-inspired American eats & an idyllic courtyard patio.', 
+     'http://www.toniscourtyardcafe.com/', '209-384-2580', 'contact@example.com', 1),  -- American
 
-INSERT INTO Restaurants (name, uid, location, price_range_id, hours_of_operation, is_open, description, food_type_id, website, phone_number, email)
+    ('Joystiq', '325 W Main St, Merced, CA', 3, 
+     '{"monday": "3:00 PM - 12:00 AM", "tuesday": "3:00 PM - 12:00 AM", "wednesday": "3:00 PM - 12:00 AM", "thursday": "3:00 PM - 12:00 AM", "friday": "3:00 PM - 12:00 AM", "saturday": "3:00 PM - 12:00 AM", "sunday": "Closed"}', 
+     TRUE, 
+     'Experience great vibes and nostalgia at one of the best bars in town, featuring old arcade games, fantastic drinks, and lively music.', 
+     'http://www.joystiqmerced.com/', '209-455-3300', 'joystiqmerced@gmail.com', 1),  -- American
+
+    ('Kind Neighbor', '1635 M St, Merced, CA', 2, 
+     '{"monday": "7:30 AM - 6:00 PM", "tuesday": "7:30 AM - 6:00 PM", "wednesday": "7:30 AM - 6:00 PM", "thursday": "7:30 AM - 6:00 PM", "friday": "7:30 AM - 6:00 PM", "saturday": "Closed", "sunday": "Closed"}', 
+     TRUE, 
+     'Enjoy one of the best smoothies ever, like our refreshing strawberry smoothie with almond milk, for a delicious treat worth the wait.', 
+     'http://www.kindneighborjuicebar.com/', '209-617-6538', 'kindneighborinfo@gmail.com', 1),  -- American
+
+    ('Oishi Teri Sushi Bar', '235 W Main St, Merced, CA', 4, 
+     '{"monday": "11:00 AM - 8:00 PM", "tuesday": "11:00 AM - 8:00 PM", "wednesday": "11:00 AM - 8:00 PM", "thursday": "11:00 AM - 8:00 PM", "friday": "11:00 AM - 8:00 PM", "saturday": "Closed", "sunday": "Closed"}', 
+     TRUE, 
+     'Enduring, spacious eatery preparing traditional Thai staples & some Vietnamese options in calm digs.', 
+     'http://www.oishisushibar.com', '209-653-5859', 'contact@example.com', 17);  -- Japanese
+;  -- Mexican
+
+
+INSERT INTO Restaurants (name, uid, location, price_range_id, hours_of_operation, is_open, description, website, phone_number, email, food_type_id)
 VALUES
-    ('El Palmar Taqueria', 'Gxenk50qj7hj9xP3m0YQZiOTRnx2','1127 Martin Luther King Jr Way, Merced, CA', 1, '10:00 AM - 9:00 PM', TRUE, 'Enjoy some of the best Mexican food in a relaxed atmosphere with reasonable prices', 21, 'http://www.elpalmartaqueria.com/', '209-726-8855', 'contact@example.com');
+    ('El Palmar Taqueria', 'Gxenk50qj7hj9xP3m0YQZiOTRnx2', '1127 Martin Luther King Jr Way, Merced, CA', 1, 
+     '{"monday": "10:00 AM - 9:00 PM", "tuesday": "10:00 AM - 9:00 PM", "wednesday": "10:00 AM - 9:00 PM", "thursday": "10:00 AM - 9:00 PM", "friday": "10:00 AM - 9:00 PM", "saturday": "Closed", "sunday": "Closed"}', 
+     TRUE, 
+     'Enjoy some of the best Mexican food in a relaxed atmosphere with reasonable prices', 
+     'http://www.elpalmartaqueria.com/', '209-726-8855', 'contact@example.com', 21);
 
 INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id)
 VALUES
