@@ -2,6 +2,9 @@ import { pool } from '@/data/db';
 
 export async function GET(req) {
     const uid = req.headers.get('uid'); // Assuming you pass the uid in the request headers
+    const menuId = req.headers.get('menuId');
+
+    console.log(menuId);
     if (!uid) {
         return new Response(JSON.stringify({ error: 'User not authenticated' }), { status: 401 });
     }
@@ -20,10 +23,10 @@ export async function GET(req) {
             FROM Menu_Items mi
             JOIN Menus m ON mi.menu_id = m.menu_id
             JOIN Restaurants r ON m.restaurant_id = r.restaurant_id
-            WHERE r.uid = $1
+            WHERE r.uid = $1 AND mi.menu_id = $2
         `;
 
-        const result = await client.query(query, [uid]);
+        const result = await client.query(query, [uid, menuId]);
         return new Response(JSON.stringify(result.rows), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },

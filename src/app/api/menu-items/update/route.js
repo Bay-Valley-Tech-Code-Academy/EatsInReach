@@ -4,6 +4,7 @@ import { pool } from '@/data/db';
 export async function POST(req) {
     try {
         const body = await req.json();
+        console.log(body)
         const { id, menu_id, item_name, item_description, item_price, image_path, alt_text } = body;
 
         // Validate input
