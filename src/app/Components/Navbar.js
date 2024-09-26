@@ -11,6 +11,7 @@ export default function Navbar() {
   const { currentUser, userName, setUserName } = useAuth();
   const [role, setRole] = useState(null);
   const [approvedRestaurant, setApprovedRestaurant] = useState(false);
+  const [pendingRestaurant, setPendingRestaurant] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // State to toggle the hamburger menu
 
   useEffect(() => {
@@ -59,27 +60,52 @@ export default function Navbar() {
 
   // This useEffect checks if the vendor has an associated restaurant
   useEffect(() => {
-    if (role === "vendor") {
-      const checkVendorRestaurant = async () => {
-        try {
-          // Send a request to your API route to check if the vendor has a restaurant
-          const response = await fetch(
-            `/api/checkRestaurant?uid=${currentUser.uid}`
-          );
-          const result = await response.json();
+    const checkVendorRestaurant = async () => {
+      if (!currentUser) return;
 
-          if (result.hasRestaurant) {
-            setApprovedRestaurant(true);
-          } else {
-            setApprovedRestaurant(false);
-          }
-        } catch (error) {
-          console.error("Error checking vendor restaurant:", error);
+      try {
+        // Send a request to your API route to check if the vendor has a restaurant
+        const response = await fetch(
+          `/api/checkRestaurant?uid=${currentUser.uid}`
+        );
+        const result = await response.json();
+
+        if (result.hasRestaurant) {
+          setApprovedRestaurant(true);
+        } else {
+          setApprovedRestaurant(false);
         }
-      };
+      } catch (error) {
+        console.error("Error checking vendor restaurant:", error);
+      }
+    };
 
-      checkVendorRestaurant();
-    }
+    checkVendorRestaurant();
+  }, [currentUser]);
+
+  // This useEffect checks if the vendor has a pending restaurant
+  useEffect(() => {
+    const checkVendorPendingRestaurant = async () => {
+      if (!currentUser) return;
+
+      try {
+        // Send a request to your API route to check if the vendor has a restaurant
+        const response = await fetch(
+          `/api/checkPendingRestaurant?uid=${currentUser.uid}`
+        );
+        const result = await response.json();
+
+        if (result.hasRestaurant) {
+          setPendingRestaurant(true);
+        } else {
+          setPendingRestaurant(false);
+        }
+      } catch (error) {
+        console.error("Error checking vendor restaurant:", error);
+      }
+    };
+
+    checkVendorPendingRestaurant();
   }, [currentUser]);
 
   const handleSignOut = () => {
@@ -156,19 +182,22 @@ export default function Navbar() {
                 <h2>Vendor Home</h2>
               </div>
             </Link>
-            {approvedRestaurant ? (
+            {approvedRestaurant && (
               <Link href="/Pages/MenuItemPage">
                 <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>Modify Menu</h2>
                 </div>
               </Link>
-            ) : (
-              <Link href="/Pages/VendorSubmission">
-                <div className="hover:bg-Fern_green p-2 md:p-4">
-                  <h2>Submit Restaurant</h2>
-                </div>
-              </Link>
-            )}
+            )
+            }
+            {pendingRestaurant && (
+                <Link href="/Pages/VendorSubmission">
+                  <div className="hover:bg-Fern_green p-2 md:p-4">
+                    <h2>Submit Restaurant</h2>
+                  </div>
+                </Link>
+              )
+            }
           </>
         )}
         {currentUser && role === "admin" && (
@@ -240,16 +269,21 @@ export default function Navbar() {
                   <h2>Vendor Home</h2>
                 </div>
               </Link>
-              <Link href="/Pages/VendorSubmission">
-                <div className="hover:bg-Fern_green p-2 md:p-4">
-                  <h2>Submit Restaurant</h2>
-                </div>
-              </Link>
-              <Link href="/Pages/MenuItemPage">
-                <div className="hover:bg-Fern_green p-2 md:p-4">
-                  <h2>Modify Menu</h2>
-                </div>
-              </Link>
+              {approvedRestaurant ? (
+                <Link href="/Pages/MenuItemPage">
+                  <div className="hover:bg-Fern_green p-2 md:p-4">
+                    <h2>Modify Menu</h2>
+                  </div>
+                </Link>
+              ) : (
+                !pendingRestaurant && (
+                  <Link href="/Pages/VendorSubmission">
+                    <div className="hover:bg-Fern_green p-2 md:p-4">
+                      <h2>Submit Restaurant</h2>
+                    </div>
+                  </Link>
+                )
+              )}
             </>
           )}
           {currentUser && role === "admin" && (

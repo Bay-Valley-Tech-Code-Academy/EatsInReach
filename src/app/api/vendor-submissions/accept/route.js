@@ -13,17 +13,6 @@ export async function POST(request) {
       }
     );
   }
-  const { submissionId } = await request.json();
-
-  if (!submissionId) {
-    return new Response(
-      JSON.stringify({ message: "Submission ID is required" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  }
 
   try {
     // Fetch the submission data
@@ -102,7 +91,7 @@ export async function POST(request) {
 
     // Delete from Vendor_Submissions
     await pool.query(
-      "DELETE FROM Vendor_Submissions WHERE submission_id = $1",
+      "DELETE FROM Vendor_Submissions WHERE uid = $1",
       [submissionId]
     );
 
