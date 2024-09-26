@@ -103,9 +103,11 @@ CREATE TABLE Menus (
 CREATE TABLE Menu_Items (
     item_id SERIAL PRIMARY KEY,
     menu_id INTEGER REFERENCES Menus(menu_id) ON DELETE CASCADE,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    price DECIMAL(10,2) NOT NULL,
+    item_name VARCHAR(255) NOT NULL,
+    item_description TEXT,
+    image_path VARCHAR(255),
+    alt_text VARCHAR(255), -- Newly added column
+    item_price DECIMAL(10,2) NOT NULL,
     is_vegetarian BOOLEAN DEFAULT FALSE,
     is_vegan BOOLEAN DEFAULT FALSE,
     is_gluten_free BOOLEAN DEFAULT FALSE
@@ -251,29 +253,28 @@ VALUES
     (4, 'Sashimi', ''),
     (5, 'Taco Truck Menu', '');
 
-INSERT INTO Menu_Items (menu_id, name, description, price, is_vegetarian, is_vegan, is_gluten_free)
+INSERT INTO Menu_Items (menu_id, item_name, item_description, item_price, image_path, alt_text, is_vegetarian, is_vegan, is_gluten_free)
 VALUES
-    (1, 'MEDITERRANEAN GRILLED CHICKEN', 'Sundried tomatoes, feta, spinach, pesto mayo on homemade focaccia bread', 14.00, false, false, false),
-    (1, 'TRI TIP', 'Our house smoked tri tip sauteed mushrooms, caramelized onions, swiss, mayo on french bread', 14.00, false, false, false),
-    (2, 'COURTYARD SALAD', 'mixed greens with apples, cranberries, tomatoes, blue cheese crumbles and candied walnuts', 12.00, true, false, false),
-    (3, 'PITA & DIP TRIO', 'WARM PITA SERVED WITH HUMMUS AND TZATZIKI SAUCE. CHOOSE TWO: CREAMY HUMMUS, SPINACH & GARLIC, HABANERO', 16.25, true, false, false),
-    (4, 'HOUSE BURGER', '1/3 POUND PATTY OF ANGUS BEEF, LETTUCE, TOMATO, SWISS CHEESE, RED ONION, DIJON MUSTARD SERVED ON TOASTED SESAME SEED BUN | ADD EXTRA ANGUS BEEF PATTY +$2', 14.00, false, false, false),
-    (4, 'CUBANO SANDWHICH', 'SMOKED PULLED PORK, SLICED HAM, SWISS CHEESE, SLICED DILL PICKLES, DIJON MUSTARD ON CUBAN BREAD', 16.25, false, false, false),
-    (5, 'Kiwi Smoothie', 'Ingredients: almond milk,*banana, kiwi, apple, *spinach, almond butter, *honey.', 6.95, true, true, true),
-    (5, 'Sunrise Orange Smoothie', 'Ingredients: banana, orange, carrot, almond butter, honey, vanilla bean powder, turmeric, orange juice, coconut milk.', 6.95, true, true, true),
-    (6, 'Loaded Superfood Acai Bowl', 'Ingredients: açaí, *banana, *strawberries, *hemp milk.', 12.50, true, true, true),
-    (7, 'Mama De Mi Alma: Vegan Green Chile Pozole', 'Soup: jackfruit, hominy, filtered water, garlic, organic white onion, olive oil, chile verde(tomatillo, serrano, poblano, white onion, garlic, cilantro, organic pumpkin seeds, cumin, sea salt), apple cider vinegar, homemade vegan bouillon, organic oregano,.', 8.95, true, true, true),
-    (8, 'Mixed Tempura', 'Tempura shrimp & vegetable served with tempura sauce', 12.95, false, false, false),
-    (8, 'Grilled Squid', 'Lightly salted grilled squid, served with special sauce', 11.95, false, false, false),
-    (9, 'Maguro (Tuna)', '7 pieces', 20.95, false, false, true),
-    (9, 'Shiro Maguro (Albacore)', '7 pieces', 20.95, false, false, true),
-    (9, 'Sake (Salmon)', '7 pieces', 20.95, false, false, true),
-    (10, 'Burrito', 'Comes with rice, beans, cilantro, onion, sauce and your choice of meat.', 10.95, false, false, false),
-    (10, 'Quesadilla', 'Comes with jack/cheddar cheese, cilantro, onion, sauce and your choice of meat.', 11.25, false, false, false),
-    (10, 'Vegetarian Burrito', 'Comes with rice, beans, cilantro, onion, sauce, lettuce, cheddar/jack cheese, sour cream and tomato.', 9.75, true, false, false),
-    (10, 'Red Taco', 'Comes with birria (beef), cilantro, onion, sauce, cheese and a 6 oz consome.', 4.25, false, false, false);
-
-    
+    (1, 'MEDITERRANEAN GRILLED CHICKEN', 'Sundried tomatoes, feta, spinach, pesto mayo on homemade focaccia bread', 14.00, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (1, 'TRI TIP', 'Our house smoked tri tip sauteed mushrooms, caramelized onions, swiss, mayo on french bread', 14.00, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (2, 'COURTYARD SALAD', 'Mixed greens with apples, cranberries, tomatoes, blue cheese crumbles, and candied walnuts', 12.00, '/images/food-bg-images.jpg', NULL, true, false, false),
+    (3, 'PITA & DIP TRIO', 'Warm pita served with hummus and tzatziki sauce. Choose two: creamy hummus, spinach & garlic, habanero', 16.25, '/images/food-bg-images.jpg', NULL, true, false, false),
+    (4, 'HOUSE BURGER', '1/3 pound patty of Angus beef, lettuce, tomato, Swiss cheese, red onion, Dijon mustard served on toasted sesame seed bun | Add extra Angus beef patty +$2', 14.00, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (4, 'CUBANO SANDWICH', 'Smoked pulled pork, sliced ham, Swiss cheese, sliced dill pickles, Dijon mustard on Cuban bread', 16.25, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (5, 'Kiwi Smoothie', 'Ingredients: almond milk, banana, kiwi, apple, spinach, almond butter, honey.', 6.95, '/images/food-bg-images.jpg', NULL, true, true, true),
+    (5, 'Sunrise Orange Smoothie', 'Ingredients: banana, orange, carrot, almond butter, honey, vanilla bean powder, turmeric, orange juice, coconut milk.', 6.95, '/images/food-bg-images.jpg', NULL, true, true, true),
+    (6, 'Loaded Superfood Acai Bowl', 'Ingredients: açaí, banana, strawberries, hemp milk.', 12.50, '/images/food-bg-images.jpg', NULL, true, true, true),
+    (7, 'Mama De Mi Alma: Vegan Green Chile Pozole', 'Soup: jackfruit, hominy, filtered water, garlic, organic white onion, olive oil, chile verde (tomatillo, serrano, poblano, white onion, garlic, cilantro, organic pumpkin seeds, cumin, sea salt), apple cider vinegar, homemade vegan bouillon, organic oregano.', 8.95, '/images/food-bg-images.jpg', NULL, true, true, true),
+    (8, 'Mixed Tempura', 'Tempura shrimp & vegetable served with tempura sauce', 12.95, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (8, 'Grilled Squid', 'Lightly salted grilled squid, served with special sauce', 11.95, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (9, 'Maguro (Tuna)', '7 pieces', 20.95, '/images/food-bg-images.jpg', NULL, false, false, true),
+    (9, 'Shiro Maguro (Albacore)', '7 pieces', 20.95, '/images/food-bg-images.jpg', NULL, false, false, true),
+    (9, 'Sake (Salmon)', '7 pieces', 20.95, '/images/food-bg-images.jpg', NULL, false, false, true),
+    (10, 'Burrito', 'Comes with rice, beans, cilantro, onion, sauce and your choice of meat.', 10.95, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (10, 'Quesadilla', 'Comes with jack/cheddar cheese, cilantro, onion, sauce and your choice of meat.', 11.25, '/images/food-bg-images.jpg', NULL, false, false, false),
+    (10, 'Vegetarian Burrito', 'Comes with rice, beans, cilantro, onion, sauce, lettuce, cheddar/jack cheese, sour cream, and tomato.', 9.75, '/images/food-bg-images.jpg', NULL, true, false, false),
+    (10, 'Red Taco', 'Comes with birria (beef), cilantro, onion, sauce, cheese and a 6 oz consome.', 4.25, '/images/food-bg-images.jpg', NULL, false, false, false);
+   
 
 INSERT INTO Dietary_Restrictions (name, description)
 VALUES
