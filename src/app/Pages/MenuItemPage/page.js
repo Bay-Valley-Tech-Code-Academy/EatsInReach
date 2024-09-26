@@ -3,28 +3,27 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
+import Navbar from "@/Components/Navbar";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../../../../firebase";
-import Navbar from "@/Components/Navbar";
 
 export default function MenuItemPage() {
   const router = useRouter();
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
-  const [vendorItems, setVendorItems] = useState([]);
+  const [menuItems, setMenuItems] = useState([]);
   const [newItemName, setNewItemName] = useState("");
   const [newItemDesc, setNewItemDesc] = useState("");
   const [newItemPrice, setNewItemPrice] = useState("");
-  const [newItemRestaurantId, setNewItemRestaurantId] = useState(1);
   const [editingItemId, setEditingItemId] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // Redirect to the landing page if the user is not logged in
     if (!loading && !currentUser) {
+      console.log("No current user, redirecting...");
       router.push("/");
-    }
-    if (currentUser) {
+    } else if (currentUser) {
       const fetchUserData = async () => {
         const collections = ["users", "vendors", "admins"];
         let found = false;
@@ -33,30 +32,25 @@ export default function MenuItemPage() {
           if (found) break;
 
           try {
-            const userDoc = await getDoc(
-              doc(firestore, collection, currentUser.uid)
-            );
-
+            const userDoc = await getDoc(doc(firestore, collection, currentUser.uid));
             if (userDoc.exists()) {
               const userData = userDoc.data();
+              console.log("User data found:", userData);
               if (userData.role !== "vendor") {
+                console.log("User is not a vendor, redirecting...");
                 router.push("/");
+              } else {
+                found = true;
+                setRole(userData.role);
               }
-              found = true;
-              setRole(userData.role);
             }
           } catch (error) {
-            console.error(
-              `Error fetching user data from ${collection} collection:`,
-              error
-            );
+            console.error(`Error fetching user data from ${collection}:`, error);
           }
         }
 
         if (!found) {
-          console.log(
-            "User document does not exist in any of the collections."
-          );
+          console.log("User document does not exist in any collection.");
           setRole(null);
         }
         setIsRoleLoading(false);
@@ -67,94 +61,101 @@ export default function MenuItemPage() {
   }, [currentUser, loading, router]);
 
   useEffect(() => {
-    async function fetchVendorItems() {
-      try {
-        const res = await fetch("/api/vendor-items");
-        if (res.ok) {
-          const data = await res.json();
-          setVendorItems(data);
-        } else {
-          console.error("Failed to fetch vendor items");
+    async function fetchMenuItems() {
+        try {
+            const res = await fetch("/api/menu-items", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "uid": currentUser.uid // Pass the user's uid
+                },
+            });
+            if (res.ok) {
+                const data = await res.json();
+                console.log("Fetched menu items:", data);
+                setMenuItems(data);
+            } else {
+                console.error("Failed to fetch menu items");
+            }
+        } catch (error) {
+            console.error("Error fetching menu items:", error);
         }
-      } catch (error) {
-        console.error("Error fetching vendor items:", error);
-      }
     }
 
-    fetchVendorItems();
-  }, []);
+    fetchMenuItems();
+}, [currentUser]);
 
-  const addItem = async () => {
-    if (newItemName && newItemDesc && newItemPrice) {
-      const itemData = {
-        restaurant_id: newItemRestaurantId,
-        item_name: newItemName,
-        item_desc: newItemDesc,
-        item_price: parseFloat(newItemPrice.replace("$", "")),
-        image_path: fallbackImage,
-        alt_text: "",
-      };
-
-      const endpoint = editingItemId
-        ? `/api/vendor-items/update`
-        : `/api/vendor-items/submit`;
-      if (editingItemId) {
-        itemData.id = editingItemId;
-      }
-
-      try {
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(itemData),
-        });
-
-        if (res.ok) {
-          const updatedItem = await res.json();
-          if (editingItemId) {
-            setVendorItems((prevItems) =>
-              prevItems.map((item) =>
-                item.item_id === editingItemId ? updatedItem : item
-              )
-            );
-          } else {
-            setVendorItems((prevItems) => [...prevItems, updatedItem]);
-          }
-          resetForm();
-        } else {
-          console.error("Failed to add/update item");
-        }
-      } catch (error) {
-        console.error("Failed to add/update item", error);
-      }
-    } else {
-      console.error("Validation failed: All fields are required");
-    }
-  };
-
-  const editItem = (item) => {
-    setNewItemName(item.item_name);
-    setNewItemDesc(item.item_desc);
-    setNewItemPrice(item.item_price);
-    setEditingItemId(item.item_id);
-  };
-
-  const cancelEdit = () => {
-    resetForm();
-  };
 
   const resetForm = () => {
     setNewItemName("");
     setNewItemDesc("");
     setNewItemPrice("");
     setEditingItemId(null);
+    setError("");
   };
+
+  const addItem = async () => {
+    console.log("Adding/updating item with:", {
+      newItemName,
+      newItemDesc,
+      newItemPrice,
+      editingItemId,
+    });
+    
+    if (newItemName && newItemDesc && newItemPrice) {
+      const parsedPrice = parseFloat(newItemPrice);
+      if (isNaN(parsedPrice) || parsedPrice < 0) {
+        setError("Price must be a valid number.");
+        return;
+      }
+  
+      const itemData = {
+        item_name: newItemName,
+        item_description: newItemDesc,
+        item_price: parsedPrice,
+        image_path: "/images/food-bg-images.jpg",
+        alt_text: "",
+      };
+  
+      const endpoint = editingItemId ? `/api/menu-items/update` : `/api/menu-items/submit`;
+      if (editingItemId) {
+        itemData.id = editingItemId;
+      }
+  
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "uid": currentUser.uid, // Include the uid in headers
+          },
+          body: JSON.stringify(itemData),
+        });
+  
+        if (res.ok) {
+          const updatedItem = await res.json();
+          setMenuItems((prevItems) =>
+            editingItemId
+              ? prevItems.map((item) => (item.item_id === editingItemId ? updatedItem : item))
+              : [...prevItems, updatedItem]
+          );
+          resetForm();
+        } else {
+          const errorData = await res.json();
+          setError(`Failed to add/update item: ${errorData.error}`);
+        }
+      } catch (error) {
+        console.error("Failed to add/update item", error);
+      }
+    } else {
+      setError("All fields are required");
+    }
+  };
+  
 
   const removeItem = async (itemId) => {
     try {
-      const res = await fetch("/api/vendor-items/remove", {
+      const res = await fetch("/api/menu-items/remove", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -163,11 +164,10 @@ export default function MenuItemPage() {
       });
 
       if (res.ok) {
-        setVendorItems((prevItems) =>
-          prevItems.filter((item) => item.item_id !== itemId)
-        );
+        setMenuItems((prevItems) => prevItems.filter((item) => item.item_id !== itemId));
       } else {
-        console.error("Failed to remove item");
+        const errorData = await res.json();
+        setError(`Failed to remove item: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error removing item:", error);
@@ -178,7 +178,7 @@ export default function MenuItemPage() {
 
   // Show a loading indicator while checking auth state or role
   if (loading || isRoleLoading) {
-    return <div>Loading...</div>; // You can replace this with a loading spinner if needed
+    return <div>Loading...</div>;
   }
 
   if (!currentUser || role !== "vendor") {
@@ -190,6 +190,7 @@ export default function MenuItemPage() {
       <Navbar />
       <div className="flex flex-col items-center justify-center gap-4 bg-[#FDFBCE] min-h-[100vh] p-6 overflow-x-hidden">
         <h1 className="text-2xl font-bold">Modify Menu Item</h1>
+        {error && <p className="text-red-500">{error}</p>}
         <div className="flex flex-col items-center justify-center gap-2">
           <input
             type="text"
@@ -220,7 +221,7 @@ export default function MenuItemPage() {
           </button>
           {editingItemId && (
             <button
-              onClick={cancelEdit}
+              onClick={resetForm}
               className="bg-gray-500 text-white p-2 rounded mt-2"
             >
               Cancel Edit
@@ -228,11 +229,8 @@ export default function MenuItemPage() {
           )}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
-          {vendorItems.map((item) => (
-            <div
-              key={item.item_id}
-              className="p-4 bg-Yellow-Green drop-shadow-md rounded-2xl flex flex-col"
-            >
+          {menuItems.map((item) => (
+            <div key={item.item_id} className="p-4 bg-Yellow-Green drop-shadow-md rounded-2xl flex flex-col">
               <div className="rounded-2xl bg-gray-50 drop-shadow-md p-3 text-center ring-1 ring-inset ring-gray-900/5 flex flex-col justify-between h-full">
                 <div className="flex flex-col justify-center items-center">
                   {editingItemId === item.item_id ? (
@@ -244,7 +242,6 @@ export default function MenuItemPage() {
                         className="border p-1 mb-2 rounded w-full"
                       />
                       <textarea
-                        type="text"
                         value={newItemDesc}
                         onChange={(e) => setNewItemDesc(e.target.value)}
                         className="border p-1 mb-2 rounded w-full"
@@ -256,16 +253,13 @@ export default function MenuItemPage() {
                         className="border p-1 mb-2 rounded w-full"
                       />
                       <button
-                        onClick={() => {
-                          addItem();
-                          resetForm();
-                        }}
+                        onClick={addItem}
                         className="bg-green-500 text-white p-2 rounded w-full drop-shadow-md"
                       >
                         Save
                       </button>
                       <button
-                        onClick={cancelEdit}
+                        onClick={resetForm}
                         className="bg-red-500 text-white p-2 rounded mt-2 w-full drop-shadow-md"
                       >
                         Cancel
@@ -277,25 +271,21 @@ export default function MenuItemPage() {
                         src={item.image_path || fallbackImage}
                         alt={item.alt_text || "Default image"}
                         className="w-full object-cover rounded-2xl drop-shadow-md"
-                        onError={(e) => {
-                          e.currentTarget.src = fallbackImage;
-                        }}
                       />
-                      <p className="text-black font-bold py-2">
-                        {item.item_name}
-                      </p>
-
-                      <div className="text-black py-2 w-full h-[60px] break-words overflow-auto">
-                        {item.item_desc}
-                      </div>
-
+                      <p className="text-black font-bold py-2">{item.item_name}</p>
+                      <div className="text-black py-2 w-full h-[60px] break-words overflow-auto">{item.item_description}</div>
                       <p className="text-black py-2">${item.item_price}</p>
                     </>
                   )}
                 </div>
                 <div className="flex flex-col w-full mt-2">
                   <button
-                    onClick={() => editItem(item)}
+                    onClick={() => {
+                      setEditingItemId(item.item_id);
+                      setNewItemName(item.item_name);
+                      setNewItemDesc(item.item_description);
+                      setNewItemPrice(item.item_price.toString());
+                    }}
                     className="bg-yellow-500 text-white p-2 rounded w-full flex-grow drop-shadow-md"
                   >
                     Edit Item

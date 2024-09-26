@@ -71,7 +71,7 @@ export async function POST(request) {
         uid,
         name,
         location,
-        hours_of_operation,
+        JSON.stringify(hours_of_operation), // Store hours_of_operation as JSONB
         description,
         website,
         phone_number,

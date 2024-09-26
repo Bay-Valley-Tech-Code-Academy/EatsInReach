@@ -13,6 +13,7 @@ const VendorHomePage = () => {
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
+  const [approvedRestaurant, setApprovedRestaurant] = useState(false);
 
   const goToVendorSubmission = () => {
     router.push("/Pages/VendorSubmission");
@@ -69,6 +70,31 @@ const VendorHomePage = () => {
     }
   }, [currentUser, loading, router]);
 
+  // This useEffect checks if the vendor has an associated restaurant
+  useEffect(() => {
+    const checkVendorRestaurant = async () => {
+      if (!currentUser) return;
+
+      try {
+        // Send a request to your API route to check if the vendor has a restaurant
+        const response = await fetch(
+          `/api/checkRestaurant?uid=${currentUser.uid}`
+        );
+        const result = await response.json();
+
+        if (result.hasRestaurant) {
+          setApprovedRestaurant(true);
+        } else {
+          setApprovedRestaurant(false);
+        }
+      } catch (error) {
+        console.error("Error checking vendor restaurant:", error);
+      }
+    };
+
+    checkVendorRestaurant();
+  }, [currentUser]);
+
   // Show a loading indicator while checking auth state or role
   if (loading || isRoleLoading) {
     return <div>Loading...</div>; // You can replace this with a loading spinner if needed
@@ -92,19 +118,21 @@ const VendorHomePage = () => {
         </p>
 
         <div className="flex justify-center gap-8 mb-12">
-          <button
-            onClick={goToVendorSubmission}
-            className="bg-red-500 text-white hover:bg-red-600 px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-transform transform hover:scale-110"
-          >
-            Submit Restaurant
-          </button>
-
-          <button
-            onClick={goToAddMenuItems}
-            className="bg-yellow-500 text-white hover:bg-yellow-600 px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-transform transform hover:scale-110"
-          >
-            Add Menu Items
-          </button>
+          {approvedRestaurant ? (
+            <button
+              onClick={goToAddMenuItems}
+              className="bg-yellow-500 text-white hover:bg-yellow-600 px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-transform transform hover:scale-110"
+            >
+              Add Menu Items
+            </button>
+          ) : (
+            <button
+              onClick={goToVendorSubmission}
+              className="bg-red-500 text-white hover:bg-red-600 px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-transform transform hover:scale-110"
+            >
+              Submit Restaurant
+            </button>
+          )}
         </div>
       </main>
 
