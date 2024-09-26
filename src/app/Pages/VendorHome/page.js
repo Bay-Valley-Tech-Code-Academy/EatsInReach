@@ -21,7 +21,7 @@ const VendorHomePage = () => {
   };
 
   const goToAddMenuItems = () => {
-    router.push("/Pages/MenuItemPage");
+    router.push("/Pages/Menu");
   };
 
   useEffect(() => {

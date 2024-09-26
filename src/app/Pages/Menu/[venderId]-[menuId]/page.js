@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../../../context/authContext";
+import { useAuth } from "../../../../../context/authContext";
 import Navbar from "@/Components/Navbar";
 import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "../../../../firebase";
+import { firestore } from "../../../../../firebase";
 
 export default function MenuItemPage() {
   const router = useRouter();

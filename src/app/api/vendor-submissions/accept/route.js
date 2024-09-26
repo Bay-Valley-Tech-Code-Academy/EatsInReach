@@ -90,13 +90,6 @@ export async function POST(request) {
       [newRestaurantId, submission.food_type_id]
     );
 
-    // Insert into Menus
-    await pool.query(
-      `INSERT INTO Menus (restaurant_id, name)
-            VALUES ($1, $2)`,
-      [newRestaurantId, "menu"]
-    );
-
     // Delete from Vendor_Submissions
     await pool.query("DELETE FROM Vendor_Submissions WHERE uid = $1", [
       submissionId,

@@ -187,7 +187,7 @@ export default function Navbar() {
               </div>
             </Link>
             {approvedRestaurant ? (
-              <Link href="/Pages/MenuItemPage">
+              <Link href="/Pages/Menu">
                 <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>Modify Menu</h2>
                 </div>
@@ -273,7 +273,7 @@ export default function Navbar() {
                 </div>
               </Link>
               {approvedRestaurant ? (
-                <Link href="/Pages/MenuItemPage">
+                <Link href="/Pages/Menu">
                   <div className="hover:bg-Fern_green p-2 md:p-4">
                     <h2>Modify Menu</h2>
                   </div>
