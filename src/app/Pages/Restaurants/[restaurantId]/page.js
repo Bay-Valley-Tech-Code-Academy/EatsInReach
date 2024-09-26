@@ -15,22 +15,17 @@ export default function RestaurantPageId({ params }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [restaurant, setRestaurant] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
-  const [menu, setMenu] = useState(null);
+  const [menu, setMenu] = useState([]); // Set initial state to an empty array
   const { restaurantId } = params;
 
   // Fetch vendor items on component mount
   useEffect(() => {
-    console.log("Fetching restaurant with ID:", restaurantId);
-
     async function fetchRestaurant() {
       try {
         const response = await fetch(`/api/restaurants/${restaurantId}`);
-        console.log("API Response:", response);
-
         if (!response.ok) {
           throw new Error("Failed to fetch restaurant");
         }
-
         const data = await response.json();
         setRestaurant(data);
       } catch (error) {
@@ -131,22 +126,29 @@ export default function RestaurantPageId({ params }) {
       console.error("Error updating favorite status", error);
     }
   };
+
   useEffect(() => {
     async function fetchMenu() {
-      try {
-        const res = await fetch(`/api/menu`);
-        const data = await res.json();
-        setMenu(data);
-        console.log(menu);
-      } catch (error) {
-        console.error("Error fetching menu data:", error);
-      }
+        try {
+            const res = await fetch(`/api/menu`);
+            const data = await res.json();
+
+            // Filter menu items based on restaurant ID
+            const filteredMenu = data.filter(menuSection => 
+                Number(menuSection.restaurant_id) === Number(restaurantId)
+            );
+
+            setMenu(filteredMenu); // Update state with filtered menu items
+        } catch (error) {
+            console.error("Error fetching menu data:", error);
+        }
     }
 
     if (restaurantId) {
-      fetchMenu();
+        fetchMenu();
     }
-  }, []);
+}, [restaurantId]); // Added restaurantId to the dependency array
+
 
   if (!restaurant) {
     return (
@@ -168,7 +170,7 @@ export default function RestaurantPageId({ params }) {
     );
   }
 
-  const justMenuItems = menu
+  const justMenuItems = Array.isArray(menu)
     ? menu.filter(
       (menuSection) =>
         Number(menuSection.restaurant_id) === Number(restaurantId)
@@ -273,14 +275,19 @@ export default function RestaurantPageId({ params }) {
                             {/* Menu Items */}
                             <ul className="space-y-4">
                               {menuSection.items.map((item, itemIndex) => (
-                                <li
-                                  key={itemIndex}
-                                  className="flex justify-between text-black"
-                                >
-                                  <span className="font-semibold">
-                                    {item.name}
-                                  </span>
-                                  <span>${item.price}</span>
+                                <li key={itemIndex} className="flex flex-col text-black">
+                                  {/* Item Name and Price */}
+                                  <div className="flex justify-between">
+                                    <span className="font-semibold">{item.name}</span>
+                                    <span>${item.price}</span>
+                                  </div>
+
+                                  {/* Item Description */}
+                                  {item.description && (
+                                    <p className="text-sm text-gray-500 mt-1">
+                                      {item.description}
+                                    </p>
+                                  )}
                                 </li>
                               ))}
                             </ul>

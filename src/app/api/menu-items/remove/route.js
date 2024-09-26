@@ -13,7 +13,7 @@ export async function POST(req) {
 
         // Construct the query with the correct column name
         const query = `
-            DELETE FROM Vendor_Items 
+            DELETE FROM Menu_Items 
             WHERE item_id = $1 
             RETURNING *;
         `;
