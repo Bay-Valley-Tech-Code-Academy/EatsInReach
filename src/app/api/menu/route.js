@@ -13,9 +13,9 @@ export async function GET() {
             SELECT
                 mi.item_id,
                 mi.menu_id,
-                mi.name,
-                mi.description AS item_desc,
-                mi.price,
+                mi.item_name,
+                mi.item_description AS item_desc,
+                mi.item_price,
                 mi.is_vegetarian, 
                 mi.is_vegan, 
                 mi.is_gluten_free,
@@ -44,9 +44,9 @@ export async function GET() {
             // Add menu item to the respective menu
             acc[menuId].items.push({
                 item_id: row.item_id,
-                name: row.name,
+                name: row.item_name,
                 description: row.item_desc,
-                price: row.price,
+                price: row.item_price,
                 is_vegetarian: row.is_vegetarian,
                 is_vegan: row.is_vegan,
                 is_gluten_free: row.is_gluten_free,

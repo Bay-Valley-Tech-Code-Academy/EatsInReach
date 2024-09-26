@@ -114,7 +114,7 @@ _UploadThing is a file upload solution for full stack applications that offers a
 In your `.env` file you will need to include this token for _UploadThing_. 
 
 ```
-UPLOADTHING_TOKEN='eyJhcGlLZXkiOiJza19saXZlXzVlM2U5YzEzYzk5YWViZjlhNTAzYmM3ZDQ4MTljNTc2MDY4NGRjMTAyYjZkNTI3OGEyNGI3NjVmN2YzOWM0OTIiLCJhcHBJZCI6Imc2ajYyaWdvejciLCJyZWdpb25zIjpbInNlYTEiXX0='
+UPLOADTHING_TOKEN='[your uploadthing token here]'
 ```
 
 # Setup for Contact Page
