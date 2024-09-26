@@ -190,7 +190,7 @@ export default function Navbar() {
               </Link>
             )
             }
-            {pendingRestaurant && (
+            {!pendingRestaurant && (
                 <Link href="/Pages/VendorSubmission">
                   <div className="hover:bg-Fern_green p-2 md:p-4">
                     <h2>Submit Restaurant</h2>
