@@ -44,10 +44,10 @@ export async function GET() {
 
             // Add menu item to the respective menu
             acc[menuId].items.push({
-                item_id: row.item_id,
-                name: row.item_name,
-                description: row.item_desc,
-                price: row.item_price,
+                item_id: row.id,
+                name: row.name,
+                description: row.description,
+                price: row.price,
                 is_vegetarian: row.is_vegetarian,
                 is_vegan: row.is_vegan,
                 is_gluten_free: row.is_gluten_free,
