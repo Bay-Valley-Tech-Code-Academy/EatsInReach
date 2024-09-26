@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../../../../context/authContext";
+import { useAuth } from "../../../../context/authContext";
 import Navbar from "@/Components/Navbar";
 import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "../../../../../firebase";
+import { firestore } from "../../../../firebase";
 
 export default function MenuItemPage() {
   const router = useRouter();
@@ -66,8 +66,32 @@ export default function MenuItemPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    try {
+      const response = await fetch('/api/menus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          menuName: formData.menuName,
+          description: formData.description,
+          uid: currentUser.uid, // Pass the uid of the logged-in user
+        }),
+      });
+  
+      if (!response.ok) {
+        const { error } = await response.json();
+        setError(error || 'Failed to create menu');
+      } else {
+        setError('');
+        setFormData({ menuName: '', description: '' });
+        console.log('Menu created successfully');
+      }
+    } catch (error) {
+      console.error('Error submitting menu:', error);
+      setError('Failed to submit menu');
+    }
   };
+  
 
   // Show a loading indicator while checking auth state or role
   if (loading || isRoleLoading) {
