@@ -174,7 +174,6 @@ export default function VendorSubmission() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     try {
       const response = await fetch("/api/vendor-submissions", {
         method: "POST",
@@ -400,7 +399,6 @@ export default function VendorSubmission() {
               <UploadButton
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
-                  console.log("Files: ", res[0].url);
                   setImageURL(res[0].url);
                   setIsImageUploaded(true);
                 }}
