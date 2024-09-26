@@ -141,6 +141,11 @@ export default function Navbar() {
             <h2>Restaurants</h2>
           </div>
         </Link>
+        <Link href="/Pages/Contact">
+          <div className="hover:bg-Fern_green p-2 sm:p-4">
+            <h2>Contact Us</h2>
+          </div>
+        </Link>
 
         {currentUser && role === "user" && (
           <Link href="/Pages/Favorites">
