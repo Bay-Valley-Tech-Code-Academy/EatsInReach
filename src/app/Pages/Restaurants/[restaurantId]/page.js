@@ -170,9 +170,9 @@ export default function RestaurantPageId({ params }) {
 
   const justMenuItems = menu
     ? menu.filter(
-        (menuSection) =>
-          Number(menuSection.restaurant_id) === Number(restaurantId)
-      )
+      (menuSection) =>
+        Number(menuSection.restaurant_id) === Number(restaurantId)
+    )
     : [];
 
   return (
@@ -251,9 +251,8 @@ export default function RestaurantPageId({ params }) {
                   >
                     {menuOpen ? "Hide Menu" : "Show Menu"}
                     <span
-                      className={`transform transition-transform duration-300 ${
-                        menuOpen ? "rotate-180" : ""
-                      }`}
+                      className={`transform transition-transform duration-300 ${menuOpen ? "rotate-180" : ""
+                        }`}
                     >
                       ▼
                     </span>
@@ -310,7 +309,11 @@ export default function RestaurantPageId({ params }) {
               onClick={handleFavoriteToggle}
               className="cursor-pointer text-3xl flex items-center ml-32"
             >
-              {isFavorited ? <PiHeartStraightFill /> : <PiHeartStraightThin />}
+              {isFavorited ? (
+                <PiHeartStraightFill className="text-red-600" /> // Change to red when favorited
+              ) : (
+                <PiHeartStraightThin className="text-black" /> // Keep black when not favorited
+              )}
             </div>
           )}
         </section>
