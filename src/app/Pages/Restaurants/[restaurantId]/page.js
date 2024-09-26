@@ -7,7 +7,11 @@ import { PiHeartStraightThin, PiHeartStraightFill } from "react-icons/pi";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../../../../../firebase";
 import { useAuth } from "../../../../../context/authContext";
-
+import { Italiana } from "next/font/google"; 
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 export default function RestaurantPageId({ params }) {
   const [error, setError] = useState(null);
   const { currentUser, loading } = useAuth();
@@ -184,7 +188,7 @@ export default function RestaurantPageId({ params }) {
       </header>
       <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-[]">
         <section className="mb-4 p-2">
-          <h1 className="text-3xl font-bold text-center text-black">
+          <h1 className={`text-[3rem]  ${italiana.className} font-bold text-center text-black`}>
             {restaurant.name}
           </h1>
         </section>
