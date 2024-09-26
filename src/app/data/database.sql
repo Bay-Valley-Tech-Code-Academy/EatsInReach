@@ -60,13 +60,6 @@ CREATE TABLE Restaurants (
     is_open BOOLEAN NOT NULL DEFAULT FALSE
 );
 
--- Create the Restaurant_Food_Types junction table
-CREATE TABLE Restaurant_Food_Types (
-    restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE,
-    food_type_id INTEGER REFERENCES Food_Types(food_type_id) ON DELETE CASCADE,
-    PRIMARY KEY (restaurant_id, food_type_id)
-);
-
 -- Create the Photo_Types table
 CREATE TABLE Photo_Types (
     photo_type_id SERIAL PRIMARY KEY,
@@ -209,14 +202,6 @@ VALUES
 INSERT INTO Restaurants (name, uid, location, price_range_id, hours_of_operation, is_open, description, food_type_id, website, phone_number, email)
 VALUES
     ('El Palmar Taqueria', 'Gxenk50qj7hj9xP3m0YQZiOTRnx2','1127 Martin Luther King Jr Way, Merced, CA', 1, '10:00 AM - 9:00 PM', TRUE, 'Enjoy some of the best Mexican food in a relaxed atmosphere with reasonable prices', 21, 'http://www.elpalmartaqueria.com/', '209-726-8855', 'contact@example.com');
-
-INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id)
-VALUES
-    (1, 1),  -- Courtyard Cafe serves American
-    (2, 1),  -- Joystiq serves American
-    (3, 1),  -- Kind Neighbor serves American food
-    (4, 17),  -- Oishi Teri serves Japanese
-    (5, 21);  -- El Palmar serves Mexican
 
 -- Insert dummy data into the Restaurant_Pictures table
 INSERT INTO Restaurant_Pictures (restaurant_id, photo_type_id, image_url, alt_text)
