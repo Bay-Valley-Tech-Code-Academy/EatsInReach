@@ -1,42 +1,46 @@
+import { NextResponse } from 'next/server';
 import { pool } from '@/data/db';
 
 export async function POST(req) {
   const { item_name, item_description, item_price, image_path, alt_text } = await req.json();
   const uid = req.headers.get('uid'); // Get the uid from the request headers
+  const menuId = req.headers.get('menuId'); // Get the menuId from the request headers
+
+  if (!menuId) {
+    return new Response(JSON.stringify({ error: 'menuId is required' }), { status: 400 });
+  }
 
   try {
-    // Fetch the restaurant_id and menu_id for the user
+    // Check if the restaurant exists for the user
     const restaurantQuery = `
-      SELECT r.restaurant_id, m.menu_id 
+      SELECT r.restaurant_id 
       FROM Restaurants r
       JOIN Menus m ON r.restaurant_id = m.restaurant_id
-      WHERE r.uid = $1
+      WHERE r.uid = $1 AND m.menu_id = $2
       LIMIT 1;  
     `;
-    
-    const restaurantResult = await pool.query(restaurantQuery, [uid]);
-    
-    if (restaurantResult.rows.length === 0) {
-      return new Response(JSON.stringify({ error: 'No restaurant found for the user' }), { status: 404 });
-    }
-    
-    const { menu_id } = restaurantResult.rows[0]; // Get the first restaurant's menu_id
 
-    // Insert the new menu item with the retrieved menu_id
+    const restaurantResult = await pool.query(restaurantQuery, [uid, menuId]);
+
+    if (restaurantResult.rows.length === 0) {
+      return new Response(JSON.stringify({ error: 'No restaurant found for the user or invalid menuId' }), { status: 404 });
+    }
+
+    // Insert the new menu item with the provided menuId
     const query = `
       INSERT INTO menu_items (menu_id, item_name, item_description, item_price, image_path, alt_text)
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING item_id;
     `;
     
-    const values = [menu_id, item_name, item_description, item_price, image_path, alt_text];
+    const values = [menuId, item_name, item_description, item_price, image_path, alt_text];
     const { rows } = await pool.query(query, values);
 
     const newItemId = rows[0].item_id;
 
     const newItem = {
       item_id: newItemId,
-      menu_id,
+      menu_id: menuId,
       item_name,
       item_description,
       item_price,

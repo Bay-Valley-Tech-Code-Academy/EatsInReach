@@ -13,17 +13,6 @@ export async function POST(request) {
       }
     );
   }
-  const { submissionId } = await request.json();
-
-  if (!submissionId) {
-    return new Response(
-      JSON.stringify({ message: "Submission ID is required" }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  }
 
   try {
     // Fetch the submission data
@@ -68,8 +57,8 @@ export async function POST(request) {
 
     // Insert into Restaurants and get the new restaurant_id
     const insertRestaurantResult = await pool.query(
-      `INSERT INTO Restaurants (uid, name, location, hours_of_operation, description, website, phone_number, email, price_range_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING restaurant_id`,
+      `INSERT INTO Restaurants (uid, name, location, hours_of_operation, description, website, phone_number, email, price_range_id, food_type_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING restaurant_id`,
       [
         submission.uid,
         submission.name,
@@ -80,6 +69,7 @@ export async function POST(request) {
         submission.phone_number,
         submission.email,
         submission.price_range_id,
+        submission.food_type_id,
       ]
     );
     const newRestaurantId = insertRestaurantResult.rows[0].restaurant_id;
@@ -93,18 +83,10 @@ export async function POST(request) {
       [newRestaurantId, photoType, imageUrl, picture_submission.alt_text]
     );
 
-    // Insert into Restaurant_Food_Types
-    await pool.query(
-      `INSERT INTO Restaurant_Food_Types (restaurant_id, food_type_id) 
-            VALUES ($1, $2)`,
-      [newRestaurantId, submission.food_type_id]
-    );
-
     // Delete from Vendor_Submissions
-    await pool.query(
-      "DELETE FROM Vendor_Submissions WHERE submission_id = $1",
-      [submissionId]
-    );
+    await pool.query("DELETE FROM Vendor_Submissions WHERE uid = $1", [
+      submissionId,
+    ]);
 
     // Commit the transaction
     await pool.query("COMMIT");

@@ -14,13 +14,14 @@ const VendorHomePage = () => {
   const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
   const [approvedRestaurant, setApprovedRestaurant] = useState(false);
+  const [pendingRestaurant, setPendingRestaurant] = useState(false);
 
   const goToVendorSubmission = () => {
     router.push("/Pages/VendorSubmission");
   };
 
   const goToAddMenuItems = () => {
-    router.push("/Pages/MenuItemPage");
+    router.push("/Pages/Menu");
   };
 
   useEffect(() => {
@@ -95,6 +96,31 @@ const VendorHomePage = () => {
     checkVendorRestaurant();
   }, [currentUser]);
 
+  // This useEffect checks if the vendor has a pending restaurant
+  useEffect(() => {
+    const checkVendorPendingRestaurant = async () => {
+      if (!currentUser) return;
+
+      try {
+        // Send a request to your API route to check if the vendor has a restaurant
+        const response = await fetch(
+          `/api/checkPendingRestaurant?uid=${currentUser.uid}`
+        );
+        const result = await response.json();
+
+        if (result.hasRestaurant) {
+          setPendingRestaurant(true);
+        } else {
+          setPendingRestaurant(false);
+        }
+      } catch (error) {
+        console.error("Error checking vendor restaurant:", error);
+      }
+    };
+
+    checkVendorPendingRestaurant();
+  }, [currentUser]);
+
   // Show a loading indicator while checking auth state or role
   if (loading || isRoleLoading) {
     return <div>Loading...</div>; // You can replace this with a loading spinner if needed
@@ -123,8 +149,12 @@ const VendorHomePage = () => {
               onClick={goToAddMenuItems}
               className="bg-yellow-500 text-white hover:bg-yellow-600 px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-transform transform hover:scale-110"
             >
-              Add Menu Items
+              Add Menus
             </button>
+          ) : pendingRestaurant ? (
+            <p className="text-orange-700 mb-10 text-lg">
+              Restaurant pending review from admin
+            </p>
           ) : (
             <button
               onClick={goToVendorSubmission}

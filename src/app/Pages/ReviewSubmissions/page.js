@@ -73,6 +73,7 @@ export default function ReviewSubmissions() {
 
         const data = await response.json();
         setSubmissions(data);
+        console.log(data);
       } catch (err) {
         console.error("Failed to fetch submissions:", err);
         setError("Failed to load submissions. Please try again later.");
@@ -122,6 +123,13 @@ export default function ReviewSubmissions() {
     return <div>{error}</div>;
   }
 
+  const formatTime = (time) => {
+    const [hour, minute] = time.split(":");
+    const hour12 = hour % 12 || 12; // Convert to 12-hour format
+    const ampm = hour < 12 ? "AM" : "PM"; // Determine AM/PM
+    return `${hour12}:${minute} ${ampm}`; // Return formatted time
+  };
+
   // Show a loading indicator while checking auth state or role
   if (loading || isRoleLoading) {
     return <div>Loading...</div>; // You can replace this with a loading spinner if needed
@@ -148,8 +156,20 @@ export default function ReviewSubmissions() {
                   <strong>Location:</strong> {submission.location}
                 </p>
                 <p>
-                  <strong>Hours of Operation:</strong>{" "}
-                  {submission.hours_of_operation}
+                  <strong>Hours of Operation:</strong> <br />
+                  {Object.entries(
+                    JSON.parse(submission.hours_of_operation)
+                  ).map(([day, hours]) => (
+                    <span key={day}>
+                      {day.charAt(0).toUpperCase() + day.slice(1)}:{" "}
+                      {hours.closed
+                        ? "Closed"
+                        : `${formatTime(hours.open)} - ${formatTime(
+                            hours.close
+                          )}`}
+                      <br />
+                    </span>
+                  ))}
                 </p>
                 <p>
                   <strong>Description:</strong> {submission.description}

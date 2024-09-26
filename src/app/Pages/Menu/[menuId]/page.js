@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../../../context/authContext";
+import { useAuth } from "../../../../../context/authContext";
 import Navbar from "@/Components/Navbar";
 import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "../../../../firebase";
+import { firestore } from "../../../../../firebase";
 
-export default function MenuItemPage() {
+export default function MenuItemPage({ params }) {
+  const { menuId } = params;
+  const menuTableId = menuId.split('-').pop();
   const router = useRouter();
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
@@ -32,7 +34,9 @@ export default function MenuItemPage() {
           if (found) break;
 
           try {
-            const userDoc = await getDoc(doc(firestore, collection, currentUser.uid));
+            const userDoc = await getDoc(
+              doc(firestore, collection, currentUser.uid)
+            );
             if (userDoc.exists()) {
               const userData = userDoc.data();
               console.log("User data found:", userData);
@@ -45,7 +49,10 @@ export default function MenuItemPage() {
               }
             }
           } catch (error) {
-            console.error(`Error fetching user data from ${collection}:`, error);
+            console.error(
+              `Error fetching user data from ${collection}:`,
+              error
+            );
           }
         }
 
@@ -62,29 +69,34 @@ export default function MenuItemPage() {
 
   useEffect(() => {
     async function fetchMenuItems() {
-        try {
-            const res = await fetch("/api/menu-items", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "uid": currentUser.uid // Pass the user's uid
-                },
-            });
-            if (res.ok) {
-                const data = await res.json();
-                console.log("Fetched menu items:", data);
-                setMenuItems(data);
-            } else {
-                console.error("Failed to fetch menu items");
-            }
-        } catch (error) {
-            console.error("Error fetching menu items:", error);
+      if (!currentUser) {
+        console.error("No current user found.");
+        return; // Exit if there's no user
+      }
+
+      try {
+        const res = await fetch("/api/menu-items", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            uid: currentUser.uid, // Pass the user's uid
+            menuId: menuTableId,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          console.log("Fetched menu items:", data);
+          setMenuItems(data);
+        } else {
+          console.error("Failed to fetch menu items");
         }
+      } catch (error) {
+        console.error("Error fetching menu items:", error);
+      }
     }
 
     fetchMenuItems();
-}, [currentUser]);
-
+  }, [currentUser, menuId]);
 
   const resetForm = () => {
     setNewItemName("");
@@ -101,14 +113,14 @@ export default function MenuItemPage() {
       newItemPrice,
       editingItemId,
     });
-    
+
     if (newItemName && newItemDesc && newItemPrice) {
       const parsedPrice = parseFloat(newItemPrice);
       if (isNaN(parsedPrice) || parsedPrice < 0) {
         setError("Price must be a valid number.");
         return;
       }
-  
+
       const itemData = {
         item_name: newItemName,
         item_description: newItemDesc,
@@ -116,27 +128,33 @@ export default function MenuItemPage() {
         image_path: "/images/food-bg-images.jpg",
         alt_text: "",
       };
-  
-      const endpoint = editingItemId ? `/api/menu-items/update` : `/api/menu-items/submit`;
+
+      const endpoint = editingItemId
+        ? `/api/menu-items/update`
+        : `/api/menu-items/submit`;
       if (editingItemId) {
         itemData.id = editingItemId;
+        itemData.menu_id = menuTableId;
       }
-  
+
       try {
         const res = await fetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "uid": currentUser.uid, // Include the uid in headers
+            uid: currentUser.uid, // Include the uid in headers
+            menuId: menuTableId
           },
           body: JSON.stringify(itemData),
         });
-  
+
         if (res.ok) {
           const updatedItem = await res.json();
           setMenuItems((prevItems) =>
             editingItemId
-              ? prevItems.map((item) => (item.item_id === editingItemId ? updatedItem : item))
+              ? prevItems.map((item) =>
+                  item.item_id === editingItemId ? updatedItem : item
+                )
               : [...prevItems, updatedItem]
           );
           resetForm();
@@ -151,7 +169,6 @@ export default function MenuItemPage() {
       setError("All fields are required");
     }
   };
-  
 
   const removeItem = async (itemId) => {
     try {
@@ -164,7 +181,9 @@ export default function MenuItemPage() {
       });
 
       if (res.ok) {
-        setMenuItems((prevItems) => prevItems.filter((item) => item.item_id !== itemId));
+        setMenuItems((prevItems) =>
+          prevItems.filter((item) => item.item_id !== itemId)
+        );
       } else {
         const errorData = await res.json();
         setError(`Failed to remove item: ${errorData.error}`);
@@ -230,7 +249,10 @@ export default function MenuItemPage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
           {menuItems.map((item) => (
-            <div key={item.item_id} className="p-4 bg-Yellow-Green drop-shadow-md rounded-2xl flex flex-col">
+            <div
+              key={item.item_id}
+              className="p-4 bg-Yellow-Green drop-shadow-md rounded-2xl flex flex-col"
+            >
               <div className="rounded-2xl bg-gray-50 drop-shadow-md p-3 text-center ring-1 ring-inset ring-gray-900/5 flex flex-col justify-between h-full">
                 <div className="flex flex-col justify-center items-center">
                   {editingItemId === item.item_id ? (
@@ -272,8 +294,12 @@ export default function MenuItemPage() {
                         alt={item.alt_text || "Default image"}
                         className="w-full object-cover rounded-2xl drop-shadow-md"
                       />
-                      <p className="text-black font-bold py-2">{item.item_name}</p>
-                      <div className="text-black py-2 w-full h-[60px] break-words overflow-auto">{item.item_description}</div>
+                      <p className="text-black font-bold py-2">
+                        {item.item_name}
+                      </p>
+                      <div className="text-black py-2 w-full h-[60px] break-words overflow-auto">
+                        {item.item_description}
+                      </div>
                       <p className="text-black py-2">${item.item_price}</p>
                     </>
                   )}

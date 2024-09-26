@@ -1,22 +1,23 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../../context/authContext";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../../../../firebase";
 import { UploadButton } from "../../../../libs/uploadthing";
 import Navbar from "@/Components/Navbar";
-import DropdownTime from "@/Components/DropDownTime";
 import Footer from "@/Components/Footer";
 
 export default function VendorSubmission() {
   const router = useRouter();
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
-  const [isRoleLoading, setIsRoleLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [priceRanges, setPriceRanges] = useState([]);
   const [foodTypes, setFoodTypes] = useState([]);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [approvedRestaurant, setApprovedRestaurant] = useState(false);
+  const [pendingRestaurant, setPendingRestaurant] = useState(false);
   const [formData, setFormData] = useState({
     name: "Sample Restaurant",
     location: "123 Main St, Sample City",
@@ -42,50 +43,68 @@ export default function VendorSubmission() {
   const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   useEffect(() => {
-    // Redirect to the landing page if the user is not logged in
-    if (!loading && !currentUser) {
-      router.push("/");
-    }
-    if (currentUser) {
-      const fetchUserData = async () => {
-        const collections = ["users", "vendors", "admins"];
-        let found = false;
+    const checkUserAndRedirect = async () => {
+      if (!loading && !currentUser) {
+        router.push("/");
+        return;
+      }
 
-        for (const collection of collections) {
-          if (found) break;
+      if (currentUser) {
+        try {
+          const collections = ["users", "vendors", "admins"];
+          let found = false;
 
-          try {
+          for (const collection of collections) {
             const userDoc = await getDoc(
               doc(firestore, collection, currentUser.uid)
             );
 
             if (userDoc.exists()) {
               const userData = userDoc.data();
-              if (userData.role !== "vendor") {
-                router.push("/");
+
+              if (userData.role === "vendor") {
+                const [pendingResponse, approvedResponse] = await Promise.all([
+                  fetch(`/api/checkPendingRestaurant?uid=${currentUser.uid}`),
+                  fetch(`/api/checkRestaurant?uid=${currentUser.uid}`),
+                ]);
+
+                const pendingResult = await pendingResponse.json();
+                const approvedResult = await approvedResponse.json();
+
+                setPendingRestaurant(pendingResult.hasRestaurant);
+                setApprovedRestaurant(approvedResult.hasRestaurant);
+
+                if (
+                  pendingResult.hasRestaurant ||
+                  approvedResult.hasRestaurant
+                ) {
+                  router.push("/Pages/VendorHome");
+                  return;
+                }
+                found = true;
+                setRole(userData.role);
+              } else {
+                router.push("/"); // Redirect if not a vendor
+                return;
               }
-              found = true;
-              setRole(userData.role);
             }
-          } catch (error) {
-            console.error(
-              `Error fetching user data from ${collection} collection:`,
-              error
-            );
           }
-        }
 
-        if (!found) {
-          console.log(
-            "User document does not exist in any of the collections."
-          );
-          setRole(null);
+          if (!found) {
+            console.log(
+              "User document does not exist in any of the collections."
+            );
+            setRole(null);
+          }
+        } catch (error) {
+          console.error(`Error fetching user data:`, error);
         }
-        setIsRoleLoading(false);
-      };
+      }
 
-      fetchUserData();
-    }
+      setIsLoading(false); // Set loading to false after fetching user data
+    };
+
+    checkUserAndRedirect();
   }, [currentUser, loading, router]);
 
   useEffect(() => {
@@ -196,6 +215,7 @@ export default function VendorSubmission() {
           },
         });
         setImageURL(""); // Clear image URL after submission
+        router.push("/Pages/VendorHome");
       } else {
         setSubmitStatus(
           "There was an error with your submission. Please try again."
@@ -220,8 +240,8 @@ export default function VendorSubmission() {
   ];
 
   // Show a loading indicator while checking auth state or role
-  if (loading || isRoleLoading) {
-    return <div>Loading...</div>; // You can replace this with a loading spinner if needed
+  if (loading || isLoading) {
+    return <div>Loading...</div>;
   }
 
   if (!currentUser || role !== "vendor") {
@@ -331,7 +351,7 @@ export default function VendorSubmission() {
           <div className="mb-4">
             <label className="block text-gray-700">Website</label>
             <input
-              type="email"
+              type="text"
               name="website"
               value={formData.website || ""}
               onChange={handleChange}
