@@ -4,10 +4,15 @@ import Link from "next/link";
 import Navbar from "@/Components/Navbar";
 import Slider from "react-slick";
 import Footer from "@/Components/Footer";
-
+import { Italiana } from "next/font/google"; 
 // Import css files for react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+const italiana = Italiana({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 
 export default function RestaurantPage() {
   const [restaurants, setRestaurants] = useState([]);
@@ -72,7 +77,7 @@ export default function RestaurantPage() {
     <div className="min-h-screen bg-[#FDFBCE]">
       <Navbar />
       <div className="rounded-[84px]">
-        <div className="container mx-auto my-16 px-24 pt-3 pb-6 max-sm:px-4 max-sm:py-2 rounded-[100px] max-sm:rounded-[24px] bg-Yellow-Green w-4/6 max-sm:w-11/12">
+        <div className="container mx-auto my-16 px-[3rem] pt-3 pb-[2rem] max-sm:px-4 max-sm:py-2 rounded-[100px] max-sm:rounded-[24px] bg-Yellow-Green w-4/6 max-sm:w-11/12 drop-shadow-md">
           <Slider {...settings} className="container mt-4">
             {restaurants.slice(0, 5).map((restaurant) => (
               <div
@@ -82,9 +87,9 @@ export default function RestaurantPage() {
                 <img
                   src={restaurant.image_url}
                   alt={`Image of ${restaurant.name}`}
-                  className="w-full h-64 object-cover rounded-t-[84px] max-sm:rounded-t-[24px]"
+                  className="w-full h-64 object-cover rounded-t-[84px] max-sm:rounded-t-[24px] drop-shadow-md"
                 />
-                <div className="bg-white p-4 rounded-b-[84px] max-sm:rounded-b-[24px] pl-16">
+                <div className="bg-white p-4 rounded-b-[84px] max-sm:rounded-b-[24px] pl-16 drop-shadow-md">
                   <h2 className="text-xl font-semibold">{restaurant.name}</h2>
                   <p>{restaurant.food_type}</p>
                   <p>{restaurant.price_range}</p>
@@ -193,13 +198,13 @@ export default function RestaurantPage() {
             <span className="sr-only">Search</span>
           </button>
         </div>
-        <h2 className="text-2xl my-4 text-zinc-800 px-16 text-center">
+        <h2 className={`text-[3rem] my-4 px-16  ${italiana.className}`}>
           All Restaurants
         </h2>
-        <div className="grid grid-col-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 px-14">
+        <div className="grid grid-col-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 px-14 ">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-              <div key={restaurant.restaurant_id}>
+              <div key={restaurant.restaurant_id} className="transition ease-in-out hover:-translate-y-1 hover:scale-100 duration-200">
                 <Link href={`/Pages/Restaurants/${restaurant.restaurant_id}`}>
                   <div className="bg-white flex flex-col md:flex-row shadow-xl rounded-xl overflow-hidden">
                     <div className="flex-shrink-0 w-full md:w-36 h-40 overflow-hidden">

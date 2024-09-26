@@ -10,6 +10,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  scroll-behavior: smooth;
 }
 
 .login-page {
@@ -45,4 +46,12 @@
   /* Fallback background color */
   filter: blur(7px);
   z-index: -1;
+}
+.slick-prev, .slick-next {
+  font-size: 30px;  /* Increase the size */
+  width: 7rem !important;
+  z-index: 1;
+}
+.slick-prev:before, .slick-next:before {
+  font-size: 4rem !important;  /* Increase the size of the arrow icon */
 }
