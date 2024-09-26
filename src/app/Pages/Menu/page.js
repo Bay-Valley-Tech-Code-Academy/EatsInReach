@@ -105,11 +105,11 @@ export default function MenuItemPage() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-center gap-4 bg-[#FDFBCE] min-h-[100vh] p-6 overflow-x-hidden">
+      <div className="flex flex-col items-center gap-4 bg-[#FDFBCE] min-h-[100vh] p-6 overflow-x-hidden">
         <h1 className="text-2xl font-bold">Create Menu</h1>
         {error && <p className="text-red-500">{error}</p>}
-        <div className="flex flex-col items-center justify-center gap-2">
-        <form onSubmit={handleSubmit} className="flex flex-col w-3/4 pt-6">
+        <div className="flex flex-col items-center gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col w-3/4 pt-6 gap-2">
           <input
             type="text"
             placeholder="Menu Name"

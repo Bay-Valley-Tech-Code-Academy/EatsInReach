@@ -149,7 +149,7 @@ const VendorHomePage = () => {
               onClick={goToAddMenuItems}
               className="bg-yellow-500 text-white hover:bg-yellow-600 px-8 py-4 text-lg font-bold rounded-full shadow-xl transition-transform transform hover:scale-110"
             >
-              Add Menu Items
+              Add Menus
             </button>
           ) : pendingRestaurant ? (
             <p className="text-orange-700 mb-10 text-lg">
