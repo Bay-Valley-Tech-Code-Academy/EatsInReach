@@ -168,7 +168,7 @@ export default function UserProfile() {
           <div className="flex justify-start mt-5 ">
             <h1 className={`text-[3rem] font-semibold ${italiana.className}`}>{activeSection === "profile" ? "Profile Settings" : "Security Settings"}</h1>
           </div>
-          <div className=" bg-[#FDFBCE] flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 h-[70%] drop-shadow-md rounded-3xl">
+          <div className=" bg-[#FDFBCE] flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 drop-shadow-md rounded-3xl p-2">
             {activeSection === "profile" ? (
               <>
                 <form className="flex flex-col max-lg:items-center m-2" onSubmit={handleUsernameChange}>

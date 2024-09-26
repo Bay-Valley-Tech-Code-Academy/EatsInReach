@@ -1,10 +1,5 @@
-// src/app/api/restaurants/[restaurantId]/route.js
-import { Pool } from 'pg';
+import { pool } from '@/data/db';
 import { NextResponse } from 'next/server';
-
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-});
 
 export async function GET(req, { params }) {
     const { restaurantId } = params;

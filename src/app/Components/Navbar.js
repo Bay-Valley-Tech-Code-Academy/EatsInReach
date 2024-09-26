@@ -137,7 +137,6 @@ export default function Navbar() {
           )}
         </div>
       </div>
-      
       {/* Hamburger icon */}
       <div className="sm:hidden mr-4  ">
         <button
@@ -160,7 +159,6 @@ export default function Navbar() {
           </svg>
         </button>
       </div>
-
       {/* Desktop menu */}
       <div className="hidden sm:flex">
         <Link href="/Pages/Restaurants">
@@ -168,12 +166,6 @@ export default function Navbar() {
             <h2>Restaurants</h2>
           </div>
         </Link>
-        <Link href="/Pages/Contact">
-          <div className="hover:bg-Fern_green p-2 sm:p-4">
-            <h2>Contact Us</h2>
-          </div>
-        </Link>
-
         {currentUser && role === "user" && (
           <Link href="/Pages/Favorites">
             <div className="hover:bg-Fern_green p-2 md:p-4">
@@ -212,7 +204,6 @@ export default function Navbar() {
                 <h2>Admin Page</h2>
               </div>
             </Link>
-
             <Link href="/Pages/ReviewSubmissions">
               <div className="hover:bg-Fern_green p-2 md:p-4">
                 <h2>Review Submissions</h2>
@@ -242,7 +233,6 @@ export default function Navbar() {
           </Link>
         )}
       </div>
-
       {/* Mobile menu (hamburger)  This is where you change color of hamburger menu */}
       {isOpen && (
         <div className="sm:hidden absolute  top-14 -right-2 bg-Yellow-Green flex flex-col items-center z-10">
@@ -251,18 +241,11 @@ export default function Navbar() {
               <h2>Restaurants</h2>
             </div>
           </Link>
-
           {currentUser && role === "user" && (
             <>
               <Link href="/Pages/Favorites">
                 <div className="hover:bg-Fern_green p-2 md:p-4">
                   <h2>Favorites</h2>
-                </div>
-              </Link>
-
-              <Link href="/Pages/UserProfile">
-                <div className="hover:bg-Fern_green p-2 md:p-4">
-                  <h2>User Profile</h2>
                 </div>
               </Link>
             </>
