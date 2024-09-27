@@ -11,7 +11,7 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
 } from "firebase/auth";
-import { Italiana } from "next/font/google"; 
+import { Italiana } from "next/font/google";
 // Constants
 const SecurityIcon = "/images/security.png"; // Update the path to the security icon
 const SUCCESS_TIMEOUT = 3000;
@@ -59,7 +59,10 @@ export default function UserProfile() {
   }, [successful]);
 
   const reauthenticate = async (password) => {
-    const credential = EmailAuthProvider.credential(currentUser.email, password);
+    const credential = EmailAuthProvider.credential(
+      currentUser.email,
+      password
+    );
     try {
       await reauthenticateWithCredential(currentUser, credential);
       console.log("Reauthentication successful");
@@ -90,7 +93,9 @@ export default function UserProfile() {
     try {
       await reauthenticate(currentPasswordEmail);
       await verifyBeforeUpdateEmail(currentUser, newEmail);
-      setSuccessful("Email updated successfully! Please check your inbox to validate.");
+      setSuccessful(
+        "Email updated successfully! Please check your inbox to validate."
+      );
       setError(null);
     } catch (error) {
       handleError(error);
@@ -111,10 +116,13 @@ export default function UserProfile() {
 
   const handleError = (error) => {
     const errorMessages = {
-      "auth/email-already-in-use": "This email is already in use. Please try a different one.",
+      "auth/email-already-in-use":
+        "This email is already in use. Please try a different one.",
       "auth/operation-not-allowed": "This operation is not allowed.",
     };
-    setError(errorMessages[error.code] || "Failed to update email: " + error.message);
+    setError(
+      errorMessages[error.code] || "Failed to update email: " + error.message
+    );
   };
 
   if (loading) {
@@ -147,31 +155,48 @@ export default function UserProfile() {
             {["profile", "security"].map((section) => (
               <li
                 key={section}
-                className={`hover:bg-Yellow-Green active:bg-green-700 cursor-pointer transition-colors duration-200 ${activeSection === section ? "bg-Yellow-Green" : ""}`}
+                className={`hover:bg-Yellow-Green active:bg-green-700 cursor-pointer transition-colors duration-200 ${
+                  activeSection === section ? "bg-Yellow-Green" : ""
+                }`}
                 onClick={() => setActiveSection(section)}
               >
                 <div className="flex items-center justify-center p-2">
                   <img
-                    src={section === "profile" ? "/images/profile-icon.png" : SecurityIcon}
+                    src={
+                      section === "profile"
+                        ? "/images/profile-icon.png"
+                        : SecurityIcon
+                    }
                     height="25"
                     width="25"
-                    alt={section === "profile" ? "Profile" : "Cyber security icon"}
+                    alt={
+                      section === "profile" ? "Profile" : "Cyber security icon"
+                    }
                     className="m-1"
                   />
-                  <h1 className="text-center text-md font-medium">{section.charAt(0).toUpperCase() + section.slice(1)}</h1>
+                  <h1 className="text-center text-md font-medium">
+                    {section.charAt(0).toUpperCase() + section.slice(1)}
+                  </h1>
                 </div>
               </li>
             ))}
           </ul>
         </div>
-        <div className=" bg-Yellow-Green  flex flex-col h-[calc(100vh-130px)] w-4/6 max-md:w-3/4 m-5 justify-center items-center rounded-lg">
+        <div className=" bg-Yellow-Green  flex flex-col w-4/6 max-md:w-3/4 m-5 justify-center items-center rounded-lg p-2">
           <div className="flex justify-start mt-5 ">
-            <h1 className={`text-[3rem] font-semibold ${italiana.className}`}>{activeSection === "profile" ? "Profile Settings" : "Security Settings"}</h1>
+            <h1 className={`text-[3rem] font-semibold ${italiana.className}`}>
+              {activeSection === "profile"
+                ? "Profile Settings"
+                : "Security Settings"}
+            </h1>
           </div>
           <div className=" bg-[#FDFBCE] flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 drop-shadow-md rounded-3xl p-2">
             {activeSection === "profile" ? (
               <>
-                <form className="flex flex-col max-lg:items-center m-2" onSubmit={handleUsernameChange}>
+                <form
+                  className="flex flex-col max-lg:items-center m-2"
+                  onSubmit={handleUsernameChange}
+                >
                   <h1 className=" font-semibold">Change Username</h1>
                   <InputField
                     type="text"
@@ -179,9 +204,14 @@ export default function UserProfile() {
                     value={newUsername}
                     onChange={(e) => setNewUsername(e.target.value)}
                   />
-                  <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md mt-2 drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">Change</button>
+                  <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md mt-2 drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">
+                    Change
+                  </button>
                 </form>
-                <form className="flex flex-col max-lg:items-center m-2" onSubmit={handleEmailChange}>
+                <form
+                  className="flex flex-col max-lg:items-center m-2"
+                  onSubmit={handleEmailChange}
+                >
                   <h1 className="mr-2 font-semibold">Change Email</h1>
                   <div className="flex flex-col space-y-2">
                     <InputField
@@ -196,10 +226,15 @@ export default function UserProfile() {
                       value={currentPasswordEmail}
                       onChange={(e) => setCurrentPasswordEmail(e.target.value)}
                     />
-                    <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">Change</button>
+                    <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">
+                      Change
+                    </button>
                   </div>
                 </form>
-                <form className="flex flex-col max-lg:items-center m-2" onSubmit={handlePasswordChange}>
+                <form
+                  className="flex flex-col max-lg:items-center m-2"
+                  onSubmit={handlePasswordChange}
+                >
                   <h1 className=" font-semibold">Change Password</h1>
                   <div className="flex flex-col space-y-2">
                     <InputField
@@ -214,7 +249,9 @@ export default function UserProfile() {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                     />
-                    <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green hover:text-white duration-300">Change</button>
+                    <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green hover:text-white duration-300">
+                      Change
+                    </button>
                   </div>
                 </form>
               </>
@@ -228,5 +265,5 @@ export default function UserProfile() {
         </div>
       </div>
     </>
-  );  
+  );
 }
