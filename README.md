@@ -225,3 +225,126 @@ node admin.js
 ```
 
 ### 3. Delete the JSON file after adding it to your `.env` file
+
+
+
+## Developers of EatsInReach
+
+Nathan Duncan
+
+
+LinkedIn: https://www.linkedin.com/in/nathan-duncan-4292b2310/
+
+
+GitHub: NathanDuncan-coder | https://github.com/NathanDuncan-coder
+
+-----------------------------------------------------------------------------
+Ruben Villagomez
+
+
+LinkedIn: https://www.linkedin.com/in/ruben-villagomez-511933263/
+
+
+GitHub: Rudone2 | https://github.com/Rudone2
+
+
+
+-------------------------------------------------------------------------
+Soraya Boza
+
+
+LinkedIn: https://www.linkedin.com/in/soraya-boza/
+
+
+GitHub: sorayaboza | https://github.com/sorayaboza
+
+--------------------------------------------------------------------------
+Khatelyne Geda
+
+
+LinkedIn: https://www.linkedin.com/in/khatelyne
+
+
+GitHub: kxtmg | https://github.com/kxtmg 
+
+-------------------------------------------------------------------------
+Jason Yuen
+
+
+LinkedIn: https://www.linkedin.com/in/jason-s-yuen/
+
+
+GitHub: JasonSYuen | https://github.com/JasonSYuen
+
+-------------------------------------------------------------------------
+Eric Ladd
+
+
+LinkedIn: https://www.linkedin.com/in/eladd416/
+
+
+GitHub: eLadd416 | https://github.com/eLadd416
+
+-------------------------------------------------------------------------
+Hans Guillen
+
+
+linkedIn: https://www.linkedin.com/in/hans-guillen/
+
+
+github: GuiH823 | https://github.com/GuiH823
+
+-------------------------------------------------------------------------
+Alisson Ross
+
+
+LinkedIn: https://www.linkedin.com/in/alisson-ross/ 
+
+
+Github: AlissonRoss | https://github.com/AlissonRoss
+
+-------------------------------------------------------------------------
+Vianca Reynoso
+
+
+LinkedIn: https://www.linkedin.com/in/vianca-reynoso/
+
+
+Github: vrey2  | https://github.com/vrey2
+
+-------------------------------------------------------------------------
+Javier Miranda
+
+
+LinkedIn: http://linkedin.com/in/javier-miranda-tech
+
+
+GitHub: jm2601  | https://github.com/jm2601
+
+-------------------------------------------------------------------------
+Kimberly Encinas 
+
+
+ Linkedin: https://www.linkedin.com/in/kimberly-encinas/ 
+ 
+ 
+ GitHub: Kimberly Encinas | https://github.com/kimbencinas
+ 
+-------------------------------------------------------------------------
+ David Xiong
+ 
+ 
+LinkedIn: https://www.linkedin.com/in/david-xiong-27b339324/
+
+
+GitHub: davidxiong117 | https://github.com/davidxiong117
+
+-------------------------------------------------------------------------
+Misael Bolainez
+
+
+LinkedIn: https://www.linkedin.com/in/misael-bolainez/
+
+
+GitHub: missile720 | https://github.com/missile720
+
