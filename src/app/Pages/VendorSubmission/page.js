@@ -222,9 +222,10 @@ export default function VendorSubmission() {
         );
       }
     } catch (error) {
-      console.error("Error submitting vendor:", error);
-      setSubmitStatus(
-        "There was an error with your submission. Please try again."
+      console.error("Error handling submission:", error.stack || error);
+      return NextResponse.json(
+        { message: "Error handling submission", error: error.message },
+        { status: 500 }
       );
     }
   };

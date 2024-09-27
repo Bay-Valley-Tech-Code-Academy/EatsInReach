@@ -59,13 +59,13 @@ export default function Landing() {
 
       </div>
       <div className=" flex flex-col items-center p-4 bg-Cream" id='faves'>
-        <div className="w-[50vw]">
+        <div className="2xl:w-[50vw]">
           <h3 className={`text-[3rem] text-black flex self-start pl-4  ${italiana.className}`}>Our Favorites</h3>
             <div className="bg-Cream grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 rounded-3xl gap-5 mt-4 scrollbar-hidden flex-wrap">
             {restaurants.slice(0, 5).map((restaurant, index) => (
               <Link
                 href={`/Pages/Restaurants/${restaurant.restaurant_id}`}
-                className="flg:w-1/2  group-hover:bg-slate-300 group-hover:translate-y-1"
+                className="group-hover:bg-slate-300 group-hover:translate-y-1 flex justify-center"
                 key={restaurant.restaurant_id}
               >
                 <div className=" h-64 w-48 p-4 rounded-2xl cursor-pointer drop-shadow-md">

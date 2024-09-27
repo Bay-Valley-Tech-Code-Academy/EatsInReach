@@ -37,8 +37,6 @@ export default function Favorites() {
                 doc(firestore, collection, currentUser.uid)
               );
 
-              
-
               if (userDoc.exists()) {
                 const userData = userDoc.data();
                 if (userData.role !== "user") {

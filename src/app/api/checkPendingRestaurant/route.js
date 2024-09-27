@@ -3,7 +3,7 @@ import { pool } from "@/data/db";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
-  const uid = searchParams.get('uid');
+  const uid = searchParams.get("uid");
 
   if (!uid) {
     return res.status(400).json({ error: "UID is required" });
@@ -13,7 +13,7 @@ export async function GET(req) {
     // Query the `restaurants` table to check if a restaurant exists with the given UID
     const query = "SELECT * FROM Vendor_Submissions WHERE uid = $1";
     const values = uid;
-    
+
     const result = await pool.query(query, [values]);
 
     if (result.rows.length > 0) {

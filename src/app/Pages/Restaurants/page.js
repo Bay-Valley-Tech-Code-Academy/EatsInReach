@@ -4,7 +4,7 @@ import Link from "next/link";
 import Navbar from "@/Components/Navbar";
 import Slider from "react-slick";
 import Footer from "@/Components/Footer";
-import { Italiana } from "next/font/google"; 
+import { Italiana } from "next/font/google";
 // Import css files for react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -204,7 +204,10 @@ export default function RestaurantPage() {
         <div className="grid grid-col-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 px-14 ">
           {filteredRestaurants.length > 0 ? (
             filteredRestaurants.map((restaurant) => (
-              <div key={restaurant.restaurant_id} className="transition ease-in-out hover:-translate-y-1 hover:scale-100 duration-200">
+              <div
+                key={restaurant.restaurant_id}
+                className="transition ease-in-out hover:-translate-y-1 hover:scale-100 duration-200"
+              >
                 <Link href={`/Pages/Restaurants/${restaurant.restaurant_id}`}>
                   <div className="bg-white flex flex-col md:flex-row shadow-xl rounded-xl overflow-hidden">
                     <div className="flex-shrink-0 w-full md:w-36 h-40 overflow-hidden">

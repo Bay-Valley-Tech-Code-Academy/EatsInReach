@@ -1,18 +1,20 @@
-import { pool } from '@/data/db';
+import { pool } from "@/data/db";
 
 export async function GET(req) {
-    const uid = req.headers.get('uid'); // Assuming you pass the uid in the request headers
-    const menuId = req.headers.get('menuId');
+  const uid = req.headers.get("uid"); // Assuming you pass the uid in the request headers
+  const menuId = req.headers.get("menuId");
 
-    console.log(menuId);
-    if (!uid) {
-        return new Response(JSON.stringify({ error: 'User not authenticated' }), { status: 401 });
-    }
+  console.log(menuId);
+  if (!uid) {
+    return new Response(JSON.stringify({ error: "User not authenticated" }), {
+      status: 401,
+    });
+  }
 
-    const client = await pool.connect();
-    
-    try {
-        const query = `
+  const client = await pool.connect();
+
+  try {
+    const query = `
             SELECT
                 mi.item_id,
                 mi.menu_id,
@@ -26,18 +28,21 @@ export async function GET(req) {
             WHERE r.uid = $1 AND mi.menu_id = $2
         `;
 
-        const result = await client.query(query, [uid, menuId]);
-        return new Response(JSON.stringify(result.rows), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    } catch (error) {
-        console.error('Error fetching menu items:', error);
-        return new Response(JSON.stringify({ error: 'Failed to fetch menu items' }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' },
-        });
-    } finally {
-        client.release();
-    }
+    const result = await client.query(query, [uid, menuId]);
+    return new Response(JSON.stringify(result.rows), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error fetching menu items:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch menu items" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } finally {
+    client.release();
+  }
 }

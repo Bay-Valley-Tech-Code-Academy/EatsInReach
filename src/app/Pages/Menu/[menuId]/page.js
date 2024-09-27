@@ -9,7 +9,7 @@ import { firestore } from "../../../../../firebase";
 
 export default function MenuItemPage({ params }) {
   const { menuId } = params;
-  const menuTableId = menuId.split('-').pop();
+  const menuTableId = menuId.split("-").pop();
   const router = useRouter();
   const { currentUser, loading } = useAuth();
   const [role, setRole] = useState(null);
@@ -143,7 +143,7 @@ export default function MenuItemPage({ params }) {
           headers: {
             "Content-Type": "application/json",
             uid: currentUser.uid, // Include the uid in headers
-            menuId: menuTableId
+            menuId: menuTableId,
           },
           body: JSON.stringify(itemData),
         });

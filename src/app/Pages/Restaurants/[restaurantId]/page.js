@@ -7,7 +7,7 @@ import { PiHeartStraightThin, PiHeartStraightFill } from "react-icons/pi";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../../../../../firebase";
 import { useAuth } from "../../../../../context/authContext";
-import { Italiana } from "next/font/google"; 
+import { Italiana } from "next/font/google";
 const italiana = Italiana({
   subsets: ["latin"],
   weight: ["400"],
@@ -98,7 +98,6 @@ export default function RestaurantPageId({ params }) {
             );
             setRole(null);
           }
-
         } catch (error) {
           console.error("Error fetching user role or favorites", error);
         }
@@ -133,26 +132,26 @@ export default function RestaurantPageId({ params }) {
 
   useEffect(() => {
     async function fetchMenu() {
-        try {
-            const res = await fetch(`/api/menu`);
-            const data = await res.json();
+      try {
+        const res = await fetch(`/api/menu`);
+        const data = await res.json();
 
-            // Filter menu items based on restaurant ID
-            const filteredMenu = data.filter(menuSection => 
-                Number(menuSection.restaurant_id) === Number(restaurantId)
-            );
+        // Filter menu items based on restaurant ID
+        const filteredMenu = data.filter(
+          (menuSection) =>
+            Number(menuSection.restaurant_id) === Number(restaurantId)
+        );
 
-            setMenu(filteredMenu); // Update state with filtered menu items
-        } catch (error) {
-            console.error("Error fetching menu data:", error);
-        }
+        setMenu(filteredMenu); // Update state with filtered menu items
+      } catch (error) {
+        console.error("Error fetching menu data:", error);
+      }
     }
 
     if (restaurantId) {
-        fetchMenu();
+      fetchMenu();
     }
-}, [restaurantId]); // Added restaurantId to the dependency array
-
+  }, [restaurantId]); // Added restaurantId to the dependency array
 
   if (!restaurant) {
     return (
@@ -176,9 +175,9 @@ export default function RestaurantPageId({ params }) {
 
   const justMenuItems = Array.isArray(menu)
     ? menu.filter(
-      (menuSection) =>
-        Number(menuSection.restaurant_id) === Number(restaurantId)
-    )
+        (menuSection) =>
+          Number(menuSection.restaurant_id) === Number(restaurantId)
+      )
     : [];
 
   return (
@@ -188,7 +187,9 @@ export default function RestaurantPageId({ params }) {
       </header>
       <main className="flex-grow w-full max-w-6xl mx-auto p-4 bg-[]">
         <section className="mb-4 p-2">
-          <h1 className={`text-[3rem]  ${italiana.className} font-bold text-center text-black`}>
+          <h1
+            className={`text-[3rem]  ${italiana.className} font-bold text-center text-black`}
+          >
             {restaurant.name}
           </h1>
         </section>
@@ -200,9 +201,8 @@ export default function RestaurantPageId({ params }) {
               style={{
                 outline: "none",
                 border: "none",
-                userSelect: "none"
-              }
-              }
+                userSelect: "none",
+              }}
               src={restaurant.image_url || "/default-image.jpg"} // Provide a default image if URL is missing
               alt={`${restaurant.name} main dish`}
               className="w-full h-auto object-cover rounded-lg"
@@ -273,17 +273,23 @@ export default function RestaurantPageId({ params }) {
               <div className="p-3 border border-gray-300 rounded-lg shadow-md bg-white">
                 <div className="border border-gray-200 rounded-lg">
                   <button
-                    onClick={toggleMenuAccordion} 
+                    onClick={toggleMenuAccordion}
                     className="flex justify-between w-full px-4 py-2 text-left text-2xl font-bold mb-2 text-black bg-gray-100 rounded-lg focus:outline-none transition duration-500 ease-in"
                   >
                     {menuOpen ? "Hide Menu" : "Show Menu"}
                     <span
-                      className={`transform transition-transform duration-300 ${menuOpen ? "rotate-180" : ""}`}
+                      className={`transform transition-transform duration-300 ${
+                        menuOpen ? "rotate-180" : ""
+                      }`}
                     >
                       ▼
                     </span>
                   </button>
-                  <div className={`overflow-hidden transition-max-height duration-500 ease-in-out  ${menuOpen ? "max-h-[1000px] p-6" : "max-h-0 p-0"}   border-t border-gray-200`}>
+                  <div
+                    className={`overflow-hidden transition-max-height duration-500 ease-in-out  ${
+                      menuOpen ? "max-h-[1000px] p-6" : "max-h-0 p-0"
+                    }   border-t border-gray-200`}
+                  >
                     {justMenuItems && justMenuItems.length > 0 ? (
                       justMenuItems.map((menuSection, index) => (
                         <div key={index} className="mb-6 ">
@@ -295,9 +301,14 @@ export default function RestaurantPageId({ params }) {
                           </p>
                           <ul className="space-y-4">
                             {menuSection.items.map((item, itemIndex) => (
-                              <li key={itemIndex} className="flex flex-col text-black">
+                              <li
+                                key={itemIndex}
+                                className="flex flex-col text-black"
+                              >
                                 <div className="flex justify-between">
-                                  <span className="font-semibold">{item.name}</span>
+                                  <span className="font-semibold">
+                                    {item.name}
+                                  </span>
                                   <span>${item.price}</span>
                                 </div>
                                 {item.description && (
