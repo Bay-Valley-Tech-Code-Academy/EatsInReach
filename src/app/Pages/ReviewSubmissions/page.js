@@ -140,7 +140,7 @@ export default function ReviewSubmissions() {
   }
 
   return (
-    <div className="bg-[#FDE4CE] min-h-screen flex flex-col">
+    <div className="bg-[#FDE4CE] min-h-screen flex flex-col justify-between">
       <Navbar />
       <div className="m-5 min-h-min items-center max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-bold mb-6">Review Submissions</h1>

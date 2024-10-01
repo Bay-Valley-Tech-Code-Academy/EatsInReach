@@ -6,6 +6,7 @@ import { useAuth } from "../../../../../context/authContext";
 import Navbar from "@/Components/Navbar";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../../../../../firebase";
+import Footer from "@/Components/Footer";
 
 export default function MenuItemPage({ params }) {
   const { menuId } = params;
@@ -328,6 +329,7 @@ export default function MenuItemPage({ params }) {
           ))}
         </div>
       </div>
+      <Footer/>
     </>
   );
 }
