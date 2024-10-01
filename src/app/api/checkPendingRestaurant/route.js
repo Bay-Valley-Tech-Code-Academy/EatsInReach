@@ -6,7 +6,7 @@ export async function GET(req) {
   const uid = searchParams.get("uid");
 
   if (!uid) {
-    return res.status(400).json({ error: "UID is required" });
+    return NextResponse.json({ error: "UID is required" });
   }
 
   try {
@@ -23,6 +23,6 @@ export async function GET(req) {
     }
   } catch (error) {
     console.error("Error checking restaurant:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return NextResponse.json({ error: "Internal server error" });
   }
 }

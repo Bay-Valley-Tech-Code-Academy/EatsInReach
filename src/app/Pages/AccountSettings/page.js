@@ -24,7 +24,7 @@ const InputField = ({ type, placeholder, value, onChange, required }) => (
   <input
     type={type}
     placeholder={placeholder}
-    className="outline-none pl-2 m-1 rounded-md"
+    className="outline-none pl-2 m-1 rounded-md w-full"
     value={value}
     onChange={onChange}
     required={required}
@@ -184,13 +184,15 @@ export default function UserProfile() {
         </div>
         <div className=" bg-Yellow-Green  flex flex-col w-4/6 max-md:w-3/4 m-5 justify-center items-center rounded-lg p-2">
           <div className="flex justify-start mt-5 ">
-            <h1 className={`text-[3rem] font-semibold ${italiana.className}`}>
+            <h1
+              className={`text-[3rem] font-semibold text-center ${italiana.className}`}
+            >
               {activeSection === "profile"
                 ? "Profile Settings"
                 : "Security Settings"}
             </h1>
           </div>
-          <div className=" bg-[#FDFBCE] flex flex-col justify-center items-center w-5/6 max-md:w-3/4 space-y-8 drop-shadow-md rounded-3xl p-2">
+          <div className=" bg-[#FDFBCE] flex flex-col justify-center items-center w-5/6 max-md:w-4/5 space-y-8 drop-shadow-md rounded-3xl p-2">
             {activeSection === "profile" ? (
               <>
                 <form
@@ -204,7 +206,7 @@ export default function UserProfile() {
                     value={newUsername}
                     onChange={(e) => setNewUsername(e.target.value)}
                   />
-                  <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md mt-2 drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">
+                  <button className="bg-Yellow-Green w-full outline-2 px-4 py-2 rounded-md mt-2 drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">
                     Change
                   </button>
                 </form>
@@ -226,7 +228,7 @@ export default function UserProfile() {
                       value={currentPasswordEmail}
                       onChange={(e) => setCurrentPasswordEmail(e.target.value)}
                     />
-                    <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">
+                    <button className="bg-Yellow-Green w-full outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green duration-300 hover:text-white">
                       Change
                     </button>
                   </div>
@@ -249,7 +251,7 @@ export default function UserProfile() {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                     />
-                    <button className="bg-Yellow-Green outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green hover:text-white duration-300">
+                    <button className="bg-Yellow-Green w-full outline-2 px-4 py-2 rounded-md drop-shadow-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-Dartmouth-green hover:text-white duration-300">
                       Change
                     </button>
                   </div>
