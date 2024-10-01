@@ -12,6 +12,7 @@ import {
   reauthenticateWithCredential,
 } from "firebase/auth";
 import { Italiana } from "next/font/google";
+import Footer from "@/Components/Footer";
 // Constants
 const SecurityIcon = "/images/security.png"; // Update the path to the security icon
 const SUCCESS_TIMEOUT = 3000;
@@ -184,9 +185,7 @@ export default function UserProfile() {
         </div>
         <div className=" bg-Yellow-Green  flex flex-col w-4/6 max-md:w-3/4 m-5 justify-center items-center rounded-lg p-2">
           <div className="flex justify-start mt-5 ">
-            <h1
-              className={`text-[3rem] font-semibold text-center ${italiana.className}`}
-            >
+            <h1 className={`text-[3rem] font-semibold text-center ${italiana.className}`}>
               {activeSection === "profile"
                 ? "Profile Settings"
                 : "Security Settings"}
@@ -266,6 +265,7 @@ export default function UserProfile() {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/Components/Footer";
 import Navbar from "@/Components/Navbar";
 import { useState } from "react";
 
@@ -40,9 +41,9 @@ export default function Contact() {
   };
 
   return (
-    <div className="bg-Yellow-Green min-h-screen">
+    <div className="bg-[#FDE4CE] min-h-screen flex flex-col justify-between">
       <Navbar />
-      <div className="flex flex-col xs:flex-col md:flex-row items-center items-center justify-center xs:gap-10 lg:gap-32 md:p-6">
+      <div className="flex flex-col xs:flex-col md:flex-row items-center items-center justify-center xs:gap-10 lg:gap-32 md:p-6 p-2">
         <div className="xs:text-center md:text-left">
           <p className="font-semibold text-3xl">Contact Us</p>
           <p className="mt-4">
@@ -102,6 +103,7 @@ export default function Contact() {
           )}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }
