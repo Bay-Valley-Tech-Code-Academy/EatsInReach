@@ -252,7 +252,7 @@ export default function VendorSubmission() {
   return (
     <div className="bg-Cream">
       <Navbar />
-      <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
+      <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg m-2">
         <div className="flex justify-between place-items-center">
           <h1 className="text-2xl font-bold">Submit Your Restaurant</h1>
         </div>
